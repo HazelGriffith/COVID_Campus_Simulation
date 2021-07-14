@@ -1,0 +1,3 @@
+00:00:10 Alfred T T T Room5 Room3 55
+00:00:20 Jane F T F Room5 Room7 367
+00:00:30 John F F T Room9 Room3 95

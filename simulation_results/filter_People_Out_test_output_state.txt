@@ -1,0 +1,28 @@
+00:00:00:000
+State for model input_reader is next time: 00:00:00:000
+State for model filterOut is 
+
+00:00:00:000
+State for model input_reader is next time: 00:00:10:000
+State for model filterOut is 
+
+00:00:10:000
+State for model input_reader is next time: 00:00:10:000
+State for model filterOut is Person ID: Alfred Room leaving: Room3; 
+
+00:00:10:000
+State for model input_reader is next time: 00:00:10:000
+State for model filterOut is 
+
+00:00:20:000
+State for model input_reader is next time: 00:00:10:000
+State for model filterOut is 
+
+00:00:30:000
+State for model input_reader is next time: inf
+State for model filterOut is Person ID: John Room leaving: Room3; 
+
+00:00:30:000
+State for model input_reader is next time: inf
+State for model filterOut is 
+

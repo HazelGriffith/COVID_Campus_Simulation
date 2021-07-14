@@ -1,0 +1,3 @@
+00:36:20 Jane F T F Room8 Room5 36
+00:55:10 Alfred T T T Room3 Room5 55
+01:35:30 John F F T Room3 Room5 95

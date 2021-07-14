@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" ?>
+<DecisionMakerBehaviour>
+<ID>1</ID>
+<location>4th_Mackenzie</location>
+<isSick>False</isSick>
+<wearingMaskCorrectly>True</wearingMaskCorrectly>
+<socialDistance>True</socialDistance>
+<riskyTravelBehaviourFactor>2</riskyTravelBehaviourFactor> <!--higher the value the greater the risk.-->
+                                                           <!--could be from using the tunnels, time spent in elevators, etc.-->
+<eatsAlone>False</eatsAlone>
+
+<relationship>
+        <relationship id = "2" 
+                type = "Classmate"/>
+
+        <relationship id = "3"  
+                type = "Friend"/>
+
+        <relationship id = "4"  
+                type = "Classmate"/>
+
+        <relationship id = "5"  
+                type = "Family"/>
+
+</relationship>
+
+<behaviourRulesPerson>
+        <personRelations status="Family"
+                probability="Low"
+                chance="Low"/>
+
+        <personRelations status="Friend"
+                probability ="Low"
+                chance="Low"/>
+
+        <personRelations status="Professor"
+                probability="High"
+                chance="High"/>
+
+        <personRelations status="Classmate"
+                probability="High"
+                chance="High"/>
+
+</behaviourRulesPerson>
+
+<behaviourRulesRoom>
+        <roomSize size="small">
+                <numberOfPeople group="large"
+                probability="Low"
+                chance="High"/>
+
+                <numberOfPeople group="small"
+                probability="Low"
+                chance="High"/>
+ 
+        </roomSize>
+        <roomSize size="large">
+                <numberOfPeople group="large"
+                probability="High"
+                chance="High"/>
+
+                <numberOfPeople group="small"
+                probability="High"
+                chance="Low"/>
+
+        </roomSize>
+</behaviourRulesRoom>
+
+<locationPlan>
+        <locationPlan room = "1st_Mackenzie" 
+                timeinroom = "60" />
+
+	<locationPlan room = "2nd_Mackenzie" 
+                timeinroom = "30" />
+
+	<locationPlan room = "3rd_Mackenzie" 
+                timeinroom = "90" />
+
+	<locationPlan room = "4th_Mackenzie" 
+                timeinroom = "60" />
+</locationPlan>
+
+</DecisionMakerBehaviour>

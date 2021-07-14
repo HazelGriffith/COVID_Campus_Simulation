@@ -1,0 +1,55 @@
+00:00:00:000
+State for model input_inToRoom_reader is next time: 00:00:00:000
+State for model input_outFromRoom_reader is next time: 00:00:00:000
+State for model room5 is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+00:00:00:000
+State for model input_inToRoom_reader is next time: 00:00:10:000
+State for model input_outFromRoom_reader is next time: 00:36:20:000
+State for model room5 is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+00:00:10:000
+State for model input_inToRoom_reader is next time: 00:00:10:000
+State for model input_outFromRoom_reader is next time: 00:36:20:000
+State for model room5 is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 1 CO2 concentration in the room: 0
+ 
+00:00:20:000
+State for model input_inToRoom_reader is next time: 00:00:10:000
+State for model input_outFromRoom_reader is next time: 00:36:20:000
+State for model room5 is Number of People in room: 2 number of people wearing masks: 2 Number of people social distancing: 1 Number of sick people: 1 CO2 concentration in the room: 0
+ 
+00:00:30:000
+State for model input_inToRoom_reader is next time: inf
+State for model input_outFromRoom_reader is next time: 00:36:20:000
+State for model room5 is Number of People in room: 3 number of people wearing masks: 2 Number of people social distancing: 2 Number of sick people: 1 CO2 concentration in the room: 0
+ 
+00:36:20:000
+State for model input_inToRoom_reader is next time: inf
+State for model input_outFromRoom_reader is next time: 00:18:50:000
+State for model room5 is Number of People in room: 2 number of people wearing masks: 1 Number of people social distancing: 2 Number of sick people: 1 CO2 concentration in the room: 14
+ 
+00:36:20:000
+State for model input_inToRoom_reader is next time: inf
+State for model input_outFromRoom_reader is next time: 00:18:50:000
+State for model room5 is Number of People in room: 2 number of people wearing masks: 1 Number of people social distancing: 2 Number of sick people: 1 CO2 concentration in the room: 14
+ 
+00:55:10:000
+State for model input_inToRoom_reader is next time: inf
+State for model input_outFromRoom_reader is next time: 00:40:20:000
+State for model room5 is Number of People in room: 1 number of people wearing masks: 0 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 23
+ 
+00:55:10:000
+State for model input_inToRoom_reader is next time: inf
+State for model input_outFromRoom_reader is next time: 00:40:20:000
+State for model room5 is Number of People in room: 1 number of people wearing masks: 0 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 23
+ 
+01:35:30:000
+State for model input_inToRoom_reader is next time: inf
+State for model input_outFromRoom_reader is next time: inf
+State for model room5 is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 23
+ 
+01:35:30:000
+State for model input_inToRoom_reader is next time: inf
+State for model input_outFromRoom_reader is next time: inf
+State for model room5 is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 23
+ 

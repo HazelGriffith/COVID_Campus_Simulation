@@ -1,0 +1,95 @@
+FILTER_PEOPLE_IN
+
+X --> PersonInfo = {personID(String), isSick(true/false), wearsMaskCorrectly(true/false), roomIDEntering(String), roomIDLeaving(String), socialDistance(true/false)}
+
+Y --> PersonInfo = {personID(String), isSick(true/false), wearsMaskCorrectly(true/false), roomIDEntering(String), roomIDLeaving(String), socialDistance(true/false)}
+
+If roomIDEntering == IDofthe filter --> send the message through the output
+
+FILTER_PEOPLE_OUT
+
+X --> PersonInfo = {personID(String), isSick(true/false), wearsMaskCorrectly(true/false), roomIDEntering(String), roomIDLeaving(String), socialDistance(true/false)}
+
+Y --> PersonInfo = {personID(String), isSick(true/false), wearsMaskCorrectly(true/false), roomIDEntering(String), roomIDLeaving(String), socialDistance(true/false)}
+
+If roomIDLeving == IDofthe filter --> send the message through the output
+
+
+
+ROOM
+
+Xports = {inToRoom, outFromRoom} --> PersonInfo = {personID(String), isSick(true/false), wearsMaskCorrectly(true/false), roomIDEntering(String), roomIDLeaving(String), socialDistance(true/false), timeLeaving(TIME)}
+
+
+
+Y = {out} --> ProbGetSick = {personID(String), probSick(int)} 
+
+RoomInfo = {roomID(String), ventilationRating(int), SocialDistancingThreshold(int), WearsMaskCorrectlyFactor(int), SocialDistancingFactor(int), respIncrease(int)} = Model Parameters
+    
+respIncrease = CO2 exhaled per minute (or second) by a person
+S = {numberPeople(int), numberPeopleWearingMasksCorrectly(int), SocialDistancing(int), numberSickPeople(int), peopleInRoom(PersonInfo), 
+CO2concentration(int), peopleLeaving(ProbGetSick)}
+
+Int: {
+
+// Clear/empty peopleLeaving
+
+Delete the rest of items in this function -
+
+	if numberOfPeople == 0 {
+	   lastPersonLeft = false;
+	   reset ROOM state parameters;
+        } else {
+           for Person in People_In_Room {
+	       ConcBase = (respIncrease * numberOfSickPeople)/(numberOfPeople + VentilationRating);
+	       If (numberOfPeople > SocialDistancingThreshold){
+	          SocialDistancingFactor = 0;
+               } 
+               Person.COVIDconcentration = ConcBase - SocialDistancingFactor - WearsMaskCorrectlyFactor;
+	       If Person.COVIDconcentration >= InfectionThreshold {
+                  Person.IsSick = true;
+	          numberOfSickPeople++;
+               }
+	   }
+	}
+     }
+
+Ext: (TIME e, input x){
+
+//update CO2 concentration
+
+	If inToRoom {
+           person = x;
+	   if person is in peopleInRoom {
+	      //peopleInRoom(person).updateParameters(person); not considering change in behaviour
+	      error	
+           } else {
+              peopleInRoom.add(person);
+           }
+	} 
+
+	If outFromRoom {
+	   person = x;
+	   if person is in peopleInRoom {
+	      peopleInRoom.remove(person);
+		//Calculate the propbability of getting sick for that person
+              peopleLeaving.add(person);
+           } else {
+              error
+           }
+	   
+	}
+
+	update ROOM parameters --> {numberPeople(int), numberPeopleWearingMasksCorrectly(int), SocialDistancing(int), numberSickPeople(int)};
+     }
+
+Out: {
+	output = peopleLeaving;
+	return output;
+     }
+
+ta: If peopleLeaving == empty { //It's a set, array, etc.
+       ta = infinity;
+    } else {
+       ta = 0;
+    }
