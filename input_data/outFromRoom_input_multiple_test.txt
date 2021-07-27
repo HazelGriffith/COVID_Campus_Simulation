@@ -1,0 +1,3 @@
+00:36:20 Jane F T F Room2 Room1 36
+00:55:10 Alfred T T T Room2 Room1 55
+01:35:30 John F F T Room1 Room2 95

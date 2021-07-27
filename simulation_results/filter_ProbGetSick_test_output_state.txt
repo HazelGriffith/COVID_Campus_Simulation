@@ -1,0 +1,28 @@
+00:00:00:000
+State for model input_reader is next time: 00:00:00:000
+State for model filterProbGetSick is 
+
+00:00:00:000
+State for model input_reader is next time: 00:00:10:000
+State for model filterProbGetSick is 
+
+00:00:10:000
+State for model input_reader is next time: 00:00:10:000
+State for model filterProbGetSick is Person ID: Alfred Infection Probability: 0.5; 
+
+00:00:10:000
+State for model input_reader is next time: 00:00:10:000
+State for model filterProbGetSick is 
+
+00:00:20:000
+State for model input_reader is next time: 00:00:10:000
+State for model filterProbGetSick is 
+
+00:00:30:000
+State for model input_reader is next time: inf
+State for model filterProbGetSick is Person ID: Alfred Infection Probability: 1; 
+
+00:00:30:000
+State for model input_reader is next time: inf
+State for model filterProbGetSick is 
+

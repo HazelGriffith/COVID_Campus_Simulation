@@ -59,7 +59,9 @@ template<typename TIME> class RoomModel{
 
     //default constructor
     RoomModel () noexcept{
+		
         state.numberPeople = 0;
+		
         state.numberPeopleWearingMasksCorrectly = 0;
         state.socialDistancing = 0;
         state.numberSickPeople = 0;
@@ -70,13 +72,27 @@ template<typename TIME> class RoomModel{
 	
     RoomModel (string inputRoomID, int inputVentilationRating, int inputSocialDistancingThreshold, int inputWearsMaskCorrectlyFactor, int inputSocialDistancingFactor, int inputRespIncreasePerMin) noexcept{
         //initializing model parameters
+		state.numberPeople = 0;
+		
+        state.numberPeopleWearingMasksCorrectly = 0;
+        state.socialDistancing = 0;
+        state.numberSickPeople = 0;
+		state.peopleInRoom.clear();
+		state.CO2concentration = 0;
+		state.peopleLeaving.clear();
+		
 		roomID = inputRoomID;
+		
 		ventilationRating = inputVentilationRating;
+		
 		socialDistancingThreshold = inputSocialDistancingThreshold;
+		
 		wearsMaskCorrectlyFactor = inputWearsMaskCorrectlyFactor;
+		
 		socialDistancingFactor = inputSocialDistancingFactor;
+		
 		respIncreasePerMin = inputRespIncreasePerMin;
-		RoomModel();
+		
     }
 
     //clear peopleLeaving

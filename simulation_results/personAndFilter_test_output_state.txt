@@ -1,0 +1,108 @@
+00:00:00:000
+State for model input_reader is next time: 00:00:00:000
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: home socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
+
+00:00:00:000
+State for model input_reader is next time: 00:00:00:000
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 2nd_Mackenzie the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 30 minutes; 
+
+State for model probGetSickFilter is 
+
+00:00:00:000
+State for model input_reader is next time: 01:00:00:000
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 2nd_Mackenzie the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 30 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0.5; 
+
+00:00:00:000
+State for model input_reader is next time: 01:00:00:000
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 2nd_Mackenzie the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 30 minutes; 
+
+State for model probGetSickFilter is 
+
+01:00:00:000
+State for model input_reader is next time: 00:30:00:000
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 4th_Mackenzie the current room is: 2nd_Mackenzie socialDistance: 1 staying in the next room for 90 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0.2; 
+
+01:00:00:000
+State for model input_reader is next time: 00:30:00:000
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 4th_Mackenzie the current room is: 2nd_Mackenzie socialDistance: 1 staying in the next room for 90 minutes; 
+
+State for model probGetSickFilter is 
+
+01:30:00:000
+State for model input_reader is next time: 01:30:00:000
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: 4th_Mackenzie socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0.7; 
+
+01:30:00:000
+State for model input_reader is next time: 01:30:00:000
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: 4th_Mackenzie socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
+
+03:00:00:000
+State for model input_reader is next time: 01:00:00:000
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 the next room is: home the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 1200 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0.4; 
+
+03:00:00:000
+State for model input_reader is next time: 01:00:00:000
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 the next room is: home the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 1200 minutes; 
+
+State for model probGetSickFilter is 
+
+04:00:00:000
+State for model input_reader is next time: 20:00:00:000
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: home socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0.2; 
+
+04:00:00:000
+State for model input_reader is next time: 20:00:00:000
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: home socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
+
+24:00:00:000
+State for model input_reader is next time: 01:00:00:000
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 the next room is: 2nd_Mackenzie the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 30 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0.6; 
+
+24:00:00:000
+State for model input_reader is next time: 01:00:00:000
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 the next room is: 2nd_Mackenzie the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 30 minutes; 
+
+State for model probGetSickFilter is 
+
+25:00:00:000
+State for model input_reader is next time: 00:30:00:000
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 the next room is: 4th_Mackenzie the current room is: 2nd_Mackenzie socialDistance: 1 staying in the next room for 90 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0.1; 
+
+25:00:00:000
+State for model input_reader is next time: 00:30:00:000
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 the next room is: 4th_Mackenzie the current room is: 2nd_Mackenzie socialDistance: 1 staying in the next room for 90 minutes; 
+
+State for model probGetSickFilter is 
+
+25:30:00:000
+State for model input_reader is next time: inf
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: 4th_Mackenzie socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0.3; 
+
+25:30:00:000
+State for model input_reader is next time: inf
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: 4th_Mackenzie socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
+

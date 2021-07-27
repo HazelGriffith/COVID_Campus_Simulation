@@ -1,0 +1,40 @@
+00:00:00:000
+State for model input_reader is next time: 00:00:00:000
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 rooomIDEntering: 1st_Mackenzie roomIDLeaving: home socialDistance: 1 minutes until leaving: 60; 
+
+00:00:00:000
+State for model input_reader is next time: 00:00:00:000
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 rooomIDEntering: 2nd_Mackenzie roomIDLeaving: 1st_Mackenzie socialDistance: 1 minutes until leaving: 30; 
+
+00:00:00:000
+State for model input_reader is next time: 01:00:00:000
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 rooomIDEntering: 2nd_Mackenzie roomIDLeaving: 1st_Mackenzie socialDistance: 1 minutes until leaving: 30; 
+
+01:00:00:000
+State for model input_reader is next time: 00:30:00:000
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 rooomIDEntering: 4th_Mackenzie roomIDLeaving: 2nd_Mackenzie socialDistance: 1 minutes until leaving: 90; 
+
+01:30:00:000
+State for model input_reader is next time: 01:30:00:000
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 rooomIDEntering: 1st_Mackenzie roomIDLeaving: 4th_Mackenzie socialDistance: 1 minutes until leaving: 60; 
+
+03:00:00:000
+State for model input_reader is next time: inf
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 rooomIDEntering: home roomIDLeaving: 1st_Mackenzie socialDistance: 1 minutes until leaving: 1200; 
+
+04:00:00:000
+State for model input_reader is next time: inf
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 rooomIDEntering: 1st_Mackenzie roomIDLeaving: home socialDistance: 1 minutes until leaving: 60; 
+
+24:00:00:000
+State for model input_reader is next time: inf
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 rooomIDEntering: 2nd_Mackenzie roomIDLeaving: 1st_Mackenzie socialDistance: 1 minutes until leaving: 30; 
+
+25:00:00:000
+State for model input_reader is next time: inf
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 rooomIDEntering: 4th_Mackenzie roomIDLeaving: 2nd_Mackenzie socialDistance: 1 minutes until leaving: 90; 
+
+25:30:00:000
+State for model input_reader is next time: inf
+State for model person is Person ID: Jane isSick: 1 wearsMaskCorrectly: 1 rooomIDEntering: 1st_Mackenzie roomIDLeaving: 4th_Mackenzie socialDistance: 1 minutes until leaving: 60; 
+
