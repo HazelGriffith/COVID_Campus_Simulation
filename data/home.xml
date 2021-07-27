@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<RoomParameters>
+<ID>home</ID>
+<ventilationRating>2</ventilationRating>
+<socialDistanceThreshold>6</socialDistanceThreshold>
+<wearsMaskCorrectlyFactor>5</wearsMaskCorrectlyFactor>
+<socialDistanceFactor>2</socialDistanceFactor>
+<respIncreasePerMin>2</respIncreasePerMin>
+</RoomParameters>
