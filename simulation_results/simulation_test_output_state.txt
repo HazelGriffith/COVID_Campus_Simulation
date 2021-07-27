@@ -1,153 +1,899 @@
 00:00:00:000
-State for model input_filterIn_reader is next time: 00:00:00:000
-State for model input_filterOut_reader is next time: 00:00:00:000
-State for model room5 is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterInhome is 
 
-State for model filterOut is 
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is:  socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
 
 00:00:00:000
-State for model input_filterIn_reader is next time: 00:00:10:000
-State for model input_filterOut_reader is next time: 00:36:20:000
-State for model room5 is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterInhome is 
 
-State for model filterOut is 
+State for model filterOuthome is 
 
-00:00:10:000
-State for model input_filterIn_reader is next time: 00:00:10:000
-State for model input_filterOut_reader is next time: 00:36:20:000
-State for model room5 is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is Person ID: Alfred Room entering: Room5; 
+State for model filterIn1st_Mackenzie is Person ID: Jane Room entering: 1st_Mackenzie; 
 
-State for model filterOut is 
+State for model filterOut1st_Mackenzie is 
 
-00:00:10:000
-State for model input_filterIn_reader is next time: 00:00:10:000
-State for model input_filterOut_reader is next time: 00:36:20:000
-State for model room5 is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 1 CO2 concentration in the room: 0
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterIn2nd_Mackenzie is 
 
-State for model filterOut is 
+State for model filterOut2nd_Mackenzie is 
 
-00:00:20:000
-State for model input_filterIn_reader is next time: 00:00:10:000
-State for model input_filterOut_reader is next time: 00:36:20:000
-State for model room5 is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 1 CO2 concentration in the room: 0
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is Person ID: Jane Room entering: Room5; 
+State for model filterIn3rd_Mackenzie is 
 
-State for model filterOut is 
+State for model filterOut3rd_Mackenzie is 
 
-00:00:20:000
-State for model input_filterIn_reader is next time: 00:00:10:000
-State for model input_filterOut_reader is next time: 00:36:20:000
-State for model room5 is Number of People in room: 2 number of people wearing masks: 2 Number of people social distancing: 1 Number of sick people: 1 CO2 concentration in the room: 0
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 2nd_Mackenzie the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 30 minutes; 
+
+State for model probGetSickFilter is 
+
+00:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterInhome is 
 
-State for model filterOut is 
+State for model filterOuthome is 
 
-00:00:30:000
-State for model input_filterIn_reader is next time: inf
-State for model input_filterOut_reader is next time: 00:36:20:000
-State for model room5 is Number of People in room: 2 number of people wearing masks: 2 Number of people social distancing: 1 Number of sick people: 1 CO2 concentration in the room: 0
+State for model 1st_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is Person ID: John Room entering: Room5; 
+State for model filterIn1st_Mackenzie is 
 
-State for model filterOut is 
+State for model filterOut1st_Mackenzie is 
 
-00:00:30:000
-State for model input_filterIn_reader is next time: inf
-State for model input_filterOut_reader is next time: 00:36:20:000
-State for model room5 is Number of People in room: 3 number of people wearing masks: 2 Number of people social distancing: 2 Number of sick people: 1 CO2 concentration in the room: 0
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterIn2nd_Mackenzie is 
 
-State for model filterOut is 
+State for model filterOut2nd_Mackenzie is 
 
-00:36:20:000
-State for model input_filterIn_reader is next time: inf
-State for model input_filterOut_reader is next time: 00:18:50:000
-State for model room5 is Number of People in room: 3 number of people wearing masks: 2 Number of people social distancing: 2 Number of sick people: 1 CO2 concentration in the room: 0
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterIn3rd_Mackenzie is 
 
-State for model filterOut is Person ID: Jane Room leaving: Room5; 
+State for model filterOut3rd_Mackenzie is 
 
-00:36:20:000
-State for model input_filterIn_reader is next time: inf
-State for model input_filterOut_reader is next time: 00:18:50:000
-State for model room5 is Number of People in room: 2 number of people wearing masks: 1 Number of people social distancing: 2 Number of sick people: 1 CO2 concentration in the room: 14
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 2nd_Mackenzie the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 30 minutes; 
+
+State for model probGetSickFilter is 
+
+01:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterInhome is 
 
-State for model filterOut is 
+State for model filterOuthome is 
 
-00:36:20:000
-State for model input_filterIn_reader is next time: inf
-State for model input_filterOut_reader is next time: 00:18:50:000
-State for model room5 is Number of People in room: 2 number of people wearing masks: 1 Number of people social distancing: 2 Number of sick people: 1 CO2 concentration in the room: 14
+State for model 1st_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterIn1st_Mackenzie is 
 
-State for model filterOut is 
+State for model filterOut1st_Mackenzie is Person ID: Jane Room leaving: 1st_Mackenzie; 
 
-00:55:10:000
-State for model input_filterIn_reader is next time: inf
-State for model input_filterOut_reader is next time: 00:40:20:000
-State for model room5 is Number of People in room: 2 number of people wearing masks: 1 Number of people social distancing: 2 Number of sick people: 1 CO2 concentration in the room: 14
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterIn2nd_Mackenzie is Person ID: Jane Room entering: 2nd_Mackenzie; 
 
-State for model filterOut is Person ID: Alfred Room leaving: Room5; 
+State for model filterOut2nd_Mackenzie is 
 
-00:55:10:000
-State for model input_filterIn_reader is next time: inf
-State for model input_filterOut_reader is next time: 00:40:20:000
-State for model room5 is Number of People in room: 1 number of people wearing masks: 0 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 23
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterIn3rd_Mackenzie is 
 
-State for model filterOut is 
+State for model filterOut3rd_Mackenzie is 
 
-00:55:10:000
-State for model input_filterIn_reader is next time: inf
-State for model input_filterOut_reader is next time: 00:40:20:000
-State for model room5 is Number of People in room: 1 number of people wearing masks: 0 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 23
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 3rd_Mackenzie the current room is: 2nd_Mackenzie socialDistance: 1 staying in the next room for 90 minutes; 
+
+State for model probGetSickFilter is 
+
+01:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterInhome is 
 
-State for model filterOut is 
+State for model filterOuthome is 
 
-01:35:30:000
-State for model input_filterIn_reader is next time: inf
-State for model input_filterOut_reader is next time: inf
-State for model room5 is Number of People in room: 1 number of people wearing masks: 0 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 23
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterIn1st_Mackenzie is 
 
-State for model filterOut is Person ID: John Room leaving: Room5; 
+State for model filterOut1st_Mackenzie is 
 
-01:35:30:000
-State for model input_filterIn_reader is next time: inf
-State for model input_filterOut_reader is next time: inf
-State for model room5 is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 23
+State for model 2nd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterIn2nd_Mackenzie is 
 
-State for model filterOut is 
+State for model filterOut2nd_Mackenzie is 
 
-01:35:30:000
-State for model input_filterIn_reader is next time: inf
-State for model input_filterOut_reader is next time: inf
-State for model room5 is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 23
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
  
-State for model filterIn is 
+State for model filterIn3rd_Mackenzie is 
 
-State for model filterOut is 
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 3rd_Mackenzie the current room is: 2nd_Mackenzie socialDistance: 1 staying in the next room for 90 minutes; 
+
+State for model probGetSickFilter is 
+
+01:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 3rd_Mackenzie the current room is: 2nd_Mackenzie socialDistance: 1 staying in the next room for 90 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0; 
+
+01:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 3rd_Mackenzie the current room is: 2nd_Mackenzie socialDistance: 1 staying in the next room for 90 minutes; 
+
+State for model probGetSickFilter is 
+
+01:30:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is Person ID: Jane Room leaving: 2nd_Mackenzie; 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is Person ID: Jane Room entering: 3rd_Mackenzie; 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: 3rd_Mackenzie socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
+
+01:30:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: 3rd_Mackenzie socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
+
+01:30:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: 3rd_Mackenzie socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0; 
+
+01:30:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: 3rd_Mackenzie socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
+
+03:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is Person ID: Jane Room entering: 1st_Mackenzie; 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is Person ID: Jane Room leaving: 3rd_Mackenzie; 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: home the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 1200 minutes; 
+
+State for model probGetSickFilter is 
+
+03:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: home the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 1200 minutes; 
+
+State for model probGetSickFilter is 
+
+03:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: home the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 1200 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0; 
+
+03:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: home the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 1200 minutes; 
+
+State for model probGetSickFilter is 
+
+04:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is Person ID: Jane Room entering: home; 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is Person ID: Jane Room leaving: 1st_Mackenzie; 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: home socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
+
+04:00:00:000
+State for model home is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: home socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
+
+04:00:00:000
+State for model home is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: home socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0; 
+
+04:00:00:000
+State for model home is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: home socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
+
+24:00:00:000
+State for model home is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is Person ID: Jane Room leaving: home; 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is Person ID: Jane Room entering: 1st_Mackenzie; 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 2nd_Mackenzie the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 30 minutes; 
+
+State for model probGetSickFilter is 
+
+24:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 2nd_Mackenzie the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 30 minutes; 
+
+State for model probGetSickFilter is 
+
+24:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 2nd_Mackenzie the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 30 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0; 
+
+24:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 2nd_Mackenzie the current room is: 1st_Mackenzie socialDistance: 1 staying in the next room for 30 minutes; 
+
+State for model probGetSickFilter is 
+
+25:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is Person ID: Jane Room leaving: 1st_Mackenzie; 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is Person ID: Jane Room entering: 2nd_Mackenzie; 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 3rd_Mackenzie the current room is: 2nd_Mackenzie socialDistance: 1 staying in the next room for 90 minutes; 
+
+State for model probGetSickFilter is 
+
+25:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 3rd_Mackenzie the current room is: 2nd_Mackenzie socialDistance: 1 staying in the next room for 90 minutes; 
+
+State for model probGetSickFilter is 
+
+25:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 3rd_Mackenzie the current room is: 2nd_Mackenzie socialDistance: 1 staying in the next room for 90 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0; 
+
+25:00:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 3rd_Mackenzie the current room is: 2nd_Mackenzie socialDistance: 1 staying in the next room for 90 minutes; 
+
+State for model probGetSickFilter is 
+
+25:30:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is Person ID: Jane Room leaving: 2nd_Mackenzie; 
+
+State for model 3rd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is Person ID: Jane Room entering: 3rd_Mackenzie; 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: 3rd_Mackenzie socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
+
+25:30:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: 3rd_Mackenzie socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
+
+25:30:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: 3rd_Mackenzie socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is Person ID: Jane Infection Probability: 0; 
+
+25:30:00:000
+State for model home is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterInhome is 
+
+State for model filterOuthome is 
+
+State for model 1st_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn1st_Mackenzie is 
+
+State for model filterOut1st_Mackenzie is 
+
+State for model 2nd_Mackenzie is Number of People in room: 0 number of people wearing masks: 0 Number of people social distancing: 0 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn2nd_Mackenzie is 
+
+State for model filterOut2nd_Mackenzie is 
+
+State for model 3rd_Mackenzie is Number of People in room: 1 number of people wearing masks: 1 Number of people social distancing: 1 Number of sick people: 0 CO2 concentration in the room: 0
+ 
+State for model filterIn3rd_Mackenzie is 
+
+State for model filterOut3rd_Mackenzie is 
+
+State for model person is Person ID: Jane isSick: 0 wearsMaskCorrectly: 1 the next room is: 1st_Mackenzie the current room is: 3rd_Mackenzie socialDistance: 1 staying in the next room for 60 minutes; 
+
+State for model probGetSickFilter is 
 

@@ -31,8 +31,8 @@ ostream& operator << (ostream &out, const PersonInfo &p){
 	
 	out << " They are leaving the room with ID " << p.roomIDLeaving;
 	out << " They are entering the room with ID " << p.roomIDEntering;
-	//out << " and staying for " << p.minsUntilLeaving << " minutes.";
-	out << " and staying for " << p.timeUntilLeaving;
+	out << " and staying for " << p.minsUntilLeaving << " minutes.";
+	//out << " and staying for " << p.timeUntilLeaving;
 	
 	return out;
 }
@@ -82,8 +82,8 @@ istream& operator >> (istream &in, PersonInfo &p){
 	in >> p.roomIDLeaving;
 	
 	//cout << "Enter the time in minutes that the person stays in the room for ";
-	//in >> p.minsUntilLeaving;
-	hours = floor(timeInMinutes/60);
+	in >> p.minsUntilLeaving;
+	/*hours = floor(timeInMinutes/60);
 	timeInMinutes = timeInMinutes - hours*60;
 	mins = floor(timeInMinutes);
 	timeInMinutes = timeInMinutes - mins;
@@ -91,7 +91,7 @@ istream& operator >> (istream &in, PersonInfo &p){
 	timeInMinutes = timeInMinutes - (secs/60);
 	msecs = (timeInMinutes*60)*1000;
 	NDTime time({hours, mins, secs, msecs});
-	p.timeUntilLeaving = time;
+	p.timeUntilLeaving = time;*/
 	
 	return in;
 	
