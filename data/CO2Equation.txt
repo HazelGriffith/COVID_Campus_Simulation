@@ -2,12 +2,12 @@ base = 400 ppm = 400 mg/L
 1ppm = 1mg/L
 basePermL = base/1000mL/L = 0.4 mg/mL
 
-respIncreasePerMin = (500mL/breath*((35000ppm+50000ppm)/2)*((12 breaths/min + 20 breaths/min)/2))
-                   = 500mL/breath*(42500mg/L / (1000mL/1L))*16 breaths/min
+respIncreasePerMin = ((500mL/breath)*((35000ppm+50000ppm)/2)*((12 breaths/min + 20 breaths/min)/2))
+                   = 500mL/breath*(42500mg/L*1e+6mL/L)*16 breaths/min
                    = 340000mg/min
 
 volumeOfRoom = (46.45m^2 * 2.44m) //500 sqr feet by 8 feet
-             = 113338000mL or 113.338 m^3
+             = 113338L or 113.338 m^3
 
 ACHVentilation = {goodVentilation : 3, enhancedVentilation : 4, typicalSchoolVentilation : 1.5, lowVentilation : 1}
 
@@ -15,12 +15,12 @@ ventilationRatePerMin = ACHVentilation.getValue()*(room.sqrMetre*room.height)/60
                       = 1 ACH * (113.338)/60 + 0
                       = 1.888967 m^3/min
 
-ventilationRatePerMinmL = ventilationRatePerMin*1e+6mL/m^3
-                        = 1.888967 m^3/min * 1e+6mL/m^3
-                        = 1888967 mL/min
+ventilationRatePerMinL = ventilationRatePerMin*1000
+                        = 1.888967 m^3/min * 1000
+                        = 1888.967 L/min
 
-CO2VentilationRatePerMin = ventilationRatePerMinmL*basePermL
-              = 1888967 mL/min * 0.4 mg/mL
+CO2VentilationRatePerMin = ventilationRatePerMinL*basePermL
+              = 1888.967 L/min * 400 mg/L
               = 755586.8 mg/min
 
 numbOfPeople = 2 people
@@ -30,13 +30,13 @@ Co2PeopleMin = respIncreasePerMin*numbOfPeoiple
              = 680000 mg/min
 
 Co2OutMin = ventilationRatePerMinmL * CO2concentrationRoom
-          = 1888967 mL/min * ((Co2PeopleMin + Co2InMin - Co2OutMin)*elapsedTime)/(volumeOfRoom*1e+6mL/m^3)
-          = 1888967 mL/min * ((680000mg/min + 755586.8 mg/min - Co2OutMin)*60min)/(113338000mL)
-          = 1888967 mL/min * (0.759985247mg/mL - (Co2OutMin*60min)/113338000mL)
+          = 1888.967 L/min * ((Co2PeopleMin + Co2InMin - Co2OutMin)*elapsedTime)/(volumeOfRoom*1000)
+          = 1888.967 L/min * ((680000mg/min + 755586.8 mg/min - Co2OutMin)*60min)/(113338L)
+          = 1888.967 L/min * (359.9852mg/mL - (Co2OutMin*60min)/113338L)
 
 CO2ConcentrationRoom = ((Co2PeopleMin  + Co2InMin - Co2OutMin)*elapsedTime)/(volumeOfRoom*1e+6mL/m^3)
-                 = ((680000mg/min + 755586.8mg/min - 755.5868mL/min)*elapsedTime)/(113338000mL)
-		 = 0.000359985
+                 = ((680000mg/min + 755586.8mg/min - Co2OutMin)*elapsedTime)/(113338L)
+		 = 
 
 
 Co2PeopleMin = respIncreasePerMin*numbOfPeoiple
