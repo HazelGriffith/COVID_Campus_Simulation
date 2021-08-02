@@ -5,6 +5,7 @@
 #include <iostream>
 #include <math.h>
 #include <vector>
+#include <assert.h>
 
 #include "../data/tinyXML/tinyxml.h"
 #include "../data/tinyXML/tinystr.h"
@@ -113,29 +114,21 @@ namespace decision_maker_behaviour_structures{
 			vector<BehaviourRulesRoom>      behaviourRulesRoom;
 			vector<LocationPlan>            locationPlan;
 			LocationPlan					nextLocation;
-
-		int totalTimeInRoom(string location, int startTime) {
-			vector<LocationPlan>::iterator iter;
-			int result = 0;
-			
-			for (iter = locationPlan.begin(); iter != locationPlan.end(); iter++){
-				const LocationPlan& lp = *iter;
-				if ((location.compare(lp.roomID) == 0)&&(startTime == lp.startTime)){
-					result = lp.timeInRoomMin;
-				}
-			}
-			return result;
-		}
 		
 		void setNextLocation(int timeRemaining) {
 			vector<LocationPlan>::iterator iter;
-			
+			bool changed = false;
 			for (iter = locationPlan.begin(); iter != locationPlan.end(); iter++){
 				const LocationPlan& lp = *iter;
+				
 				if ((currStartTime + timeRemaining)%1440 == lp.startTime){
 					nextLocation = lp;
+					changed = true;
 				}
 			}
+			cout << ID << currStartTime << endl;
+			cout << ID << timeRemaining << endl;
+			assert(changed == true);
 		}
 
 		void save(const char* pFilename){
@@ -293,19 +286,6 @@ namespace decision_maker_behaviour_structures{
 				if (!pElem) return;
 				const char* pID = pElem->GetText();
 				if(pID) ID = pID;
-				
-			}
-			
-			// block: previousLocation
-			{ 
-		  
-				pElem=hRoot.FirstChild("previousLocation").ToElement();
-		  
-				if (!pElem) return;
-		  
-				const char* pPreviousLocation = pElem->GetText();
-				if(pPreviousLocation) previousLocation = pPreviousLocation;
-				
 				
 			}
 
