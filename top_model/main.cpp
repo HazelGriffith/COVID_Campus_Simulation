@@ -16,6 +16,7 @@
 //Messages structures
 #include "../data_structures/PersonInfo.hpp"
 #include "../data_structures/ProbGetSick.hpp"
+#include "../data_structures/DecisionMakerBehaviour.hpp"
 
 //Atomic model headers
 #include "../atomics/room.hpp"
@@ -40,15 +41,6 @@ using TIME = NDTime;
 
 /***** Define output ports for coupled model *****/
 struct top_out: public out_port<ProbGetSick>{};
-
-template<typename T>
-class InputReader_PersonInfo : public iestream_input<PersonInfo, T> {
-
-    public:
-        InputReader_PersonInfo () = default;
-        InputReader_PersonInfo (const char* file_path) : 
-				iestream_input<PersonInfo,T> (file_path) {}
-};
 
 struct RoomInfo{
 	string ID;
@@ -163,20 +155,49 @@ int main(){
 		
 	}
 
-	 /****** person atomic model instantiation *******************/
-    const char * personFileName = "../data/Student1.xml";
+	/****** person atomic model instantiation *******************/
 	
-	shared_ptr<dynamic::modeling::model> person;
+	vector<shared_ptr<dynamic::modeling::model>> people;
+	vector<shared_ptr<dynamic::modeling::model>> peopleFilters;
+	vector<DecisionMakerBehaviour> peopleInfo;
 	
-    person = dynamic::translate::make_dynamic_atomic_model<Person, TIME>("person", move(personFileName));
+	vector<const char *> peopleXMLFiles;
+	const char * student1Path = "../data/Student1.xml";
+	peopleXMLFiles.push_back(student1Path);
+	const char * student2Path = "../data/Student2.xml";
+	peopleXMLFiles.push_back(student2Path);
+	const char * student3Path = "../data/Student3.xml";
+	peopleXMLFiles.push_back(student3Path);
+	const char * student4Path = "../data/Student4.xml";
+	peopleXMLFiles.push_back(student4Path);
+	const char * student5Path = "../data/Student5.xml";
+	peopleXMLFiles.push_back(student5Path);
+	const char * student6Path = "../data/Student6.xml";
+	peopleXMLFiles.push_back(student6Path);
 	
-	/****** probGetSick filter atomic model instantiation *******************/
-	const char * personID = "Jane";
+	for (int i = 0; i < peopleXMLFiles.size(); i++){
+		DecisionMakerBehaviour p;
+		peopleInfo.push_back(p);
+	}
 	
-	shared_ptr<dynamic::modeling::model> probGetSickFilter;
+	for (int i = 0; i < peopleXMLFiles.size(); i++){
 	
-    probGetSickFilter = dynamic::translate::make_dynamic_atomic_model<Filter_ProbGetSick, TIME>("probGetSickFilter", move(personID));
-	
+		string id = to_string(i+1);
+		
+		shared_ptr<dynamic::modeling::model> person;
+		
+		person = dynamic::translate::make_dynamic_atomic_model<Person, TIME>("Student" + id, move(peopleXMLFiles[i]));
+		
+		people.push_back(person);
+		
+		shared_ptr<dynamic::modeling::model> probGetSickFilter;
+		
+		probGetSickFilter = dynamic::translate::make_dynamic_atomic_model<Filter_ProbGetSick, TIME>("Student" +id+"Filter", id);
+		
+		peopleFilters.push_back(probGetSickFilter);
+		
+	}
+
 	/***** (5) *****/
     /*******TOP MODEL********/
     dynamic::modeling::Ports iports_TOP;
@@ -191,8 +212,10 @@ int main(){
 		submodels_TOP.push_back(inToRoomFilters[i]);
 		submodels_TOP.push_back(outFromRoomFilters[i]);
 	}
-    submodels_TOP.push_back(person);
-	submodels_TOP.push_back(probGetSickFilter);
+	for (int i = 0; i < people.size(); i++){
+		submodels_TOP.push_back(people[i]);
+		submodels_TOP.push_back(peopleFilters[i]);
+	}
 	
 
     dynamic::modeling::EICs eics_TOP;
@@ -204,15 +227,19 @@ int main(){
 	}
 
     dynamic::modeling::ICs ics_TOP;
+	for (int j = 0; j < people.size(); j++){
+		string id = to_string(j+1);
+		for (int i = 0; i < rooms.size(); i++){
+			ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_In_ports::inToFilter>("Student"+id,"filterIn"+roomsInfo[i].ID));
+			ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_Out_ports::inToFilter>("Student"+id,"filterOut"+roomsInfo[i].ID));
+			ics_TOP.push_back(dynamic::translate::make_IC<RoomModelPorts::out,Filter_ProbGetSick_ports::inToFilter>(roomsInfo[i].ID,"Student"+id+"Filter"));
+		}
+		ics_TOP.push_back(dynamic::translate::make_IC<Filter_ProbGetSick_ports::outFromFilter,Person_ports::infectionProb>("Student"+id+"Filter","Student"+id));
+	}
 	for (int i = 0; i < rooms.size(); i++){
-		ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_In_ports::inToFilter>("person","filterIn"+roomsInfo[i].ID));
-		ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_Out_ports::inToFilter>("person","filterOut"+roomsInfo[i].ID));
 		ics_TOP.push_back(dynamic::translate::make_IC<Filter_People_In_ports::outFromFilter,RoomModelPorts::inToRoom>("filterIn"+roomsInfo[i].ID, roomsInfo[i].ID));
 		ics_TOP.push_back(dynamic::translate::make_IC<Filter_People_Out_ports::outFromFilter,RoomModelPorts::outFromRoom>("filterOut"+roomsInfo[i].ID,roomsInfo[i].ID));
-		ics_TOP.push_back(dynamic::translate::make_IC<RoomModelPorts::out,Filter_ProbGetSick_ports::inToFilter>(roomsInfo[i].ID,"probGetSickFilter"));
 	}
-	ics_TOP.push_back(dynamic::translate::make_IC<Filter_ProbGetSick_ports::outFromFilter,Person_ports::infectionProb>("probGetSickFilter","person"));
-
 	
     shared_ptr<dynamic::modeling::coupled<TIME>> TOP;
 
@@ -253,6 +280,6 @@ int main(){
     /***** (7) *****/
     /************** Runner call ************************/
     dynamic::engine::runner<NDTime, logger_top> r(TOP, {0});
-    r.run_until(NDTime("26:00:00:000"));
+    r.run_until(NDTime("24:00:00:000"));
     return 0;
 }

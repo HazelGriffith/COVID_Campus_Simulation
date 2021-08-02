@@ -58,7 +58,7 @@ template <typename TIME> class Person{
 		//time interval is set to 0 such that the PersonInfo message saying they are entering the first room is sent immediately
 		state.timeRemaining = 0;
 		//The PersonInfo message that initializes the person's first location is created here.
-		state.travelInfo = PersonInfo(person.ID, person.isSick, person.wearingMask, person.location, "" , person.socialDistance, person.timeInFirstLocation);
+		state.travelInfo = PersonInfo(person.ID, person.isSick, person.wearingMask, person.location, "" , person.socialDistance, (person.timeInFirstLocation + person.currStartTime)%1440);
     }
 
     //internal transition function
@@ -71,14 +71,16 @@ template <typename TIME> class Person{
 			//Therefore, if the person is using the initial time of 0, the DecisionMakerBehaviour object person's nextLocation
 			//variable will be empty and cannot give the correct time remaining. So the first time remaining value is loaded
 			//from the person xml file and initialized here
-			state.timeRemaining = person.timeInFirstLocation;
+			state.timeRemaining = (person.timeInFirstLocation + person.currStartTime)%1440;
+			person.setNextLocation(person.timeInFirstLocation);
 		} else {
 			state.timeRemaining = person.nextLocation.timeInRoomMin;
+			person.setNextLocation(state.timeRemaining);
 		}
 		
 		//sets the DecisionMakerBehaviour person's nextLocation object to be equal to the LocationPlan object 
 		//with a start time equal to the person's current start time + the state's time remaining
-		person.setNextLocation(state.timeRemaining);
+		
 		
 		person.currStartTime = person.nextLocation.startTime;
 		
