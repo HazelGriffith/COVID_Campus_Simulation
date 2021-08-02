@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" ?>
 <DecisionMakerBehaviour>
-<ID>1</ID>
-<location>home</location>
-<currStartTime>780</currStartTime>
-<timeInFirstLocation>1200</timeInFirstLocation>
+<ID>6</ID>
+<location>1st_Mackenzie</location>
+<currStartTime>0</currStartTime>
+<timeInFirstLocation>60</timeInFirstLocation>
 <isSick>False</isSick>
 <wearingMaskCorrectly>True</wearingMaskCorrectly>
 <socialDistance>True</socialDistance>
@@ -67,23 +67,23 @@
 <locationPlan>
     <locationPlan room = "1st_Mackenzie" 
                 timeinroom = "60" 
-				startTime = 540 />
+				startTime = 0 />
 
 	<locationPlan room = "2nd_Mackenzie" 
-                timeinroom = "30" 
-				startTime = 600 />
+                timeinroom = "60" 
+				startTime = 60 />
 
 	<locationPlan room = "3rd_Mackenzie" 
-                timeinroom = "90" 
-				startTime = 630 />
+                timeinroom = "120" 
+				startTime = 120 />
 
 	<locationPlan room = "1st_Mackenzie" 
-                timeinroom = "60" 
-				startTime = 720 />
+                timeinroom = "30" 
+				startTime = 240 />
 				
 	<locationPlan room = "home"
-				timeinroom = "1200"
-				startTime = 780 />
+				timeinroom = "1170"
+				startTime = 270 />
 </locationPlan>
 
 </DecisionMakerBehaviour>
