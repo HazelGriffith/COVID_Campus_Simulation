@@ -1,0 +1,2 @@
+CO2Concentration (one per timestamp) state
+Probability of getting sick{overall average take from end of state log, individual probs take from output log}

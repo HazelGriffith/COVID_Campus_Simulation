@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<DecisionMakerBehaviour>
+    <ID>6</ID>
+    <location>home</location>
+    <currStartTime>993</currStartTime>
+    <timeInFirstLocation>1350</timeInFirstLocation>
+    <isSick>False</isSick>
+    <exposed>False</exposed>
+    <vaccinated>True</vaccinated>
+    <wearingMaskCorrectly>True</wearingMaskCorrectly>
+    <socialDistance>True</socialDistance>
+    <relationship />
+    <behaviourRulesPerson />
+    <locationPlan>
+        <locationPlan room="2" timeinroom="60" startTime="903" />
+        <locationPlan room="1" timeinroom="30" startTime="963" />
+        <locationPlan room="home" timeinroom="1350" startTime="993" />
+    </locationPlan>
+</DecisionMakerBehaviour>
