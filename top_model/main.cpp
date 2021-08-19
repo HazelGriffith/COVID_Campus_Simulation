@@ -93,15 +93,6 @@ int main(){
 	tunnelsPath[25] = '\0';
 	roomXMLFiles.push_back(tunnelsPath);
 	
-	/*string outsidePathStr = "../data/rooms/outside.xml";
-	const char * outsidePathConst = outsidePathStr.c_str();
-	char * outsidePath = new char[26];
-	for (int j = 0; j < strlen(outsidePathConst); j++){
-		outsidePath[j] = outsidePathConst[j];
-	}
-	outsidePath[25] = '\0';
-	roomXMLFiles.push_back(outsidePath);*/
-	
 	for (int i = 0; i < roomXMLFiles.size(); i++){
 		RoomInfo roomInfo;
 		roomsInfo.push_back(roomInfo);
@@ -264,7 +255,12 @@ int main(){
 	vector<char *> peopleXMLFiles;
 	
 	//number of people to be dynamically loaded
-	int numberOfPeople = 10;
+	int numberOfPeople;
+	
+	cout << "Enter the number of people in the simulation: ";
+	cin >> numberOfPeople;
+	cout << endl;
+	
 	peopleXMLFiles.resize(numberOfPeople);
 	string personPathStr;
 	for (int i = 0; i < numberOfPeople; i++){
@@ -393,7 +389,17 @@ int main(){
 
     /***** (7) *****/
     /************** Runner call ************************/
+	
+	string hours;
+	cout << "Enter the hours of simulation run-time: ";
+	cin >> hours;
+	cout << endl;
+	
+	string simulationRunTime;
+	simulationRunTime = hours + ":00:00:000";
+	
+	
     dynamic::engine::runner<NDTime, logger_top> r(TOP, {0});
-    r.run_until(NDTime("96:00:00:000"));
+    r.run_until(NDTime(simulationRunTime));
     return 0;
 }
