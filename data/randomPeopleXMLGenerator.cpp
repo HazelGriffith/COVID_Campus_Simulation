@@ -5,9 +5,17 @@ using namespace decision_maker_behaviour_structures;
 
 int main(){
 	DecisionMakerBehaviour person;
+	int numberOfPeople;
+	int numberOfRooms;
 	
-	int numberOfPeople = 1000;
-	int numberOfRooms = 3;
+	cout << "Enter the number of People to be generated: ";
+	cin >> numberOfPeople;
+	cout << endl;
+
+	cout << "Enter the number of rooms they can visit: ";
+	cin >> numberOfRooms;
+	cout << endl;
+	
 	vector<DecisionMakerBehaviour> people;
 	people.resize(numberOfPeople);
 	
