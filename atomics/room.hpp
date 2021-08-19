@@ -11,6 +11,7 @@
 #include <random>
 #include <vector>
 #include <iostream>
+#include <math.h>
 
 #include "../data_structures/PersonInfo.hpp"
 #include "../data_structures/ProbGetSick.hpp"
@@ -32,11 +33,18 @@ template<typename TIME> class RoomModel{
   public:
     
     string roomID;
-	int ventilationRating;
-	int socialDistancingThreshold;
+	int ACHVentilation;
+	int socialDistanceThreshold;
 	int wearsMaskCorrectlyFactor;
 	int socialDistancingFactor;
-	int respIncreasePerMin; //CO2 exhaled per minute by a person
+	int respIncPerMin; //CO2 exhaled per minute by a person
+	float volumeOfRoom; // m^2
+	int sickPeopleCO2Factor;
+	int *highCO2FactorThresholds;
+	int *highCO2Factors;
+	int vaccinatedFactor;
+	int wearsMaskFactor;
+	int socialDistanceFactor;
 	
 
     using input_ports=std::tuple<typename RoomModelPorts::inToRoom, RoomModelPorts::outFromRoom>;
@@ -51,26 +59,23 @@ template<typename TIME> class RoomModel{
         int socialDistancing;
 		int numberSickPeople;
 		vector<PersonInfo> peopleInRoom;
-        int CO2concentration;
-		//ProbGetSick *peopleLeaving;
+        float CO2Concentration;
 		vector<ProbGetSick> peopleLeaving;
+		int totalNumberPeople;
+		float averageProbOfInfection;
+		vector<int> halfHourOccupancy;
+		int currInterval;
 		
     }; state_type state;
 
     //default constructor
     RoomModel () noexcept{
 		
-        state.numberPeople = 0;
-		
-        state.numberPeopleWearingMasksCorrectly = 0;
-        state.socialDistancing = 0;
-        state.numberSickPeople = 0;
-		state.peopleInRoom.clear();
-		state.CO2concentration = 0;
-		state.peopleLeaving.clear();
     }
 	
-    RoomModel (string inputRoomID, int inputVentilationRating, int inputSocialDistancingThreshold, int inputWearsMaskCorrectlyFactor, int inputSocialDistancingFactor, int inputRespIncreasePerMin) noexcept{
+    RoomModel (string i_roomID, int i_ACHVentilation, int i_socialDistanceThreshold, int i_respIncPerMin, float i_volumeOfRoom,
+					int i_sickPeopleCO2Factor, int i_highCO2FactorThresholds[4], int i_highCO2Factors[4], int i_vaccinatedFactor, 
+					int i_wearsMaskFactor, int i_socialDistanceFactor) noexcept{
         //initializing model parameters
 		state.numberPeople = 0;
 		
@@ -78,20 +83,25 @@ template<typename TIME> class RoomModel{
         state.socialDistancing = 0;
         state.numberSickPeople = 0;
 		state.peopleInRoom.clear();
-		state.CO2concentration = 0;
+		state.CO2Concentration = 400;
 		state.peopleLeaving.clear();
+		state.totalNumberPeople = 0;
+		state.averageProbOfInfection = 0;
+		state.halfHourOccupancy.clear();
+		state.halfHourOccupancy.resize(48);
+		state.currInterval = 0;
 		
-		roomID = inputRoomID;
-		
-		ventilationRating = inputVentilationRating;
-		
-		socialDistancingThreshold = inputSocialDistancingThreshold;
-		
-		wearsMaskCorrectlyFactor = inputWearsMaskCorrectlyFactor;
-		
-		socialDistancingFactor = inputSocialDistancingFactor;
-		
-		respIncreasePerMin = inputRespIncreasePerMin;
+		roomID = i_roomID;
+		ACHVentilation = i_ACHVentilation;
+		socialDistanceThreshold = i_socialDistanceThreshold;
+		respIncPerMin = i_respIncPerMin;
+		volumeOfRoom = i_volumeOfRoom;
+		sickPeopleCO2Factor = i_sickPeopleCO2Factor;
+		highCO2FactorThresholds = i_highCO2FactorThresholds;
+		highCO2Factors = i_highCO2Factors;
+		vaccinatedFactor = i_vaccinatedFactor;
+		wearsMaskFactor = i_wearsMaskFactor;
+		socialDistanceFactor = i_socialDistanceFactor;
 		
     }
 
@@ -111,11 +121,45 @@ template<typename TIME> class RoomModel{
         float secondsToMin = e.getSeconds()/60;
         float elap_min = (hoursToMin + min + secondsToMin); // convert elapsed time to minutes 
 		
-		//The CO2 concentration is determined by taking the amount of COVID particles exhaled over the elapsed time, dividing them among the people and devices that would inhale these particles,
-		//and then adding what remains to the previous CO2 concentration in the room.
-        state.CO2concentration = state.CO2concentration + ((state.numberSickPeople * respIncreasePerMin * elap_min)/(state.numberPeople + ventilationRating));
+		float averageCO2 = 400;
+		
+		float ventilationRatePerMin = ((ACHVentilation*volumeOfRoom)/60)*1000;
+		
+		float CO2InPerMin = ventilationRatePerMin * averageCO2;
+		
+		float CO2PeoplePerMin = respIncPerMin * state.numberPeople;
+		
+		float CO2OutPerMin;
+		
+		float CO2ConcentrationFlow;
+		
+		float temp = elap_min;
+
+		int timeStep = 10;
+		while (temp >= timeStep){
+			CO2OutPerMin = ventilationRatePerMin*state.CO2Concentration;
+			CO2ConcentrationFlow = ((CO2InPerMin + CO2PeoplePerMin - CO2OutPerMin) * timeStep)/(volumeOfRoom*1000);
+			state.CO2Concentration = state.CO2Concentration + CO2ConcentrationFlow;
+			//assert(state.CO2Concentration > 150);
+			//assert(state.CO2Concentration < 2500);
+
+			temp = temp - timeStep;
+
+		}
+		
+
+		CO2OutPerMin = ventilationRatePerMin*state.CO2Concentration;
+		CO2ConcentrationFlow = ((CO2InPerMin + CO2PeoplePerMin - CO2OutPerMin) * temp)/(volumeOfRoom*1000);
+		state.CO2Concentration = state.CO2Concentration + CO2ConcentrationFlow;
+
+	//	assert(state.CO2Concentration > 150);
+	//	assert(state.CO2Concentration < 2500);
         
-       
+		/*for (int i = state.currInterval; i < state.currInterval+floor(elap_min/30); i++){
+			state.halfHourOccupancy[i] = state.numberPeople;
+		}
+		state.currInterval += floor(elap_min/30);*/
+		
         vector<PersonInfo> msgBagInToRoom = get_messages<typename RoomModelPorts::inToRoom>(mbs);
         vector<PersonInfo> msgBagOutFromRoom = get_messages<typename RoomModelPorts::outFromRoom>(mbs);
         
@@ -129,6 +173,7 @@ template<typename TIME> class RoomModel{
 			}
 			
 			state.peopleInRoom.push_back(msgInToRoom);
+			state.totalNumberPeople++;
 		}
 		
         //Entities coming out of the room
@@ -148,37 +193,63 @@ template<typename TIME> class RoomModel{
 					ProbGetSick personLeaving;
 					personLeaving.personID = msgOutFromRoom.personID;
 					
-					int wearsMaskCorrectlyFactorUsed = 0;
-					int socialDistancingFactorUsed = 0;
 					
-					if (msgOutFromRoom.wearsMaskCorrectly){
-						wearsMaskCorrectlyFactorUsed = wearsMaskCorrectlyFactor;
+					
+					int wearsMaskFactorUsed = 0;
+					int socialDistanceFactorUsed = 0;
+					int vaccinatedFactorUsed = 0;
+					int highCO2FactorUsed = 0;
+					int sickPeopleCO2FactorUsed = 0;
+					
+					if (msgOutFromRoom.vaccinated){
+						vaccinatedFactorUsed = vaccinatedFactor;
 					}
 					
-					if ((msgOutFromRoom.socialDistance)&&(state.numberPeople < socialDistancingThreshold)){
-						socialDistancingFactorUsed = socialDistancingFactor;
+					if (!msgOutFromRoom.wearsMaskCorrectly){
+						wearsMaskFactorUsed = wearsMaskFactor;
 					}
-										
+					
+					if ((!msgOutFromRoom.socialDistance)||(state.numberPeople>=socialDistanceThreshold)){
+						socialDistanceFactorUsed = socialDistanceFactor;
+					}
+					
+					if (state.numberSickPeople > 0){
+						// should consider range of values like for highCO2Factors
+						sickPeopleCO2FactorUsed = sickPeopleCO2Factor;
+					}
+					
+					if (state.CO2Concentration >= highCO2FactorThresholds[3]){
+						highCO2FactorUsed = highCO2Factors[3];
+					} else if (state.CO2Concentration >= highCO2FactorThresholds[2]){
+						highCO2FactorUsed = highCO2Factors[2];
+					} else if (state.CO2Concentration >= highCO2FactorThresholds[1]){
+						highCO2FactorUsed = highCO2Factors[1];
+					} else if (state.CO2Concentration >= highCO2FactorThresholds[0]){
+						highCO2FactorUsed = highCO2Factors[0];
+					}
+					
+					int probabilityRank = vaccinatedFactorUsed + wearsMaskFactorUsed + socialDistanceFactorUsed 
+											+ sickPeopleCO2FactorUsed + highCO2FactorUsed;
+					if (probabilityRank < 1){
+						probabilityRank = 1;
+					} else if (probabilityRank > 5){
+						probabilityRank = 5;
+					}
+					
+					
+					float probabilityOfInfection = ((probabilityRank - 1)*20) + (rand() % 21);
+					
+					state.averageProbOfInfection += probabilityOfInfection;			
 					//If the person is already sick then their chance of being sick upon leaving is guaranteed
 					if (msgOutFromRoom.isSick){
 						personLeaving.probSick = 1;
 					} else {
-						//A person's probability of getting sick is equal to the CO2 concentration in the room divided by the sum of the factors for the protective measures used
-						personLeaving.probSick = (state.CO2concentration/(1 + wearsMaskCorrectlyFactorUsed + socialDistancingFactorUsed));
+						personLeaving.probSick = probabilityOfInfection;
 						
-						if (personLeaving.probSick > 1){
-							personLeaving.probSick = 1;
-						}
 					}
 					
 					state.peopleLeaving.push_back(personLeaving);
-					//The person leaving is added to a singly-linked list of people leaving
-					/*if (state.peopleLeaving != NULL){
-						personLeaving.next = state.peopleLeaving;
-					}
-						
-					state.peopleLeaving = &personLeaving;
-					*/
+					
 					break;
 				}
 			}
@@ -218,12 +289,6 @@ template<typename TIME> class RoomModel{
     typename make_message_bags<output_ports>::type output() const{
         //output all ProbGetSick from peopleLeaving
         typename make_message_bags<output_ports>::type bags; 
-        /*ProbGetSick *nextPersonLeaving = state.peopleLeaving;
-
-        while (nextPersonLeaving != NULL){
-            get_messages<typename RoomModelPorts::out>(bags).push_back(*nextPersonLeaving);
-			nextPersonLeaving = nextPersonLeaving->next;
-        }*/
 		
 		for (int i = 0; i < state.peopleLeaving.size(); i++){
 			get_messages<typename RoomModelPorts::out>(bags).push_back(state.peopleLeaving[i]);
@@ -244,7 +309,7 @@ template<typename TIME> class RoomModel{
     };
     
     friend std::ostringstream& operator<<(std::ostringstream& os, const typename RoomModel<TIME>::state_type& i){
-        os << "Number of People in room: "<< i.numberPeople <<" number of people wearing masks: " << i.numberPeopleWearingMasksCorrectly << " Number of people social distancing: " << i.socialDistancing << " Number of sick people: " << i.numberSickPeople << " CO2 concentration in the room: " << i.CO2concentration <<"\n ";
+        os << "Number of People in room: "<< i.numberPeople <<" number of people wearing masks: " << i.numberPeopleWearingMasksCorrectly << " Number of people social distancing: " << i.socialDistancing << " Number of sick people: " << i.numberSickPeople << " CO2 concentration in the room: " << i.CO2Concentration << " average number of people per hour: " << i.totalNumberPeople/24 << " average probability of infection: " << i.averageProbOfInfection/i.totalNumberPeople << " students travelling at same time: " << i.peopleLeaving.size() <<"\n ";
         
         return os;
     }

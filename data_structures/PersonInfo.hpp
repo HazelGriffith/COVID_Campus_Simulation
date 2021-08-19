@@ -11,9 +11,9 @@ struct PersonInfo{
 	
 	PersonInfo() {}
 	
-	PersonInfo(string i_personID, bool i_isSick, bool i_wearsMaskCorrectly, 
+	PersonInfo(string i_personID, bool i_isSick, bool i_exposed, bool i_vaccinated, bool i_wearsMaskCorrectly, 
 				string i_roomIDEntering, string i_roomIDLeaving, bool i_socialDistance, int i_minsUntilLeaving)
-				:personID(i_personID), isSick(i_isSick), wearsMaskCorrectly(i_wearsMaskCorrectly),
+				:personID(i_personID), isSick(i_isSick), exposed(i_exposed), vaccinated(i_vaccinated), wearsMaskCorrectly(i_wearsMaskCorrectly),
 				  roomIDEntering(i_roomIDEntering), roomIDLeaving(i_roomIDLeaving), socialDistance(i_socialDistance),
 				  minsUntilLeaving(i_minsUntilLeaving) {}
 				  
@@ -21,11 +21,13 @@ struct PersonInfo{
 	
 	string personID;
 	bool isSick;
+	bool exposed;
+	bool vaccinated;
 	bool wearsMaskCorrectly;
 	string roomIDEntering;
 	string roomIDLeaving;
 	bool socialDistance;
-	int minsUntilLeaving;
+	long int minsUntilLeaving;
 	//NDTime timeUntilLeaving;
 };
 
