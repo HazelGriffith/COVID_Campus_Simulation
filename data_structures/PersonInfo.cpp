@@ -15,6 +15,17 @@ ostream& operator << (ostream &out, const PersonInfo &p){
 		out << " is sick";
 	} else {
 		out << " is not sick";
+		if (p.exposed){
+			out << ", has been exposed";
+		} else {
+			out << ", has not been exposed";
+		}
+	}
+	
+	if (p.vaccinated){
+		out << ", is vaccinated";
+	} else {
+		out << ", is not vaccinated";
 	}
 	
 	if (p.wearsMaskCorrectly){
@@ -58,6 +69,20 @@ istream& operator >> (istream &in, PersonInfo &p){
 		p.isSick = true;
 	} else {
 		p.isSick = false;
+	}
+	
+	in >> temp;
+	if (temp.compare("T") == 0){
+		p.exposed = true;
+	} else {
+		p.exposed = false;
+	}
+	
+	in >> temp;
+	if (temp.compare("T") == 0){
+		p.vaccinated = true;
+	} else {
+		p.vaccinated = false;
 	}
 	
 	//cout << "Enter T if the person wears a mask correctly, F if not ";

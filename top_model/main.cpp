@@ -20,6 +20,7 @@
 
 //Atomic model headers
 #include "../atomics/room.hpp"
+#include "../atomics/outdoors.hpp"
 #include "../atomics/filter_People_In.hpp"
 #include "../atomics/filter_People_Out.hpp"
 #include "../atomics/filter_ProbGetSick.hpp"
@@ -46,9 +47,14 @@ struct RoomInfo{
 	string ID;
 	int ventilationRating;
 	int socialDistanceThreshold;
-	int wearsMaskCorrectlyFactor;
+	int wearsMaskFactor;
 	int socialDistanceFactor;
+	int vaccinatedFactor;
+	int sickPeopleCO2Factor;
+	int highCO2FactorThresholds[4];
+	int highCO2Factors[4];
 	int respIncreasePerMin;
+	float volumeOfRoom;
 };
 
 /***** (3) *****/
@@ -60,15 +66,41 @@ int main(){
 	//initialize lists of RoomInfo structs, filename paths, room models, inToRoom filter models, and outFromRoom filter models
 	vector<RoomInfo> roomsInfo;
 	
-	vector<const char*> roomXMLFiles;
-	const char * homePath = "../data/home.xml";
-	roomXMLFiles.push_back(homePath);
-	const char * Mackenzie1stPath = "../data/1st_Mackenzie.xml";
-	roomXMLFiles.push_back(Mackenzie1stPath);
-	const char * Mackenzie2ndPath = "../data/2nd_Mackenzie.xml";
-	roomXMLFiles.push_back(Mackenzie2ndPath);
-	const char * Mackenzie3rdPath = "../data/3rd_Mackenzie.xml";
-	roomXMLFiles.push_back(Mackenzie3rdPath);
+	vector<char*> roomXMLFiles;
+	//this many rooms are dynamically loaded
+	int numberOfRooms = 3;
+	
+	roomXMLFiles.resize(numberOfRooms);
+	string roomPathStr;
+	for (int i = 0; i < numberOfRooms; i++){
+		string s = to_string(i+1);
+		roomPathStr = "../data/rooms/" + s + ".xml";
+		const char * roomPath = roomPathStr.c_str();
+		roomXMLFiles[i] = new char[20];
+		for (int j = 0; j < strlen(roomPath); j++){
+			roomXMLFiles[i][j] = roomPath[j];
+		}
+		roomXMLFiles[i][19] = '\0';
+	}
+	
+	//adds tunnels to the list of rooms to be loaded
+	string tunnelsPathStr = "../data/rooms/tunnels.xml";
+	const char * tunnelsPathConst = tunnelsPathStr.c_str();
+	char * tunnelsPath = new char[26];
+	for (int j = 0; j < strlen(tunnelsPathConst); j++){
+		tunnelsPath[j] = tunnelsPathConst[j];
+	}
+	tunnelsPath[25] = '\0';
+	roomXMLFiles.push_back(tunnelsPath);
+	
+	/*string outsidePathStr = "../data/rooms/outside.xml";
+	const char * outsidePathConst = outsidePathStr.c_str();
+	char * outsidePath = new char[26];
+	for (int j = 0; j < strlen(outsidePathConst); j++){
+		outsidePath[j] = outsidePathConst[j];
+	}
+	outsidePath[25] = '\0';
+	roomXMLFiles.push_back(outsidePath);*/
 	
 	for (int i = 0; i < roomXMLFiles.size(); i++){
 		RoomInfo roomInfo;
@@ -113,14 +145,60 @@ int main(){
 		roomsInfo[i].socialDistanceThreshold = strtol(pElem->GetText(), NULL, 10);
 		
 		//acquiring wearing mask correctly factor of the room
-		pElem = hRoot.FirstChild("wearsMaskCorrectlyFactor").ToElement();
+		pElem = hRoot.FirstChild("wearsMaskFactor").ToElement();
 		if (!pElem) return 0;
-		roomsInfo[i].wearsMaskCorrectlyFactor = strtol(pElem->GetText(), NULL, 10);
+		roomsInfo[i].wearsMaskFactor = strtol(pElem->GetText(), NULL, 10);
 
 		//acquiring social distance factor of the room
 		pElem = hRoot.FirstChild("socialDistanceFactor").ToElement();
 		if (!pElem) return 0;
 		roomsInfo[i].socialDistanceFactor = strtol(pElem->GetText(), NULL, 10);
+		
+		//acquiring vaccinated factor of the room
+		pElem = hRoot.FirstChild("vaccinatedFactor").ToElement();
+		if (!pElem) return 0;
+		roomsInfo[i].vaccinatedFactor = strtol(pElem->GetText(), NULL, 10);
+		
+		//acquiring square metres of the room
+		pElem = hRoot.FirstChild("squareMetres").ToElement();
+		if (!pElem) return 0;
+		int sqrMetres = strtol(pElem->GetText(), NULL, 10);
+		
+		//acquiring height of the room
+		pElem = hRoot.FirstChild("height").ToElement();
+		if (!pElem) return 0;
+		int height = strtol(pElem->GetText(), NULL, 10);
+		
+		roomsInfo[i].volumeOfRoom = sqrMetres*height;
+		
+		//acquiring sick people CO2 factor of the room
+		pElem = hRoot.FirstChild("sickPeopleCO2Factor").ToElement();
+		if (!pElem) return 0;
+		roomsInfo[i].sickPeopleCO2Factor = strtol(pElem->GetText(), NULL, 10);
+		
+		//acquiring high CO2 factor thresholds of the room
+		pElem = hRoot.FirstChild("highCO2FactorThresholds").ToElement();
+		if (!pElem) return 0;
+		string text = pElem->GetText();
+		for (int j = 0; j < 4; j++){
+			size_t seperator = text.find(",");
+			string number = text.substr(0,seperator);
+			roomsInfo[i].highCO2FactorThresholds[j] = strtol(number.c_str(), NULL, 10);
+
+			text.erase(0,seperator+1);
+		}
+		
+		//acquiring high CO2 factors of the room
+		pElem = hRoot.FirstChild("highCO2Factors").ToElement();
+		if (!pElem) return 0;
+		text = pElem->GetText();
+		for (int j = 0; j < 4; j++){
+			size_t seperator = text.find(",");
+			string number = text.substr(0,seperator);
+			roomsInfo[i].highCO2Factors[j] = strtol(number.c_str(), NULL, 10);
+
+			text.erase(0,seperator+1);
+		}
 		
 		//acquiring respiratory increase per minute of the room
 		pElem = hRoot.FirstChild("respIncreasePerMin").ToElement();
@@ -131,8 +209,10 @@ int main(){
 		//The room model is initialized and added to the list of room models
 		shared_ptr<dynamic::modeling::model> room;
 		
-		room = dynamic::translate::make_dynamic_atomic_model<RoomModel, TIME>(roomsInfo[i].ID, roomsInfo[i].ID, 
-			roomsInfo[i].ventilationRating, roomsInfo[i].socialDistanceThreshold, roomsInfo[i].wearsMaskCorrectlyFactor, roomsInfo[i].socialDistanceFactor, roomsInfo[i].respIncreasePerMin);
+		room = dynamic::translate::make_dynamic_atomic_model<RoomModel, TIME>("Room"+roomsInfo[i].ID, roomsInfo[i].ID, 
+			roomsInfo[i].ventilationRating, roomsInfo[i].socialDistanceThreshold, roomsInfo[i].respIncreasePerMin, 
+			roomsInfo[i].volumeOfRoom, roomsInfo[i].sickPeopleCO2Factor, move(roomsInfo[i].highCO2FactorThresholds), 
+			move(roomsInfo[i].highCO2Factors), roomsInfo[i].vaccinatedFactor, roomsInfo[i].wearsMaskFactor, roomsInfo[i].socialDistanceFactor);
 		
 		rooms.push_back(room);
 		
@@ -154,6 +234,26 @@ int main(){
 		
 		
 	}
+	
+	/****** outdoors atomic model instantiation *******************/
+	
+	//The outdoors model is initialized and added to the list of outdoors models
+	shared_ptr<dynamic::modeling::model> outdoors;
+	
+	string outdoorsName = "Outdoors";
+		
+	outdoors = dynamic::translate::make_dynamic_atomic_model<OutdoorsModel, TIME>(outdoorsName, outdoorsName);
+		
+	/****** outdoors filters atomic model instantiation *******************/
+	//The filterInOutdoors model is initialized
+	shared_ptr<dynamic::modeling::model> filterInOutdoors;
+
+	filterInOutdoors = dynamic::translate::make_dynamic_atomic_model<Filter_People_In, TIME>("filterIn"+outdoorsName, outdoorsName);
+		
+	//The filterOutOutdoors model is initialized
+	shared_ptr<dynamic::modeling::model> filterOutOutdoors;
+
+	filterOutOutdoors = dynamic::translate::make_dynamic_atomic_model<Filter_People_Out, TIME>("filterOut"+outdoorsName, outdoorsName);
 
 	/****** person atomic model instantiation *******************/
 	
@@ -161,38 +261,43 @@ int main(){
 	vector<shared_ptr<dynamic::modeling::model>> peopleFilters;
 	vector<DecisionMakerBehaviour> peopleInfo;
 	
-	vector<const char *> peopleXMLFiles;
-	const char * student1Path = "../data/Student1.xml";
-	peopleXMLFiles.push_back(student1Path);
-	const char * student2Path = "../data/Student2.xml";
-	peopleXMLFiles.push_back(student2Path);
-	const char * student3Path = "../data/Student3.xml";
-	peopleXMLFiles.push_back(student3Path);
-	const char * student4Path = "../data/Student4.xml";
-	peopleXMLFiles.push_back(student4Path);
-	const char * student5Path = "../data/Student5.xml";
-	peopleXMLFiles.push_back(student5Path);
-	const char * student6Path = "../data/Student6.xml";
-	peopleXMLFiles.push_back(student6Path);
+	vector<char *> peopleXMLFiles;
+	
+	//number of people to be dynamically loaded
+	int numberOfPeople = 10;
+	peopleXMLFiles.resize(numberOfPeople);
+	string personPathStr;
+	for (int i = 0; i < numberOfPeople; i++){
+		string s = to_string(i+1);
+		personPathStr = "../data/people/Person" + s + ".xml";
+		const char * personPath = personPathStr.c_str();
+		peopleXMLFiles[i] = new char[strlen(personPath)+1];
+		for (int j = 0; j < strlen(personPath); j++){
+			peopleXMLFiles[i][j] = personPath[j];
+		}
+		peopleXMLFiles[i][strlen(personPath)] = '\0';
+	}
 	
 	for (int i = 0; i < peopleXMLFiles.size(); i++){
 		DecisionMakerBehaviour p;
 		peopleInfo.push_back(p);
 	}
 	
+	//The people are loaded into atomic models
 	for (int i = 0; i < peopleXMLFiles.size(); i++){
 	
 		string id = to_string(i+1);
 		
 		shared_ptr<dynamic::modeling::model> person;
 		
-		person = dynamic::translate::make_dynamic_atomic_model<Person, TIME>("Student" + id, move(peopleXMLFiles[i]));
+		const char * xmlFile = peopleXMLFiles[i];
+		person = dynamic::translate::make_dynamic_atomic_model<Person, TIME>("Person" + id, move(xmlFile));
 		
 		people.push_back(person);
 		
 		shared_ptr<dynamic::modeling::model> probGetSickFilter;
 		
-		probGetSickFilter = dynamic::translate::make_dynamic_atomic_model<Filter_ProbGetSick, TIME>("Student" +id+"Filter", id);
+		probGetSickFilter = dynamic::translate::make_dynamic_atomic_model<Filter_ProbGetSick, TIME>("Person" +id+"Filter", id);
 		
 		peopleFilters.push_back(probGetSickFilter);
 		
@@ -216,6 +321,9 @@ int main(){
 		submodels_TOP.push_back(people[i]);
 		submodels_TOP.push_back(peopleFilters[i]);
 	}
+	submodels_TOP.push_back(outdoors);
+	submodels_TOP.push_back(filterInOutdoors);
+	submodels_TOP.push_back(filterOutOutdoors);
 	
 
     dynamic::modeling::EICs eics_TOP;
@@ -223,23 +331,29 @@ int main(){
 
     dynamic::modeling::EOCs eocs_TOP;
 	for (int i = 0; i < rooms.size(); i++){
-		eocs_TOP.push_back(dynamic::translate::make_EOC<RoomModelPorts::out,top_out>(roomsInfo[i].ID));
+		eocs_TOP.push_back(dynamic::translate::make_EOC<RoomModelPorts::out,top_out>("Room"+roomsInfo[i].ID));
 	}
 
     dynamic::modeling::ICs ics_TOP;
 	for (int j = 0; j < people.size(); j++){
 		string id = to_string(j+1);
 		for (int i = 0; i < rooms.size(); i++){
-			ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_In_ports::inToFilter>("Student"+id,"filterIn"+roomsInfo[i].ID));
-			ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_Out_ports::inToFilter>("Student"+id,"filterOut"+roomsInfo[i].ID));
-			ics_TOP.push_back(dynamic::translate::make_IC<RoomModelPorts::out,Filter_ProbGetSick_ports::inToFilter>(roomsInfo[i].ID,"Student"+id+"Filter"));
+			ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_In_ports::inToFilter>("Person"+id,"filterIn"+roomsInfo[i].ID));
+			ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_Out_ports::inToFilter>("Person"+id,"filterOut"+roomsInfo[i].ID));
+			ics_TOP.push_back(dynamic::translate::make_IC<RoomModelPorts::out,Filter_ProbGetSick_ports::inToFilter>("Room"+roomsInfo[i].ID,"Person"+id+"Filter"));
+			
 		}
-		ics_TOP.push_back(dynamic::translate::make_IC<Filter_ProbGetSick_ports::outFromFilter,Person_ports::infectionProb>("Student"+id+"Filter","Student"+id));
+		ics_TOP.push_back(dynamic::translate::make_IC<OutdoorsModelPorts::out,Filter_ProbGetSick_ports::inToFilter>(outdoorsName,"Person"+id+"Filter"));
+		ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_In_ports::inToFilter>("Person"+id,"filterIn"+outdoorsName));
+		ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_Out_ports::inToFilter>("Person"+id,"filterOut"+outdoorsName));
+		ics_TOP.push_back(dynamic::translate::make_IC<Filter_ProbGetSick_ports::outFromFilter,Person_ports::infectionProb>("Person"+id+"Filter","Person"+id));
 	}
 	for (int i = 0; i < rooms.size(); i++){
-		ics_TOP.push_back(dynamic::translate::make_IC<Filter_People_In_ports::outFromFilter,RoomModelPorts::inToRoom>("filterIn"+roomsInfo[i].ID, roomsInfo[i].ID));
-		ics_TOP.push_back(dynamic::translate::make_IC<Filter_People_Out_ports::outFromFilter,RoomModelPorts::outFromRoom>("filterOut"+roomsInfo[i].ID,roomsInfo[i].ID));
+		ics_TOP.push_back(dynamic::translate::make_IC<Filter_People_In_ports::outFromFilter,RoomModelPorts::inToRoom>("filterIn"+roomsInfo[i].ID, "Room"+roomsInfo[i].ID));
+		ics_TOP.push_back(dynamic::translate::make_IC<Filter_People_Out_ports::outFromFilter,RoomModelPorts::outFromRoom>("filterOut"+roomsInfo[i].ID,"Room"+roomsInfo[i].ID));
 	}
+	ics_TOP.push_back(dynamic::translate::make_IC<Filter_People_In_ports::outFromFilter,OutdoorsModelPorts::inToOutdoors>("filterIn"+outdoorsName, outdoorsName));
+	ics_TOP.push_back(dynamic::translate::make_IC<Filter_People_Out_ports::outFromFilter,OutdoorsModelPorts::outFromOutdoors>("filterOut"+outdoorsName, outdoorsName));
 	
     shared_ptr<dynamic::modeling::coupled<TIME>> TOP;
 
@@ -280,6 +394,6 @@ int main(){
     /***** (7) *****/
     /************** Runner call ************************/
     dynamic::engine::runner<NDTime, logger_top> r(TOP, {0});
-    r.run_until(NDTime("24:00:00:000"));
+    r.run_until(NDTime("96:00:00:000"));
     return 0;
 }
