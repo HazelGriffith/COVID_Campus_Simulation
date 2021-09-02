@@ -1,6 +1,8 @@
 CC=g++
 CFLAGS=-std=c++17
 
+INCLUDEDESTIMES=-I../../../DESTimes/include
+
 bin_folder := $(shell mkdir -p bin)
 build_folder := $(shell mkdir -p build)
 
@@ -21,10 +23,17 @@ tinyxmlerror.o: tinyXML/tinyxmlerror.cpp
 randomPeopleXMLGenerator.o: randomPeopleXMLGenerator.cpp
 	$(CC) -g -c $(CFLAGS) randomPeopleXMLGenerator.cpp -o build/randomPeopleXMLGenerator.o
 
-#TARGET TO COMPILE ONLY ABP SIMULATOR
+parser.o: parser.cpp
+	$(CC) -g -c $(CFLAGS) $(INCLUDEDESTIMES) parser.cpp -o build/parser.o
+
+#TARGET TO COMPILE ONLY People XML generator
 generator: randomPeopleXMLGenerator.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
 	$(CC) -g -o PEOPLE_XML_GENERATOR build/randomPeopleXMLGenerator.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
 	
+#TARGET TO COMPILE ONLY PARSER
+parser: parser.o
+	$(CC) -g -o PARSER build/parser.o
+
 #CLEAN COMMANDS
 clean: 
 	rm -f bin/* build/*
