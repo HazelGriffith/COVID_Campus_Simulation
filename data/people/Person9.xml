@@ -2,21 +2,21 @@
 <DecisionMakerBehaviour>
     <ID>9</ID>
     <location>home</location>
-    <currStartTime>1267</currStartTime>
-    <timeInFirstLocation>1170</timeInFirstLocation>
+    <currStartTime>704</currStartTime>
+    <timeInFirstLocation>1297</timeInFirstLocation>
     <isSick>False</isSick>
     <exposed>False</exposed>
     <vaccinated>False</vaccinated>
     <wearingMaskCorrectly>True</wearingMaskCorrectly>
-    <socialDistance>True</socialDistance>
+    <socialDistance>False</socialDistance>
     <relationship />
     <behaviourRulesPerson />
     <locationPlan>
-        <locationPlan room="1" timeinroom="30" startTime="997" />
-        <locationPlan room="2" timeinroom="60" startTime="1027" />
-        <locationPlan room="1" timeinroom="60" startTime="1087" />
-        <locationPlan room="2" timeinroom="60" startTime="1147" />
-        <locationPlan room="3" timeinroom="60" startTime="1207" />
-        <locationPlan room="home" timeinroom="1170" startTime="1267" />
+        <locationPlan room="2" timeinroom="30" startTime="569" />
+        <locationPlan room="Outdoors" timeinroom="7" startTime="599" />
+        <locationPlan room="3" timeinroom="90" startTime="606" />
+        <locationPlan room="Outdoors" timeinroom="8" startTime="696" />
+        <locationPlan room="home" timeinroom="1297" startTime="704" />
+        <locationPlan room="Outdoors" timeinroom="8" startTime="561" />
     </locationPlan>
 </DecisionMakerBehaviour>

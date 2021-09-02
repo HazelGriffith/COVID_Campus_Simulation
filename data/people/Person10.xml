@@ -2,18 +2,35 @@
 <DecisionMakerBehaviour>
     <ID>10</ID>
     <location>home</location>
-    <currStartTime>1143</currStartTime>
-    <timeInFirstLocation>1170</timeInFirstLocation>
+    <currStartTime>1281</currStartTime>
+    <timeInFirstLocation>680</timeInFirstLocation>
     <isSick>False</isSick>
     <exposed>False</exposed>
     <vaccinated>False</vaccinated>
-    <wearingMaskCorrectly>False</wearingMaskCorrectly>
+    <wearingMaskCorrectly>True</wearingMaskCorrectly>
     <socialDistance>False</socialDistance>
     <relationship />
     <behaviourRulesPerson />
     <locationPlan>
-        <locationPlan room="1" timeinroom="90" startTime="873" />
-        <locationPlan room="2" timeinroom="180" startTime="963" />
-        <locationPlan room="home" timeinroom="1170" startTime="1143" />
+        <locationPlan room="2" timeinroom="90" startTime="527" />
+        <locationPlan room="Tunnels" timeinroom="4" startTime="617" />
+        <locationPlan room="3" timeinroom="180" startTime="621" />
+        <locationPlan room="Tunnels" timeinroom="1" startTime="801" />
+        <locationPlan room="2" timeinroom="60" startTime="802" />
+        <locationPlan room="Tunnels" timeinroom="8" startTime="862" />
+        <locationPlan room="3" timeinroom="90" startTime="870" />
+        <locationPlan room="Tunnels" timeinroom="5" startTime="960" />
+        <locationPlan room="1" timeinroom="60" startTime="965" />
+        <locationPlan room="Tunnels" timeinroom="1" startTime="1025" />
+        <locationPlan room="2" timeinroom="90" startTime="1026" />
+        <locationPlan room="Tunnels" timeinroom="2" startTime="1116" />
+        <locationPlan room="3" timeinroom="90" startTime="1118" />
+        <locationPlan room="Tunnels" timeinroom="2" startTime="1208" />
+        <locationPlan room="2" timeinroom="30" startTime="1210" />
+        <locationPlan room="Tunnels" timeinroom="9" startTime="1240" />
+        <locationPlan room="3" timeinroom="30" startTime="1249" />
+        <locationPlan room="Tunnels" timeinroom="2" startTime="1279" />
+        <locationPlan room="home" timeinroom="680" startTime="1281" />
+        <locationPlan room="Tunnels" timeinroom="6" startTime="521" />
     </locationPlan>
 </DecisionMakerBehaviour>
