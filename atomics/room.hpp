@@ -62,9 +62,7 @@ template<typename TIME> class RoomModel{
         float CO2Concentration;
 		vector<ProbGetSick> peopleLeaving;
 		int totalNumberPeople;
-		float averageProbOfInfection;
-		vector<int> halfHourOccupancy;
-		int currInterval;
+		vector<float> probsOfInfection;
 		
     }; state_type state;
 
@@ -86,10 +84,7 @@ template<typename TIME> class RoomModel{
 		state.CO2Concentration = 400;
 		state.peopleLeaving.clear();
 		state.totalNumberPeople = 0;
-		state.averageProbOfInfection = 0;
-		state.halfHourOccupancy.clear();
-		state.halfHourOccupancy.resize(48);
-		state.currInterval = 0;
+		state.probsOfInfection.clear();
 		
 		roomID = i_roomID;
 		ACHVentilation = i_ACHVentilation;
@@ -113,7 +108,6 @@ template<typename TIME> class RoomModel{
 
     //update Room with new occupants and new CO2 concentration
     void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs){
-     
         
         
         float hoursToMin = e.getHours()*60;
@@ -155,10 +149,6 @@ template<typename TIME> class RoomModel{
 	//	assert(state.CO2Concentration > 150);
 	//	assert(state.CO2Concentration < 2500);
         
-		/*for (int i = state.currInterval; i < state.currInterval+floor(elap_min/30); i++){
-			state.halfHourOccupancy[i] = state.numberPeople;
-		}
-		state.currInterval += floor(elap_min/30);*/
 		
         vector<PersonInfo> msgBagInToRoom = get_messages<typename RoomModelPorts::inToRoom>(mbs);
         vector<PersonInfo> msgBagOutFromRoom = get_messages<typename RoomModelPorts::outFromRoom>(mbs);
@@ -239,7 +229,7 @@ template<typename TIME> class RoomModel{
 					
 					float probabilityOfInfection = ((probabilityRank - 1)*20) + (rand() % 21);
 					
-					state.averageProbOfInfection += probabilityOfInfection;			
+							
 					//If the person is already sick then their chance of being sick upon leaving is guaranteed
 					if (msgOutFromRoom.isSick){
 						personLeaving.probSick = 1;
@@ -309,7 +299,14 @@ template<typename TIME> class RoomModel{
     };
     
     friend std::ostringstream& operator<<(std::ostringstream& os, const typename RoomModel<TIME>::state_type& i){
-        os << "Number of People in room: "<< i.numberPeople <<" number of people wearing masks: " << i.numberPeopleWearingMasksCorrectly << " Number of people social distancing: " << i.socialDistancing << " Number of sick people: " << i.numberSickPeople << " CO2 concentration in the room: " << i.CO2Concentration << " average number of people per hour: " << i.totalNumberPeople/24 << " average probability of infection: " << i.averageProbOfInfection/i.totalNumberPeople << " students travelling at same time: " << i.peopleLeaving.size() <<"\n ";
+		string people = "";
+		for (int j = 0; j < i.peopleInRoom.size(); j++){
+			people += i.peopleInRoom[j].personID;
+			if (j != i.peopleInRoom.size()-1){
+				people += ",";
+			}
+		}
+        os << "Number of People in room: "<< i.numberPeople <<" number of people wearing masks: " << i.numberPeopleWearingMasksCorrectly << " Number of people social distancing: " << i.socialDistancing << " Number of sick people: " << i.numberSickPeople << " CO2 concentration in the room: " << i.CO2Concentration << " people ID's in room: " << people << " students travelling at same time: " << i.peopleLeaving.size() <<"\n ";
         
         return os;
     }

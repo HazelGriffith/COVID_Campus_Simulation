@@ -163,6 +163,8 @@ namespace decision_maker_behaviour_structures{
 				int numberOf60MinEvents = 0;
 				int numberOf30MinEvents = 0;
 				int numberOf180MinEvents = 0;
+				int numberOfTravelingEvents = 0;
+				vector<int> travelingEventTimes;
 				
 				//This section randomly determines how many 180, 30, 60, and/or 90 minute event durations are scheduled
 				uniform_int_distribution<int> ninetyMinDistribution(0,floor(timeAtCarleton/90));
@@ -173,7 +175,17 @@ namespace decision_maker_behaviour_structures{
 				int tempTimeAtCarleton = timeAtCarleton;
 				tempTimeAtCarleton -= numberOf90MinEvents*90;
 				
-					
+				//random travelling times are generated and added
+
+				uniform_int_distribution<int> travelTimesDistribution(1,10);
+				//travelingEventTimes.push_back(travelTimesDistribution(generator));
+				int travelingTime;
+				
+				assert(tempTimeAtCarleton >= 0);
+				
+				
+				
+				
 				if (tempTimeAtCarleton >= 180){
 					//If there are any remaining 180 min time slots then some may be generated
 					uniform_int_distribution<int> oneEightyMinDistribution(0,floor(tempTimeAtCarleton/180));
@@ -186,7 +198,8 @@ namespace decision_maker_behaviour_structures{
 					assert(numberOf180MinEvents >= 0);
 					assert(numberOf180MinEvents <= floor(tempTimeAtCarleton/180));
 					tempTimeAtCarleton -= numberOf180MinEvents*180;
-						
+					
+					assert(tempTimeAtCarleton >= 0);
 				} 
 
 				if (tempTimeAtCarleton >= 60){
@@ -197,24 +210,102 @@ namespace decision_maker_behaviour_structures{
 					assert(numberOf60MinEvents >= 0);
 					assert(numberOf60MinEvents <= floor(tempTimeAtCarleton/60));
 					tempTimeAtCarleton -= numberOf60MinEvents*60;
+					
+					assert(tempTimeAtCarleton >= 0);
 				}
 					
 				if (tempTimeAtCarleton >= 30){
 						
-					numberOf30MinEvents = tempTimeAtCarleton/30;
+					numberOf30MinEvents = floor(tempTimeAtCarleton/30);
 					assert(numberOf30MinEvents >= 0);
-					assert(numberOf30MinEvents <= tempTimeAtCarleton/30);
+					assert(numberOf30MinEvents <= floor(tempTimeAtCarleton/30));
 					tempTimeAtCarleton -= numberOf30MinEvents*30;
-						
+					
+					assert(tempTimeAtCarleton >= 0);
+					
 				}
 				
+				int numberOfEvents = numberOf90MinEvents + numberOf180MinEvents + numberOf60MinEvents + numberOf30MinEvents;
+				int sum = 0;
+				for (int i = 0; i < numberOfEvents; i++){
+					travelingTime = travelTimesDistribution(generator);
+					travelingEventTimes.push_back(travelingTime);
+					sum += travelingTime;
+				}
+				while (sum > 0){
+					if (sum >= 180){
+						if (numberOf180MinEvents > 0){
+							sum -= 180;
+							numberOf180MinEvents--;
+							numberOfEvents--;
+						} else if (numberOf90MinEvents > 0){
+							sum -= 90;
+							numberOf90MinEvents--;
+						} else if (numberOf60MinEvents > 0){
+							sum -= 60;
+							numberOf60MinEvents--;
+						} else {
+							sum -= 30;
+							numberOf30MinEvents--;
+						}
+						numberOfEvents--;
+					} else if (sum >= 90){
+						if (numberOf90MinEvents > 0){
+							sum -= 90;
+							numberOf90MinEvents--;
+							numberOfEvents--;
+						} else if (numberOf60MinEvents > 0){
+							sum -= 60;
+							numberOf60MinEvents--;
+							numberOfEvents--;
+						} else if (numberOf30MinEvents > 0){
+							sum -= 30;
+							numberOf30MinEvents--;
+							numberOfEvents--;
+						}
+						
+					} else if (sum >= 60){
+						if (numberOf60MinEvents > 0){
+							sum -= 60;
+							numberOf60MinEvents--;
+							numberOfEvents--;
+						} else {
+							sum -= 30;
+							numberOf30MinEvents--;
+							numberOfEvents--;
+						}
+						
+					} else if ((sum >= 30)&&(numberOf30MinEvents > 0)){
+						sum -= 30;
+						numberOf30MinEvents--;
+						numberOfEvents--;
+						
+					} else if (timeAtCarleton + sum <= maxTimeInDay){
+						timeAtCarleton += sum;
+						sum = 0;
+					} else {
+						if (numberOf30MinEvents > 0){
+							numberOf30MinEvents--;
+							
+						} else if (numberOf60MinEvents > 0){
+							numberOf60MinEvents--;
+						} else if (numberOf90MinEvents > 0){
+							numberOf90MinEvents--;
+						} else {
+							numberOf180MinEvents--;
+						}
+						numberOfEvents--;
+						sum = 0;
+					}
+				}
+				travelingEventTimes.resize(numberOfEvents);
+				
 				//randomly generates the time the person arrives at Carleton
-				cout << "TIME: " << timeAtCarleton << endl;
 				uniform_int_distribution<int> arrivalTimeDistribution(510,(1320-timeAtCarleton));
 				int beginningOfTimeAtCarleton = arrivalTimeDistribution(generator);
 				
 				//randomly generates the list of rooms the person will visit during events
-				int numberOfEvents = numberOf180MinEvents + numberOf60MinEvents + numberOf90MinEvents + numberOf30MinEvents;
+				
 				vector<int> locationIDs;
 				locationIDs.resize(numberOfEvents);
 				uniform_int_distribution<int> roomIDDistribution(1,numberOfRooms);
@@ -241,10 +332,9 @@ namespace decision_maker_behaviour_structures{
 				startTimes.resize(numberOfEvents);
 				timeInRooms.resize(numberOfEvents);
 				//sum is used to verify that the correct times are used
-				int sum = 0;
+				sum = 0;
 				
 				startTimes[0] = beginningOfTimeAtCarleton;
-				cout << "startTime: " << startTimes[0] << endl;
 				assert(startTimes[0] <= 1290);
 				
 				vector<tuple<int, int>> events;
@@ -282,7 +372,8 @@ namespace decision_maker_behaviour_structures{
 					}
 						
 					if (i > 0){
-						startTimes[i] = startTimes[i-1] + timeInRooms[i-1];
+						startTimes[i] = startTimes[i-1] + timeInRooms[i-1] + travelingEventTimes[i-1];
+						cout << "travelTime" << i << ": " << travelingEventTimes[i] << endl;
 					}
 					
 					sum += elapsedTime;
@@ -292,16 +383,34 @@ namespace decision_maker_behaviour_structures{
 				assert(sum == (numberOf180MinEvents*180 + numberOf90MinEvents*90 + numberOf60MinEvents*60 + numberOf30MinEvents*30));
 				
 				//The locationPlan vector is initialized for the DecisionMakerBehaviour object
-				locationPlan.resize(numberOfEvents);
+				//locationPlan.resize(numberOfEvents);
 				for (int i = 0; i < numberOfEvents; i++){
 					string iD = to_string(locationIDs[i]);
 					int timeSpent = timeInRooms[i];
 					int timeStart = startTimes[i];
 					LocationPlan temp = LocationPlan(iD, timeSpent, timeStart);
-					locationPlan[i] = temp;
+					locationPlan.push_back(temp);
+					if (riskyTravelBehaviour){
+						iD = "Tunnels";
+					} else {
+						iD = "Outdoors";
+					}
+					timeSpent = travelingEventTimes[i];
+					timeStart = startTimes[i] + timeInRooms[i];
+					temp = LocationPlan(iD, timeSpent, timeStart);
+					locationPlan.push_back(temp);
 				}
-				LocationPlan home = LocationPlan("home", 1440 - (startTimes[numberOfEvents-1]+timeInRooms[numberOfEvents-1]) + startTimes[0], startTimes[numberOfEvents-1]+timeInRooms[numberOfEvents-1]);
+				string iD;
+				if (riskyTravelBehaviour){
+					iD = "Tunnels";
+				} else {
+					iD = "Outdoors";
+				}
+				int timeSpent = travelTimesDistribution(generator);
+				LocationPlan travel = LocationPlan(iD, timeSpent, (startTimes[0] - timeSpent));
+				LocationPlan home = LocationPlan("home", 1440 - (startTimes[numberOfEvents-1]+timeInRooms[numberOfEvents-1]+travelingEventTimes[numberOfEvents-1]) + (startTimes[0] - timeSpent), startTimes[numberOfEvents-1]+timeInRooms[numberOfEvents-1]+travelingEventTimes[numberOfEvents-1]);
 				locationPlan.push_back(home);
+				locationPlan.push_back(travel);
 				currStartTime = home.startTime;
 				timeInFirstLocation = home.timeInRoomMin;
 			}

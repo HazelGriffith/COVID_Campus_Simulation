@@ -44,8 +44,6 @@ template <typename TIME> class Person{
     //State Definition
     struct state_type {
 		int timeRemaining;
-		bool travelling;
-		int timeSpentTravelling;
 		PersonInfo travelInfo;
     };
     state_type state;
@@ -60,8 +58,6 @@ template <typename TIME> class Person{
 		person.nextLocation = lp;
 		//time interval is set to 0 such that the PersonInfo message saying they are entering the first room is sent immediately
 		state.timeRemaining = 0;
-		state.travelling = true;
-		state.timeSpentTravelling = 0;
 		//The PersonInfo message that initializes the person's first location is created here.
 		state.travelInfo = PersonInfo(person.ID, person.isSick, person.exposed, person.vaccinated, person.wearingMask, person.location, "" , person.socialDistance, (person.timeInFirstLocation + person.currStartTime)%1440);
     }
@@ -69,65 +65,31 @@ template <typename TIME> class Person{
     //internal transition function
     void internal_transition(){
 		//sets up the person to output the correct PersonInfo object at the next time interval
-		unsigned seed1 = chrono::system_clock::now().time_since_epoch().count();
-		default_random_engine generator(seed1);
-		uniform_int_distribution<int> oneToTenDistribution(1,10);
 		
-		if (state.travelling){
-			
-			if (person.nextLocation.isEmpty()){
-				//person.setNextLocation() uses the current start time and time remaining to find the next location
-				//because the initial time remaining is set to 0, it will not correctly find the next location
-				//Therefore, if the person is using the initial time of 0, the DecisionMakerBehaviour object person's nextLocation
-				//variable will be empty and cannot give the correct time remaining. So the first time remaining value is loaded
-				//from the person xml file and initialized here
-				state.timeRemaining = (person.timeInFirstLocation + person.currStartTime)%1440;
-				person.setNextLocation(person.timeInFirstLocation);
-				person.currStartTime = person.nextLocation.startTime;
-			} else {
-				state.timeRemaining = person.nextLocation.timeInRoomMin;
-			}
-			state.timeSpentTravelling = oneToTenDistribution(generator);
-			
-			state.travelInfo.roomIDLeaving = person.location;
-			
-			if (person.riskyTravelBehaviour){
-				state.travelInfo.roomIDEntering = "Tunnels";
-				person.location = "Tunnels";
-			} else {
-				state.travelInfo.roomIDEntering = "Outdoors";
-				person.location = "Outdoors";
-			}
-			
-			state.travelInfo.minsUntilLeaving = state.timeSpentTravelling;
-			
-			state.travelling = false;
-			
+		
+		if (person.nextLocation.isEmpty()){
+			//person.setNextLocation() uses the current start time and time remaining to find the next location
+			//because the initial time remaining is set to 0, it will not correctly find the next location
+			//Therefore, if the person is using the initial time of 0, the DecisionMakerBehaviour object person's nextLocation
+			//variable will be empty and cannot give the correct time remaining. So the first time remaining value is loaded
+			//from the person xml file and initialized here
+			state.timeRemaining = (person.timeInFirstLocation + person.currStartTime)%1440;
+			person.setNextLocation(person.timeInFirstLocation);
 		} else {
-			state.timeRemaining = state.timeSpentTravelling;
-			
-			state.travelInfo.roomIDEntering = person.nextLocation.roomID;
-			state.travelInfo.minsUntilLeaving = person.nextLocation.timeInRoomMin;
-			state.travelInfo.roomIDLeaving = person.location;
-			person.location = person.nextLocation.roomID;
-			
-			person.setNextLocation(person.nextLocation.timeInRoomMin);
-			person.currStartTime = person.nextLocation.startTime;
-			//sets the DecisionMakerBehaviour person's nextLocation object to be equal to the LocationPlan object 
-			//with a start time equal to the person's current start time + the state's time remaining
-		
-			//The PersonInfo object is updated for the next time interval output
-			
-			state.travelling = true;
+			state.timeRemaining = person.nextLocation.timeInRoomMin;
+			person.setNextLocation(state.timeRemaining);
 		}
-		
+		person.currStartTime = person.nextLocation.startTime;
+		state.travelInfo.roomIDLeaving = person.location;
+		state.travelInfo.minsUntilLeaving = person.nextLocation.timeInRoomMin;
+		state.travelInfo.roomIDEntering = person.nextLocation.roomID;
+		person.location = person.nextLocation.roomID;
 		
     }
 
 
     //external transition function
     void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs){
-		
 		vector<ProbGetSick> msgBag = get_messages<typename Person_ports::infectionProb>(mbs);
 		
         for (int i = 0 ; i < get_messages<typename Person_ports::infectionProb>(mbs).size() ; i++ ){
