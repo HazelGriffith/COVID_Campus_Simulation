@@ -2,8 +2,8 @@
 <DecisionMakerBehaviour>
     <ID>2</ID>
     <location>home</location>
-    <currStartTime>1218</currStartTime>
-    <timeInFirstLocation>780</timeInFirstLocation>
+    <currStartTime>1298</currStartTime>
+    <timeInFirstLocation>1243</timeInFirstLocation>
     <isSick>False</isSick>
     <exposed>False</exposed>
     <vaccinated>True</vaccinated>
@@ -12,18 +12,11 @@
     <relationship />
     <behaviourRulesPerson />
     <locationPlan>
-        <locationPlan room="3" timeinroom="180" startTime="558" />
-        <locationPlan room="2" timeinroom="60" startTime="738" />
-        <locationPlan room="1" timeinroom="30" startTime="798" />
-        <locationPlan room="3" timeinroom="90" startTime="828" />
-        <locationPlan room="1" timeinroom="30" startTime="918" />
-        <locationPlan room="2" timeinroom="90" startTime="948" />
-        <locationPlan room="1" timeinroom="30" startTime="1038" />
-        <locationPlan room="3" timeinroom="30" startTime="1068" />
-        <locationPlan room="2" timeinroom="30" startTime="1098" />
-        <locationPlan room="3" timeinroom="30" startTime="1128" />
-        <locationPlan room="1" timeinroom="30" startTime="1158" />
-        <locationPlan room="2" timeinroom="30" startTime="1188" />
-        <locationPlan room="home" timeinroom="780" startTime="1218" />
+        <locationPlan room="2" timeinroom="90" startTime="1108" />
+        <locationPlan room="Outdoors" timeinroom="6" startTime="1198" />
+        <locationPlan room="1" timeinroom="90" startTime="1204" />
+        <locationPlan room="Outdoors" timeinroom="4" startTime="1294" />
+        <locationPlan room="home" timeinroom="1243" startTime="1298" />
+        <locationPlan room="Outdoors" timeinroom="7" startTime="1101" />
     </locationPlan>
 </DecisionMakerBehaviour>
