@@ -47,9 +47,6 @@ template<typename TIME> class OutdoorsModel{
 		int numberSickPeople;
 		vector<PersonInfo> peopleInOutdoors;
 		vector<ProbGetSick> peopleLeaving;
-		int totalNumberPeople;
-		vector<int> halfHourOccupancy;
-		int currInterval;
     }; state_type state;
 
     //default constructor
@@ -66,10 +63,6 @@ template<typename TIME> class OutdoorsModel{
         state.numberSickPeople = 0;
 		state.peopleInOutdoors.clear();
 		state.peopleLeaving.clear();
-		state.totalNumberPeople = 0;
-		state.halfHourOccupancy.clear();
-		state.halfHourOccupancy.resize(48);
-		state.currInterval = 0;
 		
 		outdoorsID = i_outdoorsID;
 		
@@ -83,18 +76,7 @@ template<typename TIME> class OutdoorsModel{
 
     //update Outdoors with new occupants and new CO2 concentration
     void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs){
-     
         
-        
-        float hoursToMin = e.getHours()*60;
-        float min = e.getMinutes();
-        float secondsToMin = e.getSeconds()/60;
-        float elap_min = (hoursToMin + min + secondsToMin); // convert elapsed time to minutes 
-        
-		for (int i = state.currInterval; i < state.currInterval+floor(elap_min/30); i++){
-			state.halfHourOccupancy[i] = state.numberPeople;
-		}
-		state.currInterval += floor(elap_min/30);
 		
         vector<PersonInfo> msgBagInToOutdoors = get_messages<typename OutdoorsModelPorts::inToOutdoors>(mbs);
         vector<PersonInfo> msgBagOutFromOutdoors = get_messages<typename OutdoorsModelPorts::outFromOutdoors>(mbs);
@@ -109,7 +91,6 @@ template<typename TIME> class OutdoorsModel{
 			}
 			
 			state.peopleInOutdoors.push_back(msgInToOutdoors);
-			state.totalNumberPeople++;
 		}
 		
         //Entities coming out of the outdoors
@@ -189,11 +170,19 @@ template<typename TIME> class OutdoorsModel{
         }else{
             nextInternal = TIME();
         }
+		cout << "Outdoors timeAdvance return statement" << endl;
 		return nextInternal;
     };
     
     friend std::ostringstream& operator<<(std::ostringstream& os, const typename OutdoorsModel<TIME>::state_type& i){
-        os << "Number of People in outdoors: "<< i.numberPeople <<" number of people wearing masks: " << i.numberPeopleWearingMasksCorrectly << " Number of people social distancing: " << i.socialDistancing << " Number of sick people: " << i.numberSickPeople <<"\n ";
+		string people = "";
+		for (int j = 0; j < i.peopleInOutdoors.size(); j++){
+			people += i.peopleInOutdoors[j].personID;
+			if (j != i.peopleInOutdoors.size()-1){
+				people += ",";
+			}
+		}
+        os << "Number of People in outdoors: "<< i.numberPeople <<" number of people wearing masks: " << i.numberPeopleWearingMasksCorrectly << " Number of people social distancing: " << i.socialDistancing << " Number of sick people: " << i.numberSickPeople << " people ID's in room: " << people <<"\n ";
         
         return os;
     }
