@@ -68,7 +68,10 @@ int main(){
 	
 	vector<char*> roomXMLFiles;
 	//this many rooms are dynamically loaded
-	int numberOfRooms = 3;
+	int numberOfRooms;
+	cout << "Enter the number of rooms in the simulation: ";
+	cin >> numberOfRooms;
+	cout << endl;
 	
 	roomXMLFiles.resize(numberOfRooms);
 	string roomPathStr;
@@ -80,7 +83,7 @@ int main(){
 		for (int j = 0; j < strlen(roomPath); j++){
 			roomXMLFiles[i][j] = roomPath[j];
 		}
-		roomXMLFiles[i][19] = '\0';
+		roomXMLFiles[i][strlen(roomPath)] = '\0';
 	}
 	
 	//adds tunnels to the list of rooms to be loaded

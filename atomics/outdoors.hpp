@@ -170,7 +170,6 @@ template<typename TIME> class OutdoorsModel{
         }else{
             nextInternal = TIME();
         }
-		cout << "Outdoors timeAdvance return statement" << endl;
 		return nextInternal;
     };
     

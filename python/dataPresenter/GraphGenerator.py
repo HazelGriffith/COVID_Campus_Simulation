@@ -220,7 +220,10 @@ for value in ventilationRatesPerRoom.values():
 y = []
 for value in overallProbsOfInfectionPerRoom.values():
     y.append(value)
-    
+
+plt.ylabel('Average Probability of Infection(%)')
+plt.xlabel('Ventilation Rate(L/min)')
+plt.suptitle("Overall Probability of Infection versus Ventilation Rate")
 plt.plot(x,y,'bo')
 plt.show()
 
