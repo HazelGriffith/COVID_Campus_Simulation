@@ -88,7 +88,7 @@ namespace decision_maker_behaviour_structures{
 			int startTime;
 		
 		bool isEmpty(){
-			if ((roomID.compare("") == 0)&&(timeInRoomMin == 0)&&(startTime == 0)){
+			if (((roomID.compare("") == 0)&&(timeInRoomMin == 0)&&(startTime == 0))||(timeInRoomMin < 0)||(startTime < 0)){
 				return true;
 			} else {
 				return false;
@@ -413,6 +413,16 @@ namespace decision_maker_behaviour_structures{
 				locationPlan.push_back(travel);
 				currStartTime = home.startTime;
 				timeInFirstLocation = home.timeInRoomMin;
+				
+				BehaviourRulesPerson family = BehaviourRulesPerson("family", "0.2", "0.2");
+				BehaviourRulesPerson friends = BehaviourRulesPerson("friends", "0.5", "0.5");
+				BehaviourRulesPerson stranger = BehaviourRulesPerson("stranger", "0.8", "0.8");
+				behaviourRulesPerson.push_back(family);
+				behaviourRulesPerson.push_back(friends);
+				behaviourRulesPerson.push_back(stranger);
+				
+				
+				
 			}
 			string                          ID;
 			string                          location;
@@ -442,10 +452,14 @@ namespace decision_maker_behaviour_structures{
 					changed = true;
 				}
 			}
-			//cout << "timeRemaining:" << timeRemaining << endl;
-			//cout << "currStartTime:" << currStartTime << endl;
+			cout << "timeRemaining:" << timeRemaining << endl;
+			cout << "currStartTime:" << currStartTime << endl;
 			assert(changed == true);
 		}
+		
+		//string findRelationshipType(PersonInfo person){
+			
+		//}
 
 		void save(const char* pFilename){
 	
