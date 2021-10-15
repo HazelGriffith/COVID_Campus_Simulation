@@ -12,9 +12,9 @@ struct PersonInfo{
 	PersonInfo() {}
 	
 	PersonInfo(string i_personID, bool i_isSick, bool i_exposed, bool i_vaccinated, bool i_wearsMaskCorrectly, 
-				string i_roomIDEntering, string i_roomIDLeaving, bool i_socialDistance, int i_minsUntilLeaving)
+				string i_roomIDEntering, string i_roomIDLeaving, bool i_socialDistance, int i_weatherThreshold, int i_minsUntilLeaving)
 				:personID(i_personID), isSick(i_isSick), exposed(i_exposed), vaccinated(i_vaccinated), wearsMaskCorrectly(i_wearsMaskCorrectly),
-				  roomIDEntering(i_roomIDEntering), roomIDLeaving(i_roomIDLeaving), socialDistance(i_socialDistance),
+				  roomIDEntering(i_roomIDEntering), roomIDLeaving(i_roomIDLeaving), socialDistance(i_socialDistance), weatherThreshold(i_weatherThreshold),
 				  minsUntilLeaving(i_minsUntilLeaving) {}
 				  
 	
@@ -27,6 +27,7 @@ struct PersonInfo{
 	string roomIDEntering;
 	string roomIDLeaving;
 	bool socialDistance;
+	int weatherThreshold;
 	long int minsUntilLeaving;
 	//NDTime timeUntilLeaving;
 };

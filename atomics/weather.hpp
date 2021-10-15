@@ -60,8 +60,6 @@ template <typename TIME> class Weather{
 
 		//set one day until next weather change
 		state.timeRemaining = 1440;
-
-		cout << "making new weather = " << state.weatherValue.newState << " prev = " << state.weatherValue.prevState << "\n";
     }
 
 	void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs) {}
@@ -74,7 +72,6 @@ template <typename TIME> class Weather{
     //output function
     typename make_message_bags<output_ports>::type output() const {
 
-		cout << "sending new weather = " << state.weatherValue.newState << " prev = " << state.weatherValue.prevState << "\n";
 		typename make_message_bags<output_ports>::type bags;
 		
         get_messages<typename Weather_ports::weatherUpdates>(bags).push_back(state.weatherValue);

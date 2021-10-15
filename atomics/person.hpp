@@ -64,7 +64,7 @@ template <typename TIME> class Person{
 		//sets current weather (should be immediately overwritten by incoming weather update
 		state.currentWeather = 0;
 		//The PersonInfo message that initializes the person's first location is created here.
-		state.travelInfo = PersonInfo(person.ID, person.isSick, person.exposed, person.vaccinated, person.wearingMask, person.location, "" , person.socialDistance, (person.timeInFirstLocation + person.currStartTime)%1440);
+		state.travelInfo = PersonInfo(person.ID, person.isSick, person.exposed, person.vaccinated, person.wearingMask, person.location, "" , person.socialDistance, person.weatherThreshold, (person.timeInFirstLocation + person.currStartTime)%1440);
     }
 
     //internal transition function
@@ -89,9 +89,15 @@ template <typename TIME> class Person{
 		state.travelInfo.minsUntilLeaving = person.nextLocation.timeInRoomMin;
 
 		//checks if a person is using the tunnels or outdoors to travel between destinations
-		//may change next room to tunnels or outdoors depending on weather
+		//the person will use outdoors if the current weather is greater or equal to their weatherThreshold value, will use tunnels otherwise
 		if (person.nextLocation.roomID == "Outdoors"|| person.nextLocation.roomID == "Tunnels") {
-			person.nextLocation.roomID = "Outdoors";
+			
+			if (state.currentWeather >= state.travelInfo.weatherThreshold) {
+				person.nextLocation.roomID = "Outdoors";
+			}
+			else {
+				person.nextLocation.roomID = "Tunnels";
+			}
 		}
 
 		state.travelInfo.roomIDEntering = person.nextLocation.roomID;

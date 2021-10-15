@@ -39,6 +39,8 @@ ostream& operator << (ostream &out, const PersonInfo &p){
 	} else {
 		out << ", and does not socially distance themselves.";
 	}
+
+	out << " They have a weather threshold of " << p.weatherThreshold;
 	
 	out << " They are leaving the room with ID " << p.roomIDLeaving;
 	out << " They are entering the room with ID " << p.roomIDEntering;
@@ -100,6 +102,9 @@ istream& operator >> (istream &in, PersonInfo &p){
 	} else {
 		p.socialDistance = false;
 	}
+
+	//cout << "Enter the weather threshold of the person ";
+	in >> p.weatherThreshold;
 	
 	//cout << "Enter the ID of the room the person is entering ";
 	in >> p.roomIDEntering;

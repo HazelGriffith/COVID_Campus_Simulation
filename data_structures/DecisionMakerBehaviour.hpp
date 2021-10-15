@@ -137,6 +137,10 @@ namespace decision_maker_behaviour_structures{
 				} else {
 					socialDistance = false;
 				}
+
+				r = booleanDistribution(generator);
+				weatherThreshold = floor(r / 10);
+
 				r = booleanDistribution(generator);
 				if (r < 50){
 					eatsAlone = true;
@@ -428,6 +432,7 @@ namespace decision_maker_behaviour_structures{
 			string                          location;
 			int 							currStartTime;
 			int 							timeInFirstLocation;
+			int								weatherThreshold;
 			bool                            isSick;
 			bool 							exposed;
 			bool							vaccinated;
@@ -452,8 +457,8 @@ namespace decision_maker_behaviour_structures{
 					changed = true;
 				}
 			}
-			cout << "timeRemaining:" << timeRemaining << endl;
-			cout << "currStartTime:" << currStartTime << endl;
+			//cout << "timeRemaining:" << timeRemaining << endl;
+			//cout << "currStartTime:" << currStartTime << endl;
 			assert(changed == true);
 		}
 		
@@ -573,6 +578,17 @@ namespace decision_maker_behaviour_structures{
 				}
 				root->LinkEndChild(pSocialDistance);
 			}   
+
+			// block: weatherThreshold
+
+			{
+
+				TiXmlElement * pWeatherThreshold = new TiXmlElement("weatherThreshold");
+				string weatherThresholdStr = to_string(weatherThreshold);
+				pWeatherThreshold->LinkEndChild(new TiXmlText(weatherThresholdStr.c_str()));
+				root->LinkEndChild(pWeatherThreshold);
+
+			}
 
 			//Block: Relationship
 			{
@@ -781,6 +797,14 @@ namespace decision_maker_behaviour_structures{
 				
 			}
 
+			// block: weatherThreshold
+			{
+				pElem = hRoot.FirstChild("weatherThreshold").ToElement();
+				if (!pElem) return;
+				const char* pWeatherThreshold = pElem->GetText();
+				if (pWeatherThreshold) weatherThreshold = strtol(pWeatherThreshold, NULL, 10);
+
+			}
 
 			//Block: Relationship
 			{
