@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.collections import LineCollection
+from matplotlib.colors import ListedColormap, BoundaryNorm
 
 #This section reads the data parsed from the simulation
 with open("../../data/ParsedData.txt") as dataFile:
@@ -9,6 +11,7 @@ with open("../../data/ParsedData.txt") as dataFile:
     occupancyData = {}
     timeStamps = []
     infectionProbData = {}
+    highestInfectionProbInstances = {}
     
     for line in dataLines:
         words = line.split()
@@ -31,6 +34,7 @@ with open("../../data/ParsedData.txt") as dataFile:
                     occupancyData[ID].append(words[2])
                 else:
                     occupancyData.update({ID: [words[2]]})
+
         elif (len(words) == 1):
             timeStamps.append(words[0])
         else:
@@ -39,6 +43,18 @@ with open("../../data/ParsedData.txt") as dataFile:
                 infectionProbData[key].extend([(words[1],words[2])])
             else:
                 infectionProbData.update({key: [(words[1],words[2])]})
+                
+            key = words[1]
+                
+            if key in highestInfectionProbInstances.keys():
+                if float(words[2]) > float(highestInfectionProbInstances[key]):
+                    highestInfectionProbInstances.update({key: words[2]})
+            else:
+                highestInfectionProbInstances.update({key: words[2]})
+                
+highestInfectionProbInstances = sorted(highestInfectionProbInstances.items(), key=lambda x: x[1], reverse=True)[:10]
+    
+#data formatting
 
 #The overall averages of the probabilities of infection for each room are calculated from the data
 overallProbsOfInfectionPerRoom = {}
@@ -52,7 +68,7 @@ for key in infectionProbData.keys():
             ID = roomInfTup[0].split("m")[1]
             if (ID == room):
                 overallProbsOfInfectionPerRoom[room].append(float(roomInfTup[1]))
-
+                
 for key in overallProbsOfInfectionPerRoom.keys():
     size = len(overallProbsOfInfectionPerRoom[key])
     total = 0
@@ -103,7 +119,7 @@ for room in occupancyData.keys():
     if ("Outdoors" not in room):
         #Outdoors is not considered because prob of Inf always = 0
         probOfInfPerRoomPerHalfHour.update({room:{}})
-
+        
 #Prepare ending time of half hour intervals
 endTime = timeStamps[len(timeStamps)-1]
 hours,minutes,sec,msec = endTime.split(":")
@@ -152,6 +168,10 @@ for timeSlot in occupancyPerRoomPerHalfHour["1"].keys():
             #sameLoop checks if the while loop is still looping
             #It is used to determine if the occupancy increases, then the counted value increases
             #Otherwise it would mean the same person is still in the room, or has left the room
+            
+            if occupancyData[room] == []:
+                continue;
+            
             people = occupancyData[room].pop(0)
             if (people != "none"):
                 if (len(people) == 1):
@@ -210,24 +230,56 @@ for key in occupancyPerRoomPerHalfHour.keys():
     for timeSlot in occupancyPerRoomPerHalfHour[key].keys():
         size = len(occupancyPerRoomPerHalfHour[key][timeSlot])
         occupancyPerRoomPerHalfHour[key][timeSlot] = size
+        
+#PLOTS
 
+#rooms ranked by highest reached infection probability
+
+x = [h[0] for h in highestInfectionProbInstances]
+highest = [float(h[1]) for h in highestInfectionProbInstances]
+overall = []
+
+import pandas as pd
+
+for key in x:
+    if key[4:] in overallProbsOfInfectionPerRoom.keys():
+        overall.append(overallProbsOfInfectionPerRoom.get(key[4:]))
+
+df = pd.DataFrame(np.c_[highest,overall], index=x)
+df = df.rename(columns={0: "Highest Value Reached", 1: "Average Value"})
+df.plot.bar(title = "Rooms Ranked by Highest Reached Infection Probability")
+plt.ylabel('Probability of Infection(%)')
+plt.xlabel('Room')
+plt.show()      
     
 #Ventilation versus Overall Average prob of Inf
 x = []
 for value in ventilationRatesPerRoom.values():
     x.append(value)
-    
+        
 y = []
+
+levels = []
+
 for value in overallProbsOfInfectionPerRoom.values():
     y.append(value)
+    if value > 20:
+        levels.append('r')
+    elif value > 10:
+        levels.append('y')
+    else:
+        levels.append('g')
 
 plt.ylabel('Average Probability of Infection(%)')
 plt.xlabel('Ventilation Rate(L/min)')
 plt.suptitle("Overall Probability of Infection versus Ventilation Rate")
-plt.plot(x,y,'bo')
+plt.scatter(x,y,color = levels)
 plt.show()
 
 for room in occupancyPerRoomPerHalfHour.keys():
+    
+    fig, subplts = plt.subplots(2, sharex=True)
+    
     x.clear()
     y.clear()
     for timeSlot in occupancyPerRoomPerHalfHour[room].keys():
@@ -239,14 +291,9 @@ for room in occupancyPerRoomPerHalfHour.keys():
             time += minutes/60
             x.append(time)
             y.append(occupancyPerRoomPerHalfHour[room][timeSlot])
-    plt.plot(x,y,'b-')
-    plt.ylabel('occupancy')
-    plt.xlabel('time(hours)')
-    if (room == "Outdoors"):
-        plt.suptitle("Outdoors Occupancy")
-    else:
-        plt.suptitle("Room"+room+" Occupancy")
-    plt.show()
+            
+    subplts[0].plot(x,y,'y-')
+    subplts[0].set_ylabel('occupancy')
     
     x.clear()
     y.clear()
@@ -260,11 +307,12 @@ for room in occupancyPerRoomPerHalfHour.keys():
                 time += minutes/60
                 x.append(time)
                 y.append(probOfInfPerRoomPerHalfHour[room][timeSlot])
-        plt.plot(x,y,'b-')
-        plt.ylabel("Average Probability of Infection(%)")
-        plt.xlabel("time(hours)")
-        plt.suptitle("Room"+room+" Average Probability of Infection")
-        plt.show()
-
+                
+        subplts[1].plot(x, y,'r-')
+        
+    subplts[1].set_ylabel("Average Probability of Infection(%)")
+    subplts[1].set_xlabel("time(hours)")
+    plt.suptitle("Room"+room+" Occupancy & Average Probability of Infection")
+    plt.show()
 
 

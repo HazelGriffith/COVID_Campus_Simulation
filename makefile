@@ -27,6 +27,9 @@ PersonInfo.o: data_structures/PersonInfo.cpp
 	
 ProbGetSick.o: data_structures/ProbGetSick.cpp
 	$(CC) -g -c $(CFLAGS) $(INCLUDECADMIUM) $(INCLUDEDESTIMES) data_structures/ProbGetSick.cpp -o build/ProbGetSick.o
+
+WeatherInfo.o: data_structures/WeatherInfo.cpp
+	$(CC) -g -c $(CFLAGS) $(INCLUDECADMIUM) $(INCLUDEDESTIMES) data_structures/WeatherInfo.cpp -o build/WeatherInfo.o
 	
 main_top.o: top_model/main.cpp
 	$(CC) -g -c $(CFLAGS) $(INCLUDECADMIUM) $(INCLUDEDESTIMES) top_model/main.cpp -o build/main_top.o
@@ -62,8 +65,8 @@ tests: main_filter_People_In_test.o main_filter_People_Out_test.o main_room_test
 		$(CC) -g -o bin/PERSON_AND_FILTER_TEST build/main_personAndFilter_test.o build/ProbGetSick.o build/PersonInfo.o build/tinystr.o build/tinyxml.o build/tinyxmlparser.o build/tinyxmlerror.o
 
 #TARGET TO COMPILE ONLY ABP SIMULATOR
-simulator: main_top.o PersonInfo.o ProbGetSick.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
-	$(CC) -g -o bin/ROOM_SIM build/main_top.o build/PersonInfo.o build/ProbGetSick.o build/tinystr.o build/tinyxml.o build/tinyxmlparser.o build/tinyxmlerror.o
+simulator: main_top.o PersonInfo.o ProbGetSick.o WeatherInfo.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
+	$(CC) -g -o bin/ROOM_SIM build/main_top.o build/PersonInfo.o build/ProbGetSick.o build/WeatherInfo.o build/tinystr.o build/tinyxml.o build/tinyxmlparser.o build/tinyxmlerror.o
 	
 #TARGET TO COMPILE EVERYTHING (ABP SIMULATOR + TESTS TOGETHER)
 all: simulator tests

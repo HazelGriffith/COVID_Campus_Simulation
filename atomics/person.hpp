@@ -14,6 +14,7 @@
 #include <math.h>
 #include <chrono>
 
+#include "../data_structures/WeatherInfo.hpp"
 #include "../data_structures/ProbGetSick.hpp"
 #include "../data_structures/PersonInfo.hpp"
 #include "../data_structures/DecisionMakerBehaviour.hpp"
@@ -31,6 +32,7 @@ using namespace decision_maker_behaviour_structures;
 struct Person_ports{
     struct nextDestination : public out_port<PersonInfo>{};
     struct infectionProb : public in_port<ProbGetSick>{};
+	struct weatherUpdates : public in_port<WeatherInfo>{};
 };
 
 template <typename TIME> class Person{
@@ -38,13 +40,14 @@ template <typename TIME> class Person{
 
 	DecisionMakerBehaviour person;
 
-    using input_ports=std::tuple<typename Person_ports::infectionProb>;
+    using input_ports=std::tuple<typename Person_ports::infectionProb, typename Person_ports::weatherUpdates>;
     using output_ports=std::tuple<typename Person_ports::nextDestination>;
 
     //State Definition
     struct state_type {
 		int timeRemaining;
 		PersonInfo travelInfo;
+		int currentWeather;
     };
     state_type state;
    
@@ -58,6 +61,8 @@ template <typename TIME> class Person{
 		person.nextLocation = lp;
 		//time interval is set to 0 such that the PersonInfo message saying they are entering the first room is sent immediately
 		state.timeRemaining = 0;
+		//sets current weather (should be immediately overwritten by incoming weather update
+		state.currentWeather = 0;
 		//The PersonInfo message that initializes the person's first location is created here.
 		state.travelInfo = PersonInfo(person.ID, person.isSick, person.exposed, person.vaccinated, person.wearingMask, person.location, "" , person.socialDistance, (person.timeInFirstLocation + person.currStartTime)%1440);
     }
@@ -82,6 +87,13 @@ template <typename TIME> class Person{
 		person.currStartTime = person.nextLocation.startTime;
 		state.travelInfo.roomIDLeaving = person.location;
 		state.travelInfo.minsUntilLeaving = person.nextLocation.timeInRoomMin;
+
+		//checks if a person is using the tunnels or outdoors to travel between destinations
+		//may change next room to tunnels or outdoors depending on weather
+		if (person.nextLocation.roomID == "Outdoors"|| person.nextLocation.roomID == "Tunnels") {
+			person.nextLocation.roomID = "Outdoors";
+		}
+
 		state.travelInfo.roomIDEntering = person.nextLocation.roomID;
 		person.location = person.nextLocation.roomID;
 		
@@ -90,19 +102,27 @@ template <typename TIME> class Person{
 
     //external transition function
     void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs){
-		vector<ProbGetSick> msgBag = get_messages<typename Person_ports::infectionProb>(mbs);
+
+		vector<ProbGetSick> msgBagSick = get_messages<typename Person_ports::infectionProb>(mbs);
+
+		vector<WeatherInfo> msgBagWeather = get_messages<typename Person_ports::weatherUpdates>(mbs);
 		
         for (int i = 0 ; i < get_messages<typename Person_ports::infectionProb>(mbs).size() ; i++ ){
 			//upon receiving a ProbGetSick object from a Room model, a random number from 0 to 100 is taken
 			int r = rand() % 101;
 			//if that number is less than the probability of being sick from the ProbGetSick object, then the person is now sick
-			if (r <= (msgBag[i].probSick)){
+			if (r <= (msgBagSick[i].probSick)){
 				if (!person.isSick){
 					person.exposed = true;
 					state.travelInfo.exposed = true;
 				}
 			}
         }
+
+		for (int i = 0; i < get_messages<typename Person_ports::weatherUpdates>(mbs).size(); i++) {
+
+			state.currentWeather = msgBagWeather[i].newState;
+		}
     }
 
     // confluence transition
@@ -134,7 +154,7 @@ template <typename TIME> class Person{
     };
 
     friend std::ostringstream& operator<<(std::ostringstream& os, const typename Person<TIME>::state_type& i) {
-        os << "Person ID: " << i.travelInfo.personID << " isSick: " << i.travelInfo.isSick << " wearsMaskCorrectly: " << i.travelInfo.wearsMaskCorrectly << " the next room is: " << i.travelInfo.roomIDEntering << " the current room is: " << i.travelInfo.roomIDLeaving << " socialDistance: " << i.travelInfo.socialDistance << " staying in the next room for " << i.travelInfo.minsUntilLeaving <<" minutes" << "; "; 
+        os << "Person ID: " << i.travelInfo.personID << " isSick: " << i.travelInfo.isSick << " wearsMaskCorrectly: " << i.travelInfo.wearsMaskCorrectly << " the next room is: " << i.travelInfo.roomIDEntering << " the current room is: " << i.travelInfo.roomIDLeaving << " socialDistance: " << i.travelInfo.socialDistance << " staying in the next room for " << i.travelInfo.minsUntilLeaving <<" minutes Weather: " << i.currentWeather << "; "; 
 		os << "\n";
         return os;
     }

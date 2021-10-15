@@ -49,13 +49,16 @@ int main(){
 		int k = 1;
 		
 		while (!line.empty()){
+
 			//Obtain the last section of a given timeStamp
 			//locates first timeStamp
 			while (found != string::npos){
 				getline(outputLog, line);
 				found = line.find_first_not_of("0123456789:");
 			}
+
 			currTimeStamp = line;
+
 			timeStamps.push_back(NDTime(currTimeStamp));
 			timeStampPos = outputLog.tellg();
 
@@ -80,6 +83,7 @@ int main(){
 			outputLog.seekg(tempPos);
 			getline(outputLog, line);
 			getline(outputLog, line);
+
 			room = line.find("Room");
 			int count = 0;
 			while (room != string::npos){
@@ -104,8 +108,7 @@ int main(){
 				}
 				room = line.find("Room");
 				count++;
-			}
-			
+			}	
 		
 			for (int i = 0; i < numberOfPeople; i++){
 				for (int j = 0; j < 4; j++){
@@ -124,11 +127,13 @@ int main(){
 				occupancyPerRoom[occupancyPerRoom.size()-1].push_back(value);
 			}
 			
-			for (int i = 0; i < 5; i++){
+			//try 7 instead of 5 here, because of added weather state line
+			for (int i = 0; i < 7; i++){
 				getline(outputLog, line);
 			}
 			
 			getline(outputLog, line);
+
 			found = line.find_first_not_of("0123456789:");
 		}
 		
