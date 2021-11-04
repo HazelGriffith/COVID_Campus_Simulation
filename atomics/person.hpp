@@ -48,6 +48,7 @@ template <typename TIME> class Person{
 		int timeRemaining;
 		PersonInfo travelInfo;
 		int currentWeather;
+		bool firstTravel;
     };
     state_type state;
    
@@ -64,15 +65,16 @@ template <typename TIME> class Person{
 		//sets current weather (should be immediately overwritten by incoming weather update
 		state.currentWeather = 0;
 		//The PersonInfo message that initializes the person's first location is created here.
-		state.travelInfo = PersonInfo(person.ID, person.isSick, person.exposed, person.vaccinated, person.wearingMask, person.location, "" , person.socialDistance, person.weatherThreshold, (person.timeInFirstLocation + person.currStartTime)%1440);
-    }
+		state.travelInfo = PersonInfo(person.ID, person.isSick, person.exposed, person.vaccinated, person.wearingMask, person.location, 0, "" ,(person.timeInFirstLocation + person.currStartTime)%1440, person.socialDistance, person.weatherThreshold, (person.timeInFirstLocation + person.currStartTime)%1440, person.relationship, person.behaviourRulesPerson);
+		state.firstTravel = true;
+	}
 
     //internal transition function
     void internal_transition(){
 		//sets up the person to output the correct PersonInfo object at the next time interval
 		
-		
-		if (person.nextLocation.isEmpty()){
+
+		if (state.firstTravel){
 			//person.setNextLocation() uses the current start time and time remaining to find the next location
 			//because the initial time remaining is set to 0, it will not correctly find the next location
 			//Therefore, if the person is using the initial time of 0, the DecisionMakerBehaviour object person's nextLocation
@@ -80,14 +82,17 @@ template <typename TIME> class Person{
 			//from the person xml file and initialized here
 			state.timeRemaining = (person.timeInFirstLocation + person.currStartTime)%1440;
 			person.setNextLocation(person.timeInFirstLocation);
+			state.firstTravel = false;
 		} else {
 			state.timeRemaining = person.nextLocation.timeInRoomMin;
 			person.setNextLocation(state.timeRemaining);
 		}
 		person.currStartTime = person.nextLocation.startTime;
+		state.travelInfo.timeEntering = person.currStartTime;
+		state.travelInfo.timeLeaving = person.currStartTime + person.nextLocation.timeInRoomMin;
 		state.travelInfo.roomIDLeaving = person.location;
 		state.travelInfo.minsUntilLeaving = person.nextLocation.timeInRoomMin;
-
+		
 		//checks if a person is using the tunnels or outdoors to travel between destinations
 		//the person will use outdoors if the current weather is greater or equal to their weatherThreshold value, will use tunnels otherwise
 		if (person.nextLocation.roomID == "Outdoors"|| person.nextLocation.roomID == "Tunnels") {
@@ -108,9 +113,8 @@ template <typename TIME> class Person{
 
     //external transition function
     void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs){
-
 		vector<ProbGetSick> msgBagSick = get_messages<typename Person_ports::infectionProb>(mbs);
-
+		
 		vector<WeatherInfo> msgBagWeather = get_messages<typename Person_ports::weatherUpdates>(mbs);
 		
         for (int i = 0 ; i < get_messages<typename Person_ports::infectionProb>(mbs).size() ; i++ ){
@@ -124,7 +128,7 @@ template <typename TIME> class Person{
 				}
 			}
         }
-
+		
 		for (int i = 0; i < get_messages<typename Person_ports::weatherUpdates>(mbs).size(); i++) {
 
 			state.currentWeather = msgBagWeather[i].newState;
@@ -149,18 +153,18 @@ template <typename TIME> class Person{
 
     TIME time_advance() const{
         TIME next_internal;
-
+		
 		// time remaining is in minutes, so it is split into hours and minutes to construct an NDTime object
-        int hours = floor(state.timeRemaining/60);
+		int hours = floor(state.timeRemaining/60);
 
-        next_internal = TIME({hours, state.timeRemaining - (hours*60)});
+		next_internal = TIME({hours, state.timeRemaining - (hours*60)});
         
         return next_internal;
 
     };
 
     friend std::ostringstream& operator<<(std::ostringstream& os, const typename Person<TIME>::state_type& i) {
-        os << "Person ID: " << i.travelInfo.personID << " isSick: " << i.travelInfo.isSick << " wearsMaskCorrectly: " << i.travelInfo.wearsMaskCorrectly << " the next room is: " << i.travelInfo.roomIDEntering << " the current room is: " << i.travelInfo.roomIDLeaving << " socialDistance: " << i.travelInfo.socialDistance << " staying in the next room for " << i.travelInfo.minsUntilLeaving <<" minutes Weather: " << i.currentWeather << "; "; 
+        os << "Person ID: " << i.travelInfo.personID << " isSick: " << i.travelInfo.isSick << " wearsMaskCorrectly: " << i.travelInfo.wearsMaskCorrectly << " the next room is: " << i.travelInfo.roomIDEntering << " the current room is: " << i.travelInfo.roomIDLeaving << " socialDistance: " << i.travelInfo.socialDistance << " staying in the next room for " << i.travelInfo.minsUntilLeaving <<" minutes Weather: " << i.currentWeather << "; ";
 		os << "\n";
         return os;
     }
