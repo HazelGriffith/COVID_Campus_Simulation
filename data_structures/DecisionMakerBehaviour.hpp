@@ -9,6 +9,7 @@
 #include <random>
 #include <chrono>
 #include <tuple>
+#include <map>
 
 #include "../data/tinyXML/tinyxml.h"
 #include "../data/tinyXML/tinystr.h"
@@ -35,14 +36,16 @@ namespace decision_maker_behaviour_structures{
 	class BehaviourRulesPerson{
 		public:
 			BehaviourRulesPerson(){}
-			BehaviourRulesPerson(const string& PersonRelations, const string& SafeDistanceProbability, const string& MaskWearingProbability){
+			BehaviourRulesPerson(const string& PersonRelations, const int& SafeDistanceProbability, const int& MaskWearingProbability, const int& EnterMaxOccRoomProbability){
 				this->PersonRelations=PersonRelations;
 				this->SafeDistanceProbability=SafeDistanceProbability;
 				this->MaskWearingProbability=MaskWearingProbability;
+				this->EnterMaxOccRoomProbability=EnterMaxOccRoomProbability;
 			}
 			string PersonRelations;
-			string SafeDistanceProbability;
-			string MaskWearingProbability;
+			int SafeDistanceProbability;
+			int MaskWearingProbability;
+			int EnterMaxOccRoomProbability;
 	};
 
 	class NumberOfPeople{
@@ -137,10 +140,8 @@ namespace decision_maker_behaviour_structures{
 				} else {
 					socialDistance = false;
 				}
-
 				r = booleanDistribution(generator);
 				weatherThreshold = floor(r / 10);
-
 				r = booleanDistribution(generator);
 				if (r < 50){
 					eatsAlone = true;
@@ -377,7 +378,6 @@ namespace decision_maker_behaviour_structures{
 						
 					if (i > 0){
 						startTimes[i] = startTimes[i-1] + timeInRooms[i-1] + travelingEventTimes[i-1];
-						cout << "travelTime" << i << ": " << travelingEventTimes[i] << endl;
 					}
 					
 					sum += elapsedTime;
@@ -418,33 +418,33 @@ namespace decision_maker_behaviour_structures{
 				currStartTime = home.startTime;
 				timeInFirstLocation = home.timeInRoomMin;
 				
-				BehaviourRulesPerson family = BehaviourRulesPerson("family", "0.2", "0.2");
-				BehaviourRulesPerson friends = BehaviourRulesPerson("friends", "0.5", "0.5");
-				BehaviourRulesPerson stranger = BehaviourRulesPerson("stranger", "0.8", "0.8");
-				behaviourRulesPerson.push_back(family);
-				behaviourRulesPerson.push_back(friends);
-				behaviourRulesPerson.push_back(stranger);
+				BehaviourRulesPerson family = BehaviourRulesPerson("family", 20, 20, 80);
+				BehaviourRulesPerson friends = BehaviourRulesPerson("friends", 50, 50, 50);
+				BehaviourRulesPerson stranger = BehaviourRulesPerson("stranger", 80, 80, 20);
+				behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("family", family));
+				behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("friends", friends));
+				behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("stranger", stranger));
 				
 				
 				
 			}
-			string                          ID;
-			string                          location;
-			int 							currStartTime;
-			int 							timeInFirstLocation;
-			int								weatherThreshold;
-			bool                            isSick;
-			bool 							exposed;
-			bool							vaccinated;
-			bool                            wearingMask;
-			bool							socialDistance;
-			bool                            eatsAlone;
-			bool                            riskyTravelBehaviour;
-			vector<Relationship>            relationship;
-			vector<BehaviourRulesPerson>    behaviourRulesPerson;
-			vector<BehaviourRulesRoom>      behaviourRulesRoom;
-			vector<LocationPlan>            locationPlan;
-			LocationPlan					nextLocation;
+			string                          	ID;
+			string                          	location;
+			int 								currStartTime;
+			int 								timeInFirstLocation;
+			int									weatherThreshold;
+			bool                            	isSick;
+			bool 								exposed;
+			bool								vaccinated;
+			bool                            	wearingMask;
+			bool								socialDistance;
+			bool                            	eatsAlone;
+			bool                            	riskyTravelBehaviour;
+			vector<Relationship>            	relationship;
+			map<string,BehaviourRulesPerson>    behaviourRulesPerson;
+			vector<BehaviourRulesRoom>      	behaviourRulesRoom;
+			vector<LocationPlan>            	locationPlan;
+			LocationPlan						nextLocation;
 		
 		void setNextLocation(int timeRemaining) {
 			vector<LocationPlan>::iterator iter;
@@ -461,10 +461,6 @@ namespace decision_maker_behaviour_structures{
 			//cout << "currStartTime:" << currStartTime << endl;
 			assert(changed == true);
 		}
-		
-		//string findRelationshipType(PersonInfo person){
-			
-		//}
 
 		void save(const char* pFilename){
 	
@@ -589,7 +585,7 @@ namespace decision_maker_behaviour_structures{
 				root->LinkEndChild(pWeatherThreshold);
 
 			}
-
+			
 			//Block: Relationship
 			{
 				vector<Relationship>::iterator iter;
@@ -607,17 +603,21 @@ namespace decision_maker_behaviour_structures{
         
 			//Block: BehaviourRulesPerson
 			{
-				vector<BehaviourRulesPerson>::iterator iter;
+				map<string,BehaviourRulesPerson>::iterator iter;
 				TiXmlElement * BehaviourPersonNode = new TiXmlElement("behaviourRulesPerson");
 				root->LinkEndChild(BehaviourPersonNode);
 			
 				for(iter=behaviourRulesPerson.begin(); iter != behaviourRulesPerson.end(); iter++){
-					const BehaviourRulesPerson& w=*iter;
+					BehaviourRulesPerson w = iter->second;
 					TiXmlElement * PersonRelations = new TiXmlElement( "personRelations" );
 					BehaviourPersonNode->LinkEndChild(PersonRelations);
 					PersonRelations->SetAttribute("status", w.PersonRelations.c_str());
-					PersonRelations->SetAttribute("safeDistanceProb", w.SafeDistanceProbability.c_str());
-					PersonRelations->SetAttribute("maskWearingProb", w.MaskWearingProbability.c_str());
+					string s = to_string(w.SafeDistanceProbability);
+					PersonRelations->SetAttribute("safeDistanceProb", s.c_str());
+					string m = to_string(w.MaskWearingProbability);
+					PersonRelations->SetAttribute("maskWearingProb", m.c_str());
+					string e = to_string(w.EnterMaxOccRoomProbability);
+					PersonRelations->SetAttribute("enterMaxOccRoomProb", e.c_str());
 				}
 			}
 
@@ -796,7 +796,7 @@ namespace decision_maker_behaviour_structures{
 				}
 				
 			}
-
+			
 			// block: weatherThreshold
 			{
 				pElem = hRoot.FirstChild("weatherThreshold").ToElement();
@@ -831,11 +831,13 @@ namespace decision_maker_behaviour_structures{
 					const char *pPersonRelations=pBehaviourPersonNode->Attribute("status");
 					if(pPersonRelations) c.PersonRelations = pPersonRelations;
 					const char *psafeDistanceProb=pBehaviourPersonNode->Attribute("safeDistanceProb");
-					if(psafeDistanceProb) c.SafeDistanceProbability = psafeDistanceProb;
+					if(psafeDistanceProb) c.SafeDistanceProbability = strtol(psafeDistanceProb, NULL, 10);
 					const char *pmaskWearingProb = pBehaviourPersonNode->Attribute("maskWearingProb");
-					if(pmaskWearingProb) c.MaskWearingProbability = pmaskWearingProb;
+					if(pmaskWearingProb) c.MaskWearingProbability = strtol(pmaskWearingProb, NULL, 10);
+					const char *penterMaxOccRoomProb = pBehaviourPersonNode->Attribute("enterMaxOccRoomProb");
+					if(penterMaxOccRoomProb) c.EnterMaxOccRoomProbability = strtol(penterMaxOccRoomProb, NULL, 10);
 
-					behaviourRulesPerson.push_back(c);
+					behaviourRulesPerson.insert(pair<string,BehaviourRulesPerson>(c.PersonRelations,c));
 				}
 			}
 
