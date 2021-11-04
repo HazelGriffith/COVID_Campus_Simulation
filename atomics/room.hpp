@@ -250,7 +250,7 @@ template<typename TIME> class RoomModel{
 					
 					ProbGetSick personLeaving;
 					personLeaving.personID = msgOutFromRoom.personID;
-					cout << "ID: " << personLeaving.personID << endl;
+
 					
 					
 					int wearsMaskFactorUsed = 0;
@@ -287,11 +287,11 @@ template<typename TIME> class RoomModel{
 					
 					//The start time, end time and total time spent in the room by the person leaving are retrieved
 					float mainStartTime = state.peopleInRoom[k].timeEntering;
-					cout << "mainStartTime: " << mainStartTime << endl;
+
 					float mainEndTime = state.peopleInRoom[k].timeLeaving;
-					cout << "mainEndTime: " << mainEndTime << endl;
+
 					float mainTotalTime = state.peopleInRoom[k].minsUntilLeaving;
-					cout << "mainTotalTime: " << mainTotalTime << endl;
+
 					
 					//The person is erased from the peopleInRoom list
 					state.peopleInRoom.erase(state.peopleInRoom.begin()+k);
@@ -330,21 +330,17 @@ template<typename TIME> class RoomModel{
 							//The person left after the person leaving
 							endTime = mainEndTime;
 						}
-						cout << "endTime = " << endTime << endl;
-						cout << "startTime = " << startTime << endl;
+
 						//This is the time they spent in the room together
 						totalTime = endTime - startTime;
-						cout << "totalTime = " << totalTime << endl;
 						
 						//This is the percentage of the person leaving's time spent in the room with that person
 						float familyTimePercent = totalTime/mainTotalTime;
 						
 						//The probability is the percentage multiplied by the appropriate behaviour factor
 						averageMaskProb += floor(familyTimePercent*familyMaskBehaviour);
-						cout << "AverageMaskProbValue: " << floor(familyTimePercent*familyMaskBehaviour) << endl;
 						
 						averageSocialDistanceProb += floor(familyTimePercent*familySocialDistanceBehaviour);
-						cout << "AverageSocDistProbValue: " << floor(familyTimePercent*familySocialDistanceBehaviour) << endl;
 					}
 					
 					//The same as the above only for the friends category
@@ -364,18 +360,17 @@ template<typename TIME> class RoomModel{
 						} else {
 							endTime = mainEndTime;
 						}
-						cout << "endTime = " << endTime << endl;
-						cout << "startTime = " << startTime << endl;
+
 						totalTime = endTime - startTime;
-						cout << "totalTime = " << totalTime << endl;
+
 						
 						float friendsTimePercent = totalTime/mainTotalTime;
 						
 						averageMaskProb += floor(friendsTimePercent*friendsMaskBehaviour);
-						cout << "AverageMaskProbValue: " << floor(friendsTimePercent*friendsMaskBehaviour) << endl;
+
 						
 						averageSocialDistanceProb += floor(friendsTimePercent*friendsSocialDistanceBehaviour);
-						cout << "AverageSocDistProbValue: " << floor(friendsTimePercent*friendsSocialDistanceBehaviour) << endl;
+
 					}
 					
 					//The same as the above only for the strangers category
@@ -397,16 +392,16 @@ template<typename TIME> class RoomModel{
 						}
 
 						totalTime = endTime - startTime;
-						cout << "totalTime = " << totalTime << endl;
+
 						
 						float strangersTimePercent = totalTime/mainTotalTime;
-						cout << "time Percent = " << strangersTimePercent << endl;
+
 						
 						averageMaskProb += floor(strangersTimePercent*strangersMaskBehaviour);
-						cout << "AverageMaskProbValue: " << floor(strangersTimePercent*strangersMaskBehaviour) << endl;
+
 						
 						averageSocialDistanceProb += floor(strangersTimePercent*strangersSocialDistanceBehaviour);
-						cout << "AverageSocDistProbValue: " << floor(strangersTimePercent*strangersSocialDistanceBehaviour) << endl;
+
 					}
 					
 					//If the person leaving did share the room with other people, then the average probability is calculated for mask wearing and social distancing
@@ -414,8 +409,7 @@ template<typename TIME> class RoomModel{
 						averageMaskProb = floor(averageMaskProb/(strangers.size()+friends.size()+family.size()));
 						averageSocialDistanceProb = floor(averageSocialDistanceProb/(strangers.size()+friends.size()+family.size()));
 					}
-					cout << "FINAL averageMaskProb: " << averageMaskProb << endl;
-					cout << "FINAL averageSocialDistanceProb: " << averageSocialDistanceProb << endl;
+
 					
 					assert(averageMaskProb <= 100);
 					assert(averageSocialDistanceProb <= 100);
@@ -637,7 +631,7 @@ template<typename TIME> class RoomModel{
 			}
 		}
 		
-		string relationships = "";
+		/*string relationships = "";
 		for (int j = 0; j < i.peopleInRoom.size(); j++){
 			const string ID = i.peopleInRoom[j].personID;
 			relationships += "person" + ID + ": ";
@@ -652,8 +646,8 @@ template<typename TIME> class RoomModel{
 				}
 			}
 			relationships += "\n";
-		}			
-        os << "Number of People in room: "<< i.numberPeople <<" number of people wearing masks: " << i.numberPeopleWearingMasksCorrectly << " Number of people social distancing: " << i.socialDistancing << " Number of sick people: " << i.numberSickPeople << " CO2 concentration in the room: " << i.CO2Concentration << " people ID's in room: " << people << " students travelling at same time: " << i.peopleLeaving.size() << " students waiting outside room: " << i.peopleWaitingOutsideRoom.size() << " relationships: " << relationships << "\n ";
+		}*/		
+        os << "Number of People in room: "<< i.numberPeople <<" number of people wearing masks: " << i.numberPeopleWearingMasksCorrectly << " Number of people social distancing: " << i.socialDistancing << " Number of sick people: " << i.numberSickPeople << " CO2 concentration in the room: " << i.CO2Concentration << " people ID's in room: " << people << " students travelling at same time: " << i.peopleLeaving.size() << "\n ";
 
         return os;
     }
