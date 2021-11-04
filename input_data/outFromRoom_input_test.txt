@@ -1,3 +1,5 @@
-00:36:20 Jane F T F Room8 Room5 36
-00:55:10 Alfred T T T Room3 Room5 55
-01:35:30 John F F T Room3 Room5 95
+00:12:00 4 F F T T F 8 12 1 17 5 1 stranger 2 family 3 friends 5 stranger
+00:40:00 3 F F F T T 8 40 1 45 5 2 family 1 stranger 4 friends 5 stranger
+00:46:00 2 F F T F F 8 46 1 51 5 1 friends 3 family 4 family 5 stranger
+01:00:00 1 T T T T T 8 60 1 65 5 2 friends 3 stranger 4 stranger 5 friends
+01:05:00 5 F F T T T 8 65 1 70 5 1 friends 2 stranger 3 stranger 4 stranger

@@ -24,6 +24,7 @@ struct RoomInfo{
 	int respIncreasePerMin;
 	int squareMetres;
 	int height;
+	int maxOccupancy;
 };
 
 int main(){
@@ -56,6 +57,7 @@ int main(){
 		room.height = r;
 		
 		room.socialDistanceThreshold = floor(room.squareMetres/2);
+		room.maxOccupancy = floor(room.socialDistanceThreshold * 0.75);
 		
 		r = mainDistribution(generator);
 		if (r < 50){
@@ -92,6 +94,7 @@ int main(){
 		}
 		
 		room.respIncreasePerMin = 340000;
+		
 		
 		TiXmlDocument doc;  
 		TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );  
@@ -130,6 +133,17 @@ int main(){
 			string socialDistanceThresholdStr = to_string(room.socialDistanceThreshold);	
 			pSocialDistanceThreshold->LinkEndChild(new TiXmlText(socialDistanceThresholdStr.c_str()));
 			root->LinkEndChild( pSocialDistanceThreshold );  
+
+		}
+		
+		// block: maxOccupancy
+
+		{           
+
+			TiXmlElement * pMaxOccupancy = new TiXmlElement( "maxOccupancy" );   
+			string maxOccupancyStr = to_string(room.maxOccupancy);	
+			pMaxOccupancy->LinkEndChild(new TiXmlText(maxOccupancyStr.c_str()));
+			root->LinkEndChild( pMaxOccupancy );  
 
 		}
 			

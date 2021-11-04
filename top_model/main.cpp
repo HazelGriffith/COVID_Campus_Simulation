@@ -49,6 +49,7 @@ struct RoomInfo{
 	string ID;
 	int ventilationRating;
 	int socialDistanceThreshold;
+	int maxOccupancy;
 	int wearsMaskFactor;
 	int socialDistanceFactor;
 	int vaccinatedFactor;
@@ -140,6 +141,11 @@ int main(){
 		if (!pElem) return 0;
 		roomsInfo[i].socialDistanceThreshold = strtol(pElem->GetText(), NULL, 10);
 		
+		//acquiring maximum occupancy of the room
+		pElem = hRoot.FirstChild("maxOccupancy").ToElement();
+		if (!pElem) return 0;
+		roomsInfo[i].maxOccupancy = strtol(pElem->GetText(), NULL, 10);
+		
 		//acquiring wearing mask correctly factor of the room
 		pElem = hRoot.FirstChild("wearsMaskFactor").ToElement();
 		if (!pElem) return 0;
@@ -206,7 +212,7 @@ int main(){
 		shared_ptr<dynamic::modeling::model> room;
 		
 		room = dynamic::translate::make_dynamic_atomic_model<RoomModel, TIME>("Room"+roomsInfo[i].ID, roomsInfo[i].ID, 
-			roomsInfo[i].ventilationRating, roomsInfo[i].socialDistanceThreshold, roomsInfo[i].respIncreasePerMin, 
+			roomsInfo[i].ventilationRating, roomsInfo[i].socialDistanceThreshold, roomsInfo[i].maxOccupancy, roomsInfo[i].respIncreasePerMin, 
 			roomsInfo[i].volumeOfRoom, roomsInfo[i].sickPeopleCO2Factor, move(roomsInfo[i].highCO2FactorThresholds), 
 			move(roomsInfo[i].highCO2Factors), roomsInfo[i].vaccinatedFactor, roomsInfo[i].wearsMaskFactor, roomsInfo[i].socialDistanceFactor);
 		
@@ -250,7 +256,7 @@ int main(){
 	shared_ptr<dynamic::modeling::model> filterOutOutdoors;
 
 	filterOutOutdoors = dynamic::translate::make_dynamic_atomic_model<Filter_People_Out, TIME>("filterOut"+outdoorsName, outdoorsName);
-
+	
 	/****** weather atomic model instantiation *******************/
 	shared_ptr<dynamic::modeling::model> weather;
 
@@ -354,7 +360,6 @@ int main(){
 		ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_In_ports::inToFilter>("Person"+id,"filterIn"+outdoorsName));
 		ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_Out_ports::inToFilter>("Person"+id,"filterOut"+outdoorsName));
 		ics_TOP.push_back(dynamic::translate::make_IC<Filter_ProbGetSick_ports::outFromFilter,Person_ports::infectionProb>("Person"+id+"Filter","Person"+id));
-
 		//weather to person connection
 		ics_TOP.push_back(dynamic::translate::make_IC<Weather_ports::weatherUpdates, Person_ports::weatherUpdates>("Weather", "Person" + id));
 	}

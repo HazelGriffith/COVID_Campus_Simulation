@@ -11,6 +11,11 @@
 
 //Messages structures
 #include "../data_structures/PersonInfo.hpp"
+#include "../data_structures/ProbGetSick.hpp"
+
+//XML parser
+#include "../data/tinyXML/tinyxml.h"
+#include "../data/tinyXML/tinystr.h"
 
 //Atomic model headers
 #include "../atomics/room.hpp"
@@ -64,22 +69,120 @@ int main(){
 
 	/***** (4) *****/
     /****** room atomic model instantiation *******************/
-    const char * i_roomID = "Room5";
+	cout << "Enter the room being used: ";
+	string roomID;
+	cin >> roomID;
+	cout << endl;
 	
-	const int i_ventilationRating = 2;
+	string roomPathStr = "../data/rooms/" + roomID + ".xml";\
+	const char * roomPath = roomPathStr.c_str();
 	
-	const int i_socialDistanceThreshold = 3;
-	
-	const int i_wearsMaskCorrectlyFactor = 4;
-	
-	const int i_socialDistancingFactor = 3;
-	
-	const int i_inputRespIncreasePerMin = 2;
-	
-	shared_ptr<dynamic::modeling::model> room5;
-	
-    room5 = dynamic::translate::make_dynamic_atomic_model<RoomModel, TIME>("room5", move(i_roomID), 
-		i_ventilationRating, i_socialDistanceThreshold, i_wearsMaskCorrectlyFactor, i_socialDistancingFactor, i_inputRespIncreasePerMin);
+	//loading document
+	TiXmlDocument _document;
+	bool result = _document.LoadFile(roomPath);
+	if (!result) {cout << "file not loaded " << _document.ErrorDesc() << endl; return 0;} 
+		
+		
+	//acquiring root of XML document
+	TiXmlHandle hDoc(&_document);
+	TiXmlElement* pElem;
+	TiXmlHandle hRoot(0);
+		
+	pElem=hDoc.FirstChildElement().ToElement();
+	if (!pElem) return 0;    
+	hRoot=TiXmlHandle(pElem);
+		
+	//acquiring ID of the room
+	pElem=hRoot.FirstChild("ID").ToElement();
+	if (!pElem) return 0;
+	string ID = pElem->GetText();
+		
+	//acquiring ventilation rating of the room
+	pElem = hRoot.FirstChild("ventilationRating").ToElement();
+	if (!pElem) return 0;
+	int ventilationRating = strtol(pElem->GetText(), NULL, 10);
+
+	//acquiring social distance threshold of the room
+	pElem = hRoot.FirstChild("socialDistanceThreshold").ToElement();
+	if (!pElem) return 0;
+	int socialDistanceThreshold = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring maximum occupancy of the room
+	pElem = hRoot.FirstChild("maxOccupancy").ToElement();
+	if (!pElem) return 0;
+	int maxOccupancy = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring wearing mask correctly factor of the room
+	pElem = hRoot.FirstChild("wearsMaskFactor").ToElement();
+	if (!pElem) return 0;
+	int wearsMaskFactor = strtol(pElem->GetText(), NULL, 10);
+
+	//acquiring social distance factor of the room
+	pElem = hRoot.FirstChild("socialDistanceFactor").ToElement();
+	if (!pElem) return 0;
+	int socialDistanceFactor = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring vaccinated factor of the room
+	pElem = hRoot.FirstChild("vaccinatedFactor").ToElement();
+	if (!pElem) return 0;
+	int vaccinatedFactor = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring square metres of the room
+	pElem = hRoot.FirstChild("squareMetres").ToElement();
+	if (!pElem) return 0;
+	int sqrMetres = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring height of the room
+	pElem = hRoot.FirstChild("height").ToElement();
+	if (!pElem) return 0;
+	int height = strtol(pElem->GetText(), NULL, 10);
+		
+	float volumeOfRoom = sqrMetres*height;
+		
+	//acquiring sick people CO2 factor of the room
+	pElem = hRoot.FirstChild("sickPeopleCO2Factor").ToElement();
+	if (!pElem) return 0;
+	int sickPeopleCO2Factor = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring high CO2 factor thresholds of the room
+	pElem = hRoot.FirstChild("highCO2FactorThresholds").ToElement();
+	if (!pElem) return 0;
+	string text = pElem->GetText();
+	int highCO2FactorThresholds[4];
+	for (int j = 0; j < 4; j++){
+		size_t seperator = text.find(",");
+		string number = text.substr(0,seperator);
+		highCO2FactorThresholds[j] = strtol(number.c_str(), NULL, 10);
+
+		text.erase(0,seperator+1);
+	}
+		
+	//acquiring high CO2 factors of the room
+	pElem = hRoot.FirstChild("highCO2Factors").ToElement();
+	if (!pElem) return 0;
+	text = pElem->GetText();
+	int highCO2Factors[4];
+	for (int j = 0; j < 4; j++){
+		size_t seperator = text.find(",");
+		string number = text.substr(0,seperator);
+		highCO2Factors[j] = strtol(number.c_str(), NULL, 10);
+
+		text.erase(0,seperator+1);
+	}
+		
+	//acquiring respiratory increase per minute of the room
+	pElem = hRoot.FirstChild("respIncreasePerMin").ToElement();
+	if (!pElem) return 0;
+	int respIncreasePerMin = strtol(pElem->GetText(), NULL, 10);
+		
+		
+	//The room model is initialized and added to the list of room models
+	shared_ptr<dynamic::modeling::model> room;
+		
+	room = dynamic::translate::make_dynamic_atomic_model<RoomModel, TIME>("Room"+ID, ID, 
+		ventilationRating, socialDistanceThreshold, maxOccupancy, respIncreasePerMin, 
+		volumeOfRoom, sickPeopleCO2Factor, move(highCO2FactorThresholds), 
+		move(highCO2Factors), vaccinatedFactor, wearsMaskFactor, socialDistanceFactor);
 	
 	
 	/***** (5) *****/
@@ -91,20 +194,20 @@ int main(){
     oports_TOP = {typeid(top_out)};
 
     dynamic::modeling::Models submodels_TOP;
-    submodels_TOP = {input_inToRoom_reader, input_outFromRoom_reader, room5};
+    submodels_TOP = {input_inToRoom_reader, input_outFromRoom_reader, room};
 
     dynamic::modeling::EICs eics_TOP;
     eics_TOP = {};  // _EIC WOULD GO HERE ; NOT NEEDED BECAUSE IT IS EMTPY IN THIS EXAMPLE
 
     dynamic::modeling::EOCs eocs_TOP;
     eocs_TOP = {
-        dynamic::translate::make_EOC<RoomModelPorts::out,top_out>("room5")
+        dynamic::translate::make_EOC<RoomModelPorts::out,top_out>("Room"+ID)
     };
 
     dynamic::modeling::ICs ics_TOP;
     ics_TOP = {
-        dynamic::translate::make_IC<iestream_input_defs<PersonInfo>::out,RoomModelPorts::inToRoom>("input_inToRoom_reader","room5"),
-		dynamic::translate::make_IC<iestream_input_defs<PersonInfo>::out,RoomModelPorts::outFromRoom>("input_outFromRoom_reader","room5")
+        dynamic::translate::make_IC<iestream_input_defs<PersonInfo>::out,RoomModelPorts::inToRoom>("input_inToRoom_reader","Room"+ID),
+		dynamic::translate::make_IC<iestream_input_defs<PersonInfo>::out,RoomModelPorts::outFromRoom>("input_outFromRoom_reader","Room"+ID)
     };
 
     shared_ptr<dynamic::modeling::coupled<TIME>> TOP;
@@ -145,7 +248,16 @@ int main(){
 
     /***** (7) *****/
     /************** Runner call ************************/
+	
+	string hours;
+	cout << "Enter the hours of simulation run-time: ";
+	cin >> hours;
+	cout << endl;
+	
+	string simulationRunTime;
+	simulationRunTime = hours + ":00:00:000";
+	
     dynamic::engine::runner<NDTime, logger_top> r(TOP, {0});
-    r.run_until(NDTime("04:00:00:000"));
+    r.run_until(NDTime(simulationRunTime));
     return 0;
 }

@@ -26,6 +26,9 @@ randomPeopleXMLGenerator.o: randomPeopleXMLGenerator.cpp
 parser.o: parser.cpp
 	$(CC) -g -c $(CFLAGS) $(INCLUDEDESTIMES) parser.cpp -o build/parser.o
 
+CO2Validation.o: CO2Validation.cpp
+	$(CC) -g -c $(CFLAGS) CO2Validation.cpp -o build/CO2Validation.o
+
 randomRoomsXMLGenerator.o: randomRoomsXMLGenerator.cpp
 	$(CC) -g -c $(CFLAGS) randomRoomsXMLGenerator.cpp -o build/randomRoomsXMLGenerator.o
 
@@ -36,6 +39,10 @@ peopleGenerator: randomPeopleXMLGenerator.o tinystr.o tinyxml.o tinyxmlparser.o 
 #TARGET TO COMPILE ONLY PARSER
 parser: parser.o
 	$(CC) -g -o PARSER build/parser.o
+
+#TARGET TO COMPILE ONLY CO2 CONCENTRATION VALIDATION
+validator: CO2Validation.o
+	$(CC) -g -o CO2_VALIDATION build/CO2Validation.o
 
 #TARGET TO COMPILE ONLY Rooms XML generator
 roomsGenerator: randomRoomsXMLGenerator.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
