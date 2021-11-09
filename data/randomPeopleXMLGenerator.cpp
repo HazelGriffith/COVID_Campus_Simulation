@@ -39,9 +39,9 @@ int main(){
 			
 				
 				if (r > 80){
-					type = "family";
-				} else if (r > 60){
 					type = "friends";
+				} else if (r > 60){
+					type = "acquaintances";
 				} else {
 					type = "stranger";
 				}
