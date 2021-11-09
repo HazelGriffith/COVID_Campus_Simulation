@@ -418,11 +418,11 @@ namespace decision_maker_behaviour_structures{
 				currStartTime = home.startTime;
 				timeInFirstLocation = home.timeInRoomMin;
 				
-				BehaviourRulesPerson family = BehaviourRulesPerson("family", 20, 20, 80);
-				BehaviourRulesPerson friends = BehaviourRulesPerson("friends", 50, 50, 50);
+				BehaviourRulesPerson family = BehaviourRulesPerson("friends", 20, 20, 80);
+				BehaviourRulesPerson friends = BehaviourRulesPerson("acquaintances", 50, 50, 50);
 				BehaviourRulesPerson stranger = BehaviourRulesPerson("stranger", 80, 80, 20);
-				behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("family", family));
-				behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("friends", friends));
+				behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("friends", family));
+				behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("acquaintances", friends));
 				behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("stranger", stranger));
 				
 				
