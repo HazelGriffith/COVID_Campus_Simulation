@@ -487,7 +487,7 @@ template<typename TIME> class RoomModel{
 					break;
 				}
 			}
-			cout << "check for waiting outside room"<< endl;
+			
 			//checks if the person is waiting outside the room
 			for (int k = 0; k < state.peopleWaitingOutsideRoom.size(); k++){
 				if(msgOutFromRoom.personID.compare(state.peopleWaitingOutsideRoom[k].personID) == 0){
@@ -507,7 +507,7 @@ template<typename TIME> class RoomModel{
 			//If the person is not in the room, an error is thrown
 			assert(personFound == true);
         }
-		cout << "update room state"<< endl;
+		
 		//The state of the Room is updated
 		state.numberPeople = state.peopleInRoom.size();
 		state.numberPeopleWearingMasksCorrectly = 0;
