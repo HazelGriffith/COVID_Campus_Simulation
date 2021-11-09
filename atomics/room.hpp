@@ -182,8 +182,8 @@ template<typename TIME> class RoomModel{
 				unsigned seed1 = chrono::system_clock::now().time_since_epoch().count();
 				default_random_engine generator(seed1);
 				int strangers = 0;
+				int acquaintances = 0;
 				int friends = 0;
-				int family = 0;
 				for (int j = 0; j < state.numberPeople; j++){
 					string ID = state.peopleInRoom[j].personID;
 					string relationshipType = "";
@@ -200,31 +200,31 @@ template<typename TIME> class RoomModel{
 					
 					if (relationshipType.compare("stranger") == 0){
 						strangers++;
-					} else if (relationshipType.compare("friends") == 0){
-						friends++;
+					} else if (relationshipType.compare("acquaintance") == 0){
+						acquaintances++;
 					} else {
-						family++;
+						friends++;
 					}
 				}
 				
-				assert(strangers+friends+family == state.numberPeople);
+				assert(strangers+friends+acquaintances == state.numberPeople);
 				
-				//The percentages of family to friends to strangers is calculated
+				//The percentages of acquaintances to friends to strangers is calculated
 				float strangersPercent = strangers/state.numberPeople;
 				float friendsPercent = friends/state.numberPeople;
-				float familyPercent = family/state.numberPeople;
+				float acquaintancesPercent = acquaintances/state.numberPeople;
 				
 				//the probability of them entering the room given the probability of each category is calculated by multiplying the category percentage by the appropriate behaviour factor
 				int strangersProb = floor(msgInToRoom.relationshipBehaviour.at("stranger").EnterMaxOccRoomProbability*strangersPercent);
 				int friendsProb = floor(msgInToRoom.relationshipBehaviour.at("friends").EnterMaxOccRoomProbability*friendsPercent);
-				int familyProb = floor(msgInToRoom.relationshipBehaviour.at("family").EnterMaxOccRoomProbability*familyPercent);
+				int acquaintancesProb = floor(msgInToRoom.relationshipBehaviour.at("acquaintance").EnterMaxOccRoomProbability*acquaintancesPercent);
 				
 				
 				uniform_int_distribution<int> probEnterDistribution(0,100);
 				
 				//If r is then less than any of the probabilities of each category, then they will enter the room, otherwise they will wait outside
 				int r = probEnterDistribution(generator);
-				if ((r <= strangersProb)||(r <= friendsProb)||(r <= familyProb)){
+				if ((r <= strangersProb)||(r <= friendsProb)||(r <= acquaintancesProb)){
 					state.peopleInRoom.push_back(msgInToRoom);
 				} else {
 					state.peopleWaitingOutsideRoom.push_back(msgInToRoom);
@@ -265,17 +265,17 @@ template<typename TIME> class RoomModel{
 					}
 					
 					vector<PersonRelationInfo> strangers;
-					vector<PersonRelationInfo> family;
+					vector<PersonRelationInfo> acquaintances;
 					vector<PersonRelationInfo> friends;
 					
-					//The people that the person leaving had interacted with in this room are tallied and divided into the friends, strangers, or family categories
+					//The people that the person leaving had interacted with in this room are tallied and divided into the friends, strangers, or acquaintances categories
 					map <string, PersonRelationInfo> currRelationships = state.relationshipsInRoom.at(personLeaving.personID);
 					int count = 0;
 					map<string, PersonRelationInfo>::iterator iter;
 					for (iter = currRelationships.begin(); iter != currRelationships.end(); iter++){
 						PersonRelationInfo relationInfo = iter->second;
-						if (relationInfo.relationshipType.compare("family") == 0){
-							family.push_back(relationInfo);
+						if (relationInfo.relationshipType.compare("acquaintances") == 0){
+							acquaintances.push_back(relationInfo);
 						} else if (relationInfo.relationshipType.compare("friends") == 0){
 							friends.push_back(relationInfo);
 						} else {
@@ -283,7 +283,7 @@ template<typename TIME> class RoomModel{
 						}
 						count++;
 					}
-					assert(count == (family.size()+friends.size()+strangers.size()));
+					assert(count == (acquaintances.size()+friends.size()+strangers.size()));
 					
 					//The start time, end time and total time spent in the room by the person leaving are retrieved
 					float mainStartTime = state.peopleInRoom[k].timeEntering;
@@ -299,33 +299,33 @@ template<typename TIME> class RoomModel{
 					//The behaviour factors for mask wearing and social distancing for each relationship type are retrieved
 					float strangersMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("stranger").MaskWearingProbability;
 					float friendsMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("friends").MaskWearingProbability;
-					float familyMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("family").MaskWearingProbability;
+					float acquaintancesMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("acquaintance").MaskWearingProbability;
 					
 					float strangersSocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("stranger").SafeDistanceProbability;
 					float friendsSocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("friends").SafeDistanceProbability;
-					float familySocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("family").SafeDistanceProbability;
+					float acquaintancesSocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("acquaintance").SafeDistanceProbability;
 				
 					int averageMaskProb = 0;
 					int averageSocialDistanceProb = 0;
 					
-					//The time spent in the room with the person leaving is calculated for each person in the family category
-					for (int i = 0; i < family.size(); i++){
+					//The time spent in the room with the person leaving is calculated for each person in the acquaintances category
+					for (int i = 0; i < acquaintances.size(); i++){
 						int startTime;
 						int endTime;
 						int totalTime;
 						
 						
-						if (family[i].startTime <= mainStartTime){
+						if (acquaintances[i].startTime <= mainStartTime){
 							//The person entered before the person leaving
 							startTime = mainStartTime;
 						} else {
 							//The person entered after the person leaving
-							startTime = family[i].startTime;
+							startTime = acquaintances[i].startTime;
 						}
 						
-						if (family[i].endTime < mainEndTime){
+						if (acquaintances[i].endTime < mainEndTime){
 							//The person left before the person leaving
-							endTime = family[i].endTime;
+							endTime = acquaintances[i].endTime;
 						} else {
 							//The person left after the person leaving
 							endTime = mainEndTime;
@@ -335,12 +335,12 @@ template<typename TIME> class RoomModel{
 						totalTime = endTime - startTime;
 						
 						//This is the percentage of the person leaving's time spent in the room with that person
-						float familyTimePercent = totalTime/mainTotalTime;
+						float acquaintancesTimePercent = totalTime/mainTotalTime;
 						
 						//The probability is the percentage multiplied by the appropriate behaviour factor
-						averageMaskProb += floor(familyTimePercent*familyMaskBehaviour);
+						averageMaskProb += floor(acquaintancesTimePercent*acquaintancesMaskBehaviour);
 						
-						averageSocialDistanceProb += floor(familyTimePercent*familySocialDistanceBehaviour);
+						averageSocialDistanceProb += floor(acquaintancesTimePercent*acquaintancesSocialDistanceBehaviour);
 					}
 					
 					//The same as the above only for the friends category
@@ -405,9 +405,9 @@ template<typename TIME> class RoomModel{
 					}
 					
 					//If the person leaving did share the room with other people, then the average probability is calculated for mask wearing and social distancing
-					if ((strangers.size()+friends.size()+family.size()) > 0){
-						averageMaskProb = floor(averageMaskProb/(strangers.size()+friends.size()+family.size()));
-						averageSocialDistanceProb = floor(averageSocialDistanceProb/(strangers.size()+friends.size()+family.size()));
+					if ((strangers.size()+friends.size()+acquaintances.size()) > 0){
+						averageMaskProb = floor(averageMaskProb/(strangers.size()+friends.size()+acquaintances.size()));
+						averageSocialDistanceProb = floor(averageSocialDistanceProb/(strangers.size()+friends.size()+acquaintances.size()));
 					}
 
 					
