@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<RoomParameters>
+    <ID>22,AA - 110G</ID>
+    <ventilationRating>1</ventilationRating>
+    <socialDistanceThreshold>24</socialDistanceThreshold>
+    <maxOccupancy>18</maxOccupancy>
+    <wearsMaskFactor>1</wearsMaskFactor>
+    <socialDistanceFactor>2</socialDistanceFactor>
+    <vaccinatedFactor>-3</vaccinatedFactor>
+    <sickPeopleCO2Factor>2</sickPeopleCO2Factor>
+    <highCO2FactorThresholds>1172,1836,1874,1905</highCO2FactorThresholds>
+    <highCO2Factors>1,2,3,4</highCO2Factors>
+    <respIncreasePerMin>340000</respIncreasePerMin>
+    <squareMetres>49.419998</squareMetres>
+    <height>2.438000</height>
+</RoomParameters>

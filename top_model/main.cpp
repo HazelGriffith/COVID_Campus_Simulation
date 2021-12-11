@@ -258,9 +258,9 @@ int main(){
 	filterOutOutdoors = dynamic::translate::make_dynamic_atomic_model<Filter_People_Out, TIME>("filterOut"+outdoorsName, outdoorsName);
 	
 	/****** weather atomic model instantiation *******************/
-	shared_ptr<dynamic::modeling::model> weather;
+	//shared_ptr<dynamic::modeling::model> weather;
 
-	weather = dynamic::translate::make_dynamic_atomic_model<Weather, TIME>("Weather");
+	//weather = dynamic::translate::make_dynamic_atomic_model<Weather, TIME>("Weather");
 
 	/****** person atomic model instantiation *******************/
 	
@@ -334,7 +334,7 @@ int main(){
 		submodels_TOP.push_back(peopleFilters[i]);
 	}
 	submodels_TOP.push_back(outdoors);
-	submodels_TOP.push_back(weather);
+	//submodels_TOP.push_back(weather);
 	submodels_TOP.push_back(filterInOutdoors);
 	submodels_TOP.push_back(filterOutOutdoors);
 	
@@ -361,7 +361,7 @@ int main(){
 		ics_TOP.push_back(dynamic::translate::make_IC<Person_ports::nextDestination,Filter_People_Out_ports::inToFilter>("Person"+id,"filterOut"+outdoorsName));
 		ics_TOP.push_back(dynamic::translate::make_IC<Filter_ProbGetSick_ports::outFromFilter,Person_ports::infectionProb>("Person"+id+"Filter","Person"+id));
 		//weather to person connection
-		ics_TOP.push_back(dynamic::translate::make_IC<Weather_ports::weatherUpdates, Person_ports::weatherUpdates>("Weather", "Person" + id));
+		//ics_TOP.push_back(dynamic::translate::make_IC<Weather_ports::weatherUpdates, Person_ports::weatherUpdates>("Weather", "Person" + id));
 	}
 	for (int i = 0; i < rooms.size(); i++){
 		ics_TOP.push_back(dynamic::translate::make_IC<Filter_People_In_ports::outFromFilter,RoomModelPorts::inToRoom>("filterIn"+roomsInfo[i].ID, "Room"+roomsInfo[i].ID));

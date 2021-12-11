@@ -1,0 +1,153 @@
+<?xml version="1.0" ?>
+<DecisionMakerBehaviour>
+    <ID>86</ID>
+    <location>home</location>
+    <currStartTime>1309</currStartTime>
+    <timeInFirstLocation>631</timeInFirstLocation>
+    <isSick>False</isSick>
+    <exposed>False</exposed>
+    <vaccinated>True</vaccinated>
+    <wearingMaskCorrectly>False</wearingMaskCorrectly>
+    <socialDistance>False</socialDistance>
+    <weatherThreshold>8</weatherThreshold>
+    <relationship>
+        <relationship ID="1" type="stranger" />
+        <relationship ID="2" type="stranger" />
+        <relationship ID="3" type="friends" />
+        <relationship ID="4" type="friends" />
+        <relationship ID="5" type="acquaintance" />
+        <relationship ID="6" type="stranger" />
+        <relationship ID="7" type="stranger" />
+        <relationship ID="8" type="friends" />
+        <relationship ID="9" type="stranger" />
+        <relationship ID="10" type="friends" />
+        <relationship ID="11" type="acquaintance" />
+        <relationship ID="12" type="stranger" />
+        <relationship ID="13" type="stranger" />
+        <relationship ID="14" type="stranger" />
+        <relationship ID="15" type="stranger" />
+        <relationship ID="16" type="stranger" />
+        <relationship ID="17" type="acquaintance" />
+        <relationship ID="18" type="friends" />
+        <relationship ID="19" type="stranger" />
+        <relationship ID="20" type="stranger" />
+        <relationship ID="21" type="acquaintance" />
+        <relationship ID="22" type="stranger" />
+        <relationship ID="23" type="stranger" />
+        <relationship ID="24" type="friends" />
+        <relationship ID="25" type="acquaintance" />
+        <relationship ID="26" type="friends" />
+        <relationship ID="27" type="stranger" />
+        <relationship ID="28" type="stranger" />
+        <relationship ID="29" type="acquaintance" />
+        <relationship ID="30" type="stranger" />
+        <relationship ID="31" type="stranger" />
+        <relationship ID="32" type="friends" />
+        <relationship ID="33" type="acquaintance" />
+        <relationship ID="34" type="stranger" />
+        <relationship ID="35" type="friends" />
+        <relationship ID="36" type="friends" />
+        <relationship ID="37" type="stranger" />
+        <relationship ID="38" type="friends" />
+        <relationship ID="39" type="friends" />
+        <relationship ID="40" type="friends" />
+        <relationship ID="41" type="stranger" />
+        <relationship ID="42" type="stranger" />
+        <relationship ID="43" type="acquaintance" />
+        <relationship ID="44" type="acquaintance" />
+        <relationship ID="45" type="stranger" />
+        <relationship ID="46" type="acquaintance" />
+        <relationship ID="47" type="acquaintance" />
+        <relationship ID="48" type="stranger" />
+        <relationship ID="49" type="stranger" />
+        <relationship ID="50" type="acquaintance" />
+        <relationship ID="51" type="stranger" />
+        <relationship ID="52" type="friends" />
+        <relationship ID="53" type="acquaintance" />
+        <relationship ID="54" type="friends" />
+        <relationship ID="55" type="friends" />
+        <relationship ID="56" type="friends" />
+        <relationship ID="57" type="stranger" />
+        <relationship ID="58" type="stranger" />
+        <relationship ID="59" type="stranger" />
+        <relationship ID="60" type="stranger" />
+        <relationship ID="61" type="stranger" />
+        <relationship ID="62" type="acquaintance" />
+        <relationship ID="63" type="stranger" />
+        <relationship ID="64" type="stranger" />
+        <relationship ID="65" type="friends" />
+        <relationship ID="66" type="stranger" />
+        <relationship ID="67" type="stranger" />
+        <relationship ID="68" type="acquaintance" />
+        <relationship ID="69" type="acquaintance" />
+        <relationship ID="70" type="stranger" />
+        <relationship ID="71" type="stranger" />
+        <relationship ID="72" type="stranger" />
+        <relationship ID="73" type="stranger" />
+        <relationship ID="74" type="acquaintance" />
+        <relationship ID="75" type="friends" />
+        <relationship ID="76" type="stranger" />
+        <relationship ID="77" type="stranger" />
+        <relationship ID="78" type="stranger" />
+        <relationship ID="79" type="stranger" />
+        <relationship ID="80" type="stranger" />
+        <relationship ID="81" type="acquaintance" />
+        <relationship ID="82" type="friends" />
+        <relationship ID="83" type="stranger" />
+        <relationship ID="84" type="friends" />
+        <relationship ID="85" type="acquaintance" />
+        <relationship ID="87" type="stranger" />
+        <relationship ID="88" type="acquaintance" />
+        <relationship ID="89" type="acquaintance" />
+        <relationship ID="90" type="acquaintance" />
+        <relationship ID="91" type="acquaintance" />
+        <relationship ID="92" type="acquaintance" />
+        <relationship ID="93" type="acquaintance" />
+        <relationship ID="94" type="acquaintance" />
+        <relationship ID="95" type="acquaintance" />
+        <relationship ID="96" type="acquaintance" />
+        <relationship ID="97" type="acquaintance" />
+        <relationship ID="98" type="acquaintance" />
+        <relationship ID="99" type="acquaintance" />
+        <relationship ID="100" type="acquaintance" />
+    </relationship>
+    <behaviourRulesPerson>
+        <personRelations status="acquaintance" safeDistanceProb="50" maskWearingProb="50" enterMaxOccRoomProb="50" />
+        <personRelations status="friends" safeDistanceProb="20" maskWearingProb="20" enterMaxOccRoomProb="80" />
+        <personRelations status="stranger" safeDistanceProb="80" maskWearingProb="80" enterMaxOccRoomProb="20" />
+    </behaviourRulesPerson>
+    <locationPlan>
+        <locationPlan room="38" timeinroom="90" startTime="510" />
+        <locationPlan room="Tunnels" timeinroom="4" startTime="600" />
+        <locationPlan room="28" timeinroom="60" startTime="604" />
+        <locationPlan room="Tunnels" timeinroom="5" startTime="664" />
+        <locationPlan room="21" timeinroom="90" startTime="669" />
+        <locationPlan room="Tunnels" timeinroom="8" startTime="759" />
+        <locationPlan room="3" timeinroom="60" startTime="767" />
+        <locationPlan room="Tunnels" timeinroom="8" startTime="827" />
+        <locationPlan room="40" timeinroom="90" startTime="835" />
+        <locationPlan room="Tunnels" timeinroom="2" startTime="925" />
+        <locationPlan room="41" timeinroom="30" startTime="927" />
+        <locationPlan room="Tunnels" timeinroom="3" startTime="957" />
+        <locationPlan room="2" timeinroom="60" startTime="960" />
+        <locationPlan room="Tunnels" timeinroom="1" startTime="1020" />
+        <locationPlan room="40" timeinroom="30" startTime="1021" />
+        <locationPlan room="Tunnels" timeinroom="4" startTime="1051" />
+        <locationPlan room="43" timeinroom="30" startTime="1055" />
+        <locationPlan room="Tunnels" timeinroom="7" startTime="1085" />
+        <locationPlan room="46" timeinroom="30" startTime="1092" />
+        <locationPlan room="Tunnels" timeinroom="6" startTime="1122" />
+        <locationPlan room="9" timeinroom="30" startTime="1128" />
+        <locationPlan room="Tunnels" timeinroom="3" startTime="1158" />
+        <locationPlan room="31" timeinroom="30" startTime="1161" />
+        <locationPlan room="Tunnels" timeinroom="6" startTime="1191" />
+        <locationPlan room="28" timeinroom="30" startTime="1197" />
+        <locationPlan room="Tunnels" timeinroom="7" startTime="1227" />
+        <locationPlan room="48" timeinroom="30" startTime="1234" />
+        <locationPlan room="Tunnels" timeinroom="9" startTime="1264" />
+        <locationPlan room="47" timeinroom="30" startTime="1273" />
+        <locationPlan room="Tunnels" timeinroom="6" startTime="1303" />
+        <locationPlan room="home" timeinroom="631" startTime="1309" />
+        <locationPlan room="Tunnels" timeinroom="10" startTime="500" />
+    </locationPlan>
+</DecisionMakerBehaviour>

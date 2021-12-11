@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<DecisionMakerBehaviour>
+    <ID>18</ID>
+    <location>home</location>
+    <currStartTime>1128</currStartTime>
+    <timeInFirstLocation>924</timeInFirstLocation>
+    <isSick>False</isSick>
+    <exposed>False</exposed>
+    <vaccinated>False</vaccinated>
+    <wearingMaskCorrectly>True</wearingMaskCorrectly>
+    <socialDistance>True</socialDistance>
+    <weatherThreshold>2</weatherThreshold>
+    <relationship>
+        <relationship ID="1" type="stranger" />
+        <relationship ID="2" type="stranger" />
+        <relationship ID="3" type="stranger" />
+        <relationship ID="4" type="stranger" />
+        <relationship ID="5" type="stranger" />
+        <relationship ID="6" type="stranger" />
+        <relationship ID="7" type="stranger" />
+        <relationship ID="8" type="acquaintance" />
+        <relationship ID="9" type="stranger" />
+        <relationship ID="10" type="friends" />
+        <relationship ID="11" type="stranger" />
+        <relationship ID="12" type="stranger" />
+        <relationship ID="13" type="acquaintance" />
+        <relationship ID="14" type="friends" />
+        <relationship ID="15" type="stranger" />
+        <relationship ID="16" type="stranger" />
+        <relationship ID="17" type="stranger" />
+        <relationship ID="19" type="friends" />
+        <relationship ID="20" type="friends" />
+        <relationship ID="21" type="stranger" />
+        <relationship ID="22" type="stranger" />
+        <relationship ID="23" type="stranger" />
+        <relationship ID="24" type="stranger" />
+        <relationship ID="25" type="stranger" />
+    </relationship>
+    <behaviourRulesPerson>
+        <personRelations status="acquaintance" safeDistanceProb="50" maskWearingProb="50" enterMaxOccRoomProb="50" />
+        <personRelations status="friends" safeDistanceProb="20" maskWearingProb="20" enterMaxOccRoomProb="80" />
+        <personRelations status="stranger" safeDistanceProb="80" maskWearingProb="80" enterMaxOccRoomProb="20" />
+    </behaviourRulesPerson>
+    <locationPlan>
+        <locationPlan room="15" timeinroom="60" startTime="615" />
+        <locationPlan room="Outdoors" timeinroom="5" startTime="675" />
+        <locationPlan room="9" timeinroom="60" startTime="680" />
+        <locationPlan room="Outdoors" timeinroom="8" startTime="740" />
+        <locationPlan room="1" timeinroom="90" startTime="748" />
+        <locationPlan room="Outdoors" timeinroom="5" startTime="838" />
+        <locationPlan room="3" timeinroom="90" startTime="843" />
+        <locationPlan room="Outdoors" timeinroom="3" startTime="933" />
+        <locationPlan room="2" timeinroom="90" startTime="936" />
+        <locationPlan room="Outdoors" timeinroom="6" startTime="1026" />
+        <locationPlan room="10" timeinroom="90" startTime="1032" />
+        <locationPlan room="Outdoors" timeinroom="6" startTime="1122" />
+        <locationPlan room="home" timeinroom="924" startTime="1128" />
+        <locationPlan room="Outdoors" timeinroom="3" startTime="612" />
+    </locationPlan>
+</DecisionMakerBehaviour>

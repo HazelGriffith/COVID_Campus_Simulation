@@ -49,6 +49,7 @@ template <typename TIME> class Person{
 		PersonInfo travelInfo;
 		int currentWeather;
 		bool firstTravel;
+		bool firstWeatherUpdate;
     };
     state_type state;
    
@@ -67,6 +68,7 @@ template <typename TIME> class Person{
 		//The PersonInfo message that initializes the person's first location is created here.
 		state.travelInfo = PersonInfo(person.ID, person.isSick, person.exposed, person.vaccinated, person.wearingMask, person.location, 0, "" ,(person.timeInFirstLocation + person.currStartTime)%1440, person.socialDistance, person.weatherThreshold, (person.timeInFirstLocation + person.currStartTime)%1440, person.relationship, person.behaviourRulesPerson);
 		state.firstTravel = true;
+		state.firstWeatherUpdate = true;
 	}
 
     //internal transition function
@@ -86,6 +88,7 @@ template <typename TIME> class Person{
 		} else {
 			state.timeRemaining = person.nextLocation.timeInRoomMin;
 			person.setNextLocation(state.timeRemaining);
+			
 		}
 		person.currStartTime = person.nextLocation.startTime;
 		state.travelInfo.timeEntering = person.currStartTime;
@@ -132,6 +135,12 @@ template <typename TIME> class Person{
 		for (int i = 0; i < get_messages<typename Person_ports::weatherUpdates>(mbs).size(); i++) {
 
 			state.currentWeather = msgBagWeather[i].newState;
+			
+			if (state.firstWeatherUpdate == true){
+				state.firstWeatherUpdate = false;
+			} else {
+				state.timeRemaining = (person.nextLocation.timeInRoomMin + person.currStartTime)%1440;
+			}
 		}
     }
 

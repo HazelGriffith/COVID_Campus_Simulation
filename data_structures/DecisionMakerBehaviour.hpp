@@ -17,10 +17,30 @@
 using namespace std;
 
 namespace decision_maker_behaviour_structures{
-
+	
+	class Event{
+		public:
+			Event(){}
+			Event(const string& ID, const string& type, const int& capacity, const int& startTime, const int& endTime){
+				this->ID=ID;
+				this->type=type;
+				this->capacity=capacity;
+				this->startTime=startTime;
+				this->endTime=endTime;
+			}
+		
+		string ID;
+		string type;
+		int capacity;
+		int startTime;
+		int endTime;
+	};
+	
     /*******************************************/
     /***** XML Auxiliary structures  ***********/
     /*******************************************/
+	
+	
     class Relationship{
 		public:
 			Relationship(){}
@@ -107,7 +127,7 @@ namespace decision_maker_behaviour_structures{
 			DecisionMakerBehaviour() = default;
 			
 			//constructor for randomly generating DecisionMakerBehaviour objects
-			DecisionMakerBehaviour(string i_ID, int numberOfRooms){
+			DecisionMakerBehaviour(string i_ID, vector<Event> events){
 				unsigned seed1 = chrono::system_clock::now().time_since_epoch().count();
 				default_random_engine generator(seed1);
 				uniform_int_distribution<int> booleanDistribution(0,100);
@@ -155,7 +175,35 @@ namespace decision_maker_behaviour_structures{
 					riskyTravelBehaviour = false;
 				}
 				
-				int maxTimeInDay = 810; //minutes. This was found as Carleton lectures start at 8:30 am and end at 10 pm, so 13.5 hours *60 min = 810 min
+				vector<Event> selectedEvents;
+				
+				uniform_int_distribution<int> eventsDistribution(0,events.size()-1);
+				int firstEvent = eventsDistribution(generator);
+				Event event = events[firstEvent];
+				selectedEvents.push_back(event);
+				
+				r = booleanDistribution(generator);
+				int count = 0;
+				while(r > 25){
+					count = 0;
+					for (int i = 0; i < events.size(); i++){
+						if (events[i].startTime > event.endTime){
+							event = events[i];
+						} else {
+							count++;
+						}
+					}
+					if (count >= events.size()){
+						r = 0;
+					} else {
+						r = booleanDistribution(generator);
+						selectedEvents.push_back(event);
+					}
+				}
+				
+				
+				
+				/*int maxTimeInDay = 810; //minutes. This was found as Carleton lectures start at 8:30 am and end at 10 pm, so 13.5 hours *60 min = 810 min
 				
 				//The amount of time spent at Carleton is randomly generated as a multiple of 30, as events at Carleton rarely end at the quarter hour
 				uniform_int_distribution<int> carletonTimeDistribution(1,maxTimeInDay/30);
@@ -385,13 +433,14 @@ namespace decision_maker_behaviour_structures{
 				}
 					
 				assert(sum == (numberOf180MinEvents*180 + numberOf90MinEvents*90 + numberOf60MinEvents*60 + numberOf30MinEvents*30));
-				
+				*/
 				//The locationPlan vector is initialized for the DecisionMakerBehaviour object
 				//locationPlan.resize(numberOfEvents);
-				for (int i = 0; i < numberOfEvents; i++){
-					string iD = to_string(locationIDs[i]);
-					int timeSpent = timeInRooms[i];
-					int timeStart = startTimes[i];
+				uniform_int_distribution<int> travelTimesDistribution(1,10);
+				for (int i = 0; i < selectedEvents.size(); i++){
+					string iD = selectedEvents[i].ID;
+					int timeSpent = selectedEvents[i].endTime - selectedEvents[i].startTime;
+					int timeStart = selectedEvents[i].startTime;
 					LocationPlan temp = LocationPlan(iD, timeSpent, timeStart);
 					locationPlan.push_back(temp);
 					if (riskyTravelBehaviour){
@@ -399,8 +448,12 @@ namespace decision_maker_behaviour_structures{
 					} else {
 						iD = "Outdoors";
 					}
-					timeSpent = travelingEventTimes[i];
-					timeStart = startTimes[i] + timeInRooms[i];
+					if (i == selectedEvents.size()-1){
+						timeSpent = 10;
+					} else {
+						timeSpent = selectedEvents[i+1].startTime - selectedEvents[i].endTime;
+					}
+					timeStart = selectedEvents[i].endTime;
 					temp = LocationPlan(iD, timeSpent, timeStart);
 					locationPlan.push_back(temp);
 				}
@@ -411,8 +464,8 @@ namespace decision_maker_behaviour_structures{
 					iD = "Outdoors";
 				}
 				int timeSpent = travelTimesDistribution(generator);
-				LocationPlan travel = LocationPlan(iD, timeSpent, (startTimes[0] - timeSpent));
-				LocationPlan home = LocationPlan("home", 1440 - (startTimes[numberOfEvents-1]+timeInRooms[numberOfEvents-1]+travelingEventTimes[numberOfEvents-1]) + (startTimes[0] - timeSpent), startTimes[numberOfEvents-1]+timeInRooms[numberOfEvents-1]+travelingEventTimes[numberOfEvents-1]);
+				LocationPlan travel = LocationPlan(iD, timeSpent, (selectedEvents[0].startTime - timeSpent));
+				LocationPlan home = LocationPlan("home", 1440 - (selectedEvents[selectedEvents.size()-1].endTime+10) + (selectedEvents[0].startTime - timeSpent), (selectedEvents[selectedEvents.size()-1].endTime+10));
 				locationPlan.push_back(home);
 				locationPlan.push_back(travel);
 				currStartTime = home.startTime;

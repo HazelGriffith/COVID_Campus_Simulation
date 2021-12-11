@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<RoomParameters>
+    <ID>49,HS - M101A</ID>
+    <ventilationRating>1</ventilationRating>
+    <socialDistanceThreshold>55</socialDistanceThreshold>
+    <maxOccupancy>41</maxOccupancy>
+    <wearsMaskFactor>1</wearsMaskFactor>
+    <socialDistanceFactor>2</socialDistanceFactor>
+    <vaccinatedFactor>-1</vaccinatedFactor>
+    <sickPeopleCO2Factor>1</sickPeopleCO2Factor>
+    <highCO2FactorThresholds>1770,1788,1993,1995</highCO2FactorThresholds>
+    <highCO2Factors>1,2,3,4</highCO2Factors>
+    <respIncreasePerMin>340000</respIncreasePerMin>
+    <squareMetres>110.809998</squareMetres>
+    <height>4.100000</height>
+</RoomParameters>

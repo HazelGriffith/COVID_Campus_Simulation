@@ -300,7 +300,7 @@ template<typename TIME> class RoomModel{
 					float strangersMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("stranger").MaskWearingProbability;
 					float friendsMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("friends").MaskWearingProbability;
 					float acquaintancesMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("acquaintance").MaskWearingProbability;
-					
+
 					float strangersSocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("stranger").SafeDistanceProbability;
 					float friendsSocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("friends").SafeDistanceProbability;
 					float acquaintancesSocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("acquaintance").SafeDistanceProbability;
@@ -333,7 +333,6 @@ template<typename TIME> class RoomModel{
 
 						//This is the time they spent in the room together
 						totalTime = endTime - startTime;
-						
 						//This is the percentage of the person leaving's time spent in the room with that person
 						float acquaintancesTimePercent = totalTime/mainTotalTime;
 						
@@ -362,7 +361,6 @@ template<typename TIME> class RoomModel{
 						}
 
 						totalTime = endTime - startTime;
-
 						
 						float friendsTimePercent = totalTime/mainTotalTime;
 						
@@ -392,7 +390,6 @@ template<typename TIME> class RoomModel{
 						}
 
 						totalTime = endTime - startTime;
-
 						
 						float strangersTimePercent = totalTime/mainTotalTime;
 
@@ -410,7 +407,6 @@ template<typename TIME> class RoomModel{
 						averageSocialDistanceProb = floor(averageSocialDistanceProb/(strangers.size()+friends.size()+acquaintances.size()));
 					}
 
-					
 					assert(averageMaskProb <= 100);
 					assert(averageSocialDistanceProb <= 100);
 					assert(averageMaskProb >= 0);

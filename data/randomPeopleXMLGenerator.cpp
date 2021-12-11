@@ -20,6 +20,8 @@ int main(){
 	cin >> numberOfRooms;
 	cout << endl;
 	
+	
+	
 	vector<DecisionMakerBehaviour> people;
 	people.resize(numberOfPeople);
 	

@@ -2,37 +2,36 @@
 <DecisionMakerBehaviour>
     <ID>8</ID>
     <location>home</location>
-    <currStartTime>1263</currStartTime>
-    <timeInFirstLocation>911</timeInFirstLocation>
+    <currStartTime>1280</currStartTime>
+    <timeInFirstLocation>1083</timeInFirstLocation>
     <isSick>False</isSick>
     <exposed>False</exposed>
-    <vaccinated>False</vaccinated>
+    <vaccinated>True</vaccinated>
     <wearingMaskCorrectly>False</wearingMaskCorrectly>
     <socialDistance>False</socialDistance>
-    <relationship />
-    <behaviourRulesPerson />
+    <weatherThreshold>2</weatherThreshold>
+    <relationship>
+        <relationship ID="1" type="stranger" />
+        <relationship ID="2" type="stranger" />
+        <relationship ID="3" type="friends" />
+        <relationship ID="4" type="acquaintance" />
+        <relationship ID="5" type="acquaintance" />
+        <relationship ID="6" type="friends" />
+        <relationship ID="7" type="stranger" />
+        <relationship ID="9" type="acquaintance" />
+        <relationship ID="10" type="acquaintance" />
+    </relationship>
+    <behaviourRulesPerson>
+        <personRelations status="acquaintance" safeDistanceProb="50" maskWearingProb="50" enterMaxOccRoomProb="50" />
+        <personRelations status="friends" safeDistanceProb="20" maskWearingProb="20" enterMaxOccRoomProb="80" />
+        <personRelations status="stranger" safeDistanceProb="80" maskWearingProb="80" enterMaxOccRoomProb="20" />
+    </behaviourRulesPerson>
     <locationPlan>
-        <locationPlan room="3" timeinroom="90" startTime="744" />
-        <locationPlan room="Outdoors" timeinroom="6" startTime="834" />
-        <locationPlan room="2" timeinroom="30" startTime="840" />
-        <locationPlan room="Outdoors" timeinroom="5" startTime="870" />
-        <locationPlan room="1" timeinroom="30" startTime="875" />
-        <locationPlan room="Outdoors" timeinroom="1" startTime="905" />
-        <locationPlan room="2" timeinroom="60" startTime="906" />
-        <locationPlan room="Outdoors" timeinroom="7" startTime="966" />
-        <locationPlan room="3" timeinroom="30" startTime="973" />
-        <locationPlan room="Outdoors" timeinroom="10" startTime="1003" />
-        <locationPlan room="1" timeinroom="60" startTime="1013" />
-        <locationPlan room="Outdoors" timeinroom="10" startTime="1073" />
-        <locationPlan room="2" timeinroom="30" startTime="1083" />
-        <locationPlan room="Outdoors" timeinroom="8" startTime="1113" />
-        <locationPlan room="3" timeinroom="60" startTime="1121" />
-        <locationPlan room="Outdoors" timeinroom="5" startTime="1181" />
-        <locationPlan room="1" timeinroom="30" startTime="1186" />
-        <locationPlan room="Outdoors" timeinroom="7" startTime="1216" />
-        <locationPlan room="2" timeinroom="30" startTime="1223" />
-        <locationPlan room="Outdoors" timeinroom="10" startTime="1253" />
-        <locationPlan room="home" timeinroom="911" startTime="1263" />
-        <locationPlan room="Outdoors" timeinroom="10" startTime="734" />
+        <locationPlan room="5" timeinroom="60" startTime="930" />
+        <locationPlan room="Outdoors" timeinroom="220" startTime="990" />
+        <locationPlan room="5" timeinroom="60" startTime="1210" />
+        <locationPlan room="Outdoors" timeinroom="10" startTime="1270" />
+        <locationPlan room="home" timeinroom="1083" startTime="1280" />
+        <locationPlan room="Outdoors" timeinroom="7" startTime="923" />
     </locationPlan>
 </DecisionMakerBehaviour>

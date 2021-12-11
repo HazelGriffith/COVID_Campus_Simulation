@@ -32,6 +32,12 @@ CO2Validation.o: CO2Validation.cpp
 randomRoomsXMLGenerator.o: randomRoomsXMLGenerator.cpp
 	$(CC) -g -c $(CFLAGS) randomRoomsXMLGenerator.cpp -o build/randomRoomsXMLGenerator.o
 
+randomGenerator.o: randomGenerator.cpp
+	$(CC) -g -c $(CFLAGS) randomGenerator.cpp -o build/randomGenerator.o
+
+roomsExtractor.o: roomsExtractor.cpp
+	$(CC) -g -c $(CFLAGS) roomsExtractor.cpp -o build/roomsExtractor.o
+
 #TARGET TO COMPILE ONLY People XML generator
 peopleGenerator: randomPeopleXMLGenerator.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
 	$(CC) -g -o PEOPLE_XML_GENERATOR build/randomPeopleXMLGenerator.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
@@ -47,6 +53,14 @@ validator: CO2Validation.o
 #TARGET TO COMPILE ONLY Rooms XML generator
 roomsGenerator: randomRoomsXMLGenerator.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
 	$(CC) -g -o ROOMS_XML_GENERATOR build/randomRoomsXMLGenerator.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
+	
+#TARGET TO COMPILE ONLY GENERATOR
+generator: randomGenerator.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
+	$(CC) -g -o GENERATOR build/randomGenerator.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
+
+#TARGET TO COMPILE ONLY ROOMS EXTRACTOR
+extractor: roomsExtractor.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
+	$(CC) -g -o EXTRACTOR build/roomsExtractor.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
 
 #CLEAN COMMANDS
 clean: 
