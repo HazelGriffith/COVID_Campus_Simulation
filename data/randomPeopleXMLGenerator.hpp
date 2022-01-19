@@ -20,9 +20,13 @@ void generatePeopleXML(vector<Event> events){
 	vector<DecisionMakerBehaviour> people;
 	people.resize(numberOfPeople);
 	
+	DecisionMakerBehaviour::setEvents(events);
+	
 	for (int i = 0; i < numberOfPeople; i++){
 		string s = to_string(i+1);
-		people[i] = DecisionMakerBehaviour(s, events);
+		
+		people[i] = DecisionMakerBehaviour(s);
+		
 		for (int j = 0; j < numberOfPeople; j++){
 			Relationship relation;
 			string otherPerson = to_string(j+1);
@@ -37,7 +41,7 @@ void generatePeopleXML(vector<Event> events){
 				
 				if (r > 80){
 					type = "friends";
-				} else if (r > 60){
+				} else if (r > 50){
 					type = "acquaintance";
 				} else {
 					type = "stranger";
@@ -53,7 +57,6 @@ void generatePeopleXML(vector<Event> events){
 				people[i].relationship.push_back(relation);
 			}
 		}
-			
 			
 		string studentPathStr = "../data/people/Person" + s + ".xml";
 		const char * studentPath = studentPathStr.c_str();

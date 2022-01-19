@@ -31,6 +31,7 @@
 
 //C++ libraries
 #include <iostream>
+#include <fstream>
 #include <string>
 
 using namespace std;
@@ -38,6 +39,8 @@ using namespace cadmium;
 using namespace cadmium::basic_models::pdevs;
 
 using TIME = NDTime;
+
+ifstream roomData;
 
 /***** (1) *****/
 /***** Define input port for coupled models *****/
@@ -47,7 +50,7 @@ struct top_out: public out_port<ProbGetSick>{};
 
 struct RoomInfo{
 	string ID;
-	int ventilationRating;
+	float ventilationRating;
 	int socialDistanceThreshold;
 	int maxOccupancy;
 	int wearsMaskFactor;
@@ -70,24 +73,50 @@ int main(){
 	vector<RoomInfo> roomsInfo;
 	
 	vector<char*> roomXMLFiles;
-	//this many rooms are dynamically loaded
-	int numberOfRooms;
-	cout << "Enter the number of rooms in the simulation: ";
-	cin >> numberOfRooms;
-	cout << endl;
+	int numberOfRooms = 0;
+	
+	//rooms are dynamically loaded from file
+	roomData.open("realRoomData.csv");
+	string line;
+	string name;
+	
+	if (roomData.is_open()){
+		getline(roomData, line);
+		getline(roomData, line);
+		while (!line.empty()){
+			numberOfRooms++;
+			getline(roomData, line);
+		}
+	}
+	roomData.close();
+	
+	roomData.open("realRoomData.csv");
 	
 	roomXMLFiles.resize(numberOfRooms);
 	string roomPathStr;
-	for (int i = 0; i < numberOfRooms; i++){
-		string s = to_string(i+1);
-		roomPathStr = "../data/rooms/" + s + ".xml";
-		const char * roomPath = roomPathStr.c_str();
-		roomXMLFiles[i] = new char[20];
-		for (int j = 0; j < strlen(roomPath); j++){
-			roomXMLFiles[i][j] = roomPath[j];
+	size_t firstComma;
+	
+	if (roomData.is_open()){
+		getline(roomData, line);
+		getline(roomData, line);
+		int i = 0;
+		while (!line.empty()){
+			
+			firstComma = line.find(",");
+			
+			name = line.substr(0, firstComma);
+		
+			roomPathStr = "../data/rooms/" + name + ".xml";
+			const char * roomPath = roomPathStr.c_str();
+			roomXMLFiles[i] = new char[strlen(roomPath) + 1];
+			for (int j = 0; j < strlen(roomPath); j++){
+				roomXMLFiles[i][j] = roomPath[j];
+			}
+			roomXMLFiles[i][strlen(roomPath)] = '\0';
+			i++;
 		}
-		roomXMLFiles[i][strlen(roomPath)] = '\0';
 	}
+	roomData.close();
 	
 	//adds tunnels to the list of rooms to be loaded
 	string tunnelsPathStr = "../data/rooms/tunnels.xml";
