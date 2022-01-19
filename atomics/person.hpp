@@ -49,6 +49,11 @@ template <typename TIME> class Person{
 		PersonInfo travelInfo;
 		int currentWeather;
 		bool firstTravel;
+
+		//the remaining time in minutes until the person will recieve the next weather update
+		int timeUntilNextWeatherUpdate;
+		//when a weather update is received while waiting to move rooms, this stores the remaining time until the internal transition was supposed to occur
+		int remainingTimeUntilNextInternalTransition;
     };
     state_type state;
    
@@ -66,24 +71,29 @@ template <typename TIME> class Person{
 		state.currentWeather = 0;
 		//The PersonInfo message that initializes the person's first location is created here.
 		state.travelInfo = PersonInfo(person.ID, person.isSick, person.exposed, person.vaccinated, person.wearingMask, person.location, 0, "" ,(person.timeInFirstLocation + person.currStartTime)%1440, person.socialDistance, person.weatherThreshold, (person.timeInFirstLocation + person.currStartTime)%1440, person.relationship, person.behaviourRulesPerson);
+		//flag indicating whether the person has traveled yet
 		state.firstTravel = true;
+		//the remaining time in minutes until the person will recieve the next weather update. It is initialized to 24 hours
+		state.timeUntilNextWeatherUpdate = 1440;
+		//initialized to 0. It is not used until a weather update interrupts the wait before an internal transition
+		state.remainingTimeUntilNextInternalTransition = 0;
 	}
 
     //internal transition function
     void internal_transition(){
 		//sets up the person to output the correct PersonInfo object at the next time interval
-		
 
-		if (state.firstTravel){
+		if (state.firstTravel) {
 			//person.setNextLocation() uses the current start time and time remaining to find the next location
 			//because the initial time remaining is set to 0, it will not correctly find the next location
 			//Therefore, if the person is using the initial time of 0, the DecisionMakerBehaviour object person's nextLocation
 			//variable will be empty and cannot give the correct time remaining. So the first time remaining value is loaded
 			//from the person xml file and initialized here
-			state.timeRemaining = (person.timeInFirstLocation + person.currStartTime)%1440;
+			state.timeRemaining = (person.timeInFirstLocation + person.currStartTime) % 1440;
 			person.setNextLocation(person.timeInFirstLocation);
 			state.firstTravel = false;
-		} else {
+		}
+		else {
 			state.timeRemaining = person.nextLocation.timeInRoomMin;
 			person.setNextLocation(state.timeRemaining);
 		}
@@ -92,6 +102,19 @@ template <typename TIME> class Person{
 		state.travelInfo.timeLeaving = person.currStartTime + person.nextLocation.timeInRoomMin;
 		state.travelInfo.roomIDLeaving = person.location;
 		state.travelInfo.minsUntilLeaving = person.nextLocation.timeInRoomMin;
+
+		//COMMENT
+
+		//decrements the time until the next weather update to reflect the next amount of time to spend in the next room
+		state.timeUntilNextWeatherUpdate -= state.timeRemaining;
+
+		/*if the next weather update is to arrive before the person leaves the room, 
+		then the waiting time after the weather update that will be cut off is stored, and the time left in the day is reset*/
+		if (state.timeUntilNextWeatherUpdate <= 0) {
+			state.remainingTimeUntilNextInternalTransition = -1 * state.timeUntilNextWeatherUpdate;
+			state.timeUntilNextWeatherUpdate = 1440 - state.remainingTimeUntilNextInternalTransition;
+		}
+		else state.remainingTimeUntilNextInternalTransition = 0;
 		
 		//checks if a person is using the tunnels or outdoors to travel between destinations
 		//the person will use outdoors if the current weather is greater or equal to their weatherThreshold value, will use tunnels otherwise
@@ -106,13 +129,13 @@ template <typename TIME> class Person{
 		}
 
 		state.travelInfo.roomIDEntering = person.nextLocation.roomID;
-		person.location = person.nextLocation.roomID;
-		
+		person.location = person.nextLocation.roomID;	
     }
 
 
     //external transition function
     void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs){
+
 		vector<ProbGetSick> msgBagSick = get_messages<typename Person_ports::infectionProb>(mbs);
 		
 		vector<WeatherInfo> msgBagWeather = get_messages<typename Person_ports::weatherUpdates>(mbs);
@@ -130,13 +153,16 @@ template <typename TIME> class Person{
         }
 		
 		for (int i = 0; i < get_messages<typename Person_ports::weatherUpdates>(mbs).size(); i++) {
-
 			state.currentWeather = msgBagWeather[i].newState;
+
+			//sets the amount of time to pass after this weather update to the remaining time between room transitions that was interrupted
+			if (state.remainingTimeUntilNextInternalTransition > 0) state.timeRemaining = state.remainingTimeUntilNextInternalTransition;
 		}
     }
 
     // confluence transition
     void confluence_transition(TIME e, typename make_message_bags<input_ports>::type mbs) {
+
         internal_transition();
         external_transition(TIME(), std::move(mbs));
     }
@@ -152,13 +178,13 @@ template <typename TIME> class Person{
 
 
     TIME time_advance() const{
-        TIME next_internal;
-		
-		// time remaining is in minutes, so it is split into hours and minutes to construct an NDTime object
-		int hours = floor(state.timeRemaining/60);
 
-		next_internal = TIME({hours, state.timeRemaining - (hours*60)});
-        
+        TIME next_internal;
+
+		// time remaining is in minutes, so it is split into hours and minutes to construct an NDTime object
+		int hours = floor(state.timeRemaining / 60);
+		next_internal = TIME({ hours, state.timeRemaining - (hours * 60) });
+
         return next_internal;
 
     };
