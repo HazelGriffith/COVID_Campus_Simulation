@@ -1,14 +1,11 @@
 # COVID_Campus_Simulation
 A simulation of how COVID-19 spreads across a university campus. It uses an Architecture to study Diffusion Processes in Multiplex dynamic networks (ADPM) as created by Cristina Ruiz-Martin and Gabriel Wainer. 
 
-# Room XML File Generation Instructions
-To generate x number of room XML files, open a back prompt in the data folder, and execute "make roomsGenerator", then "./ROOMS_XML_GENERATOR". It will prompt you for the number of rooms you want to randomly generate, enter it. It will then generate x number of rooms and store them in the data/rooms folder.
-
-# People XML File Generation Instructions
-To generate x number of people XML files, open a bash prompt in the data folder, and execute "make peopleGenerator", then "./PEOPLE_XML_GENERATOR". It will prompt you for the number of people you want to randomly generate, enter it. Then it will prompt you for the number of rooms in the simulation to randomly create their schedules around, enter that and it will finish generating the people XML files and store them in the data/people folder.
+# Person and Room XML File Generation Instructions
+To generate people and room XML files, open a bash prompt in the data folder and execute "make generator", then "./GENERATOR". You will then be prompted to enter the number of people to generate. Once this value is entered, that amount of people XML files will be generated and stored in the data/people folder. The room XML files based on real room data from the Carleton University campus will be generated and stored in the data/rooms folder.
 
 # Running Simulation Instructions
-To run the simulation open a bash prompt in the main directory. Execute "make clean", and then "make simulator". Open a bash prompt in the bin folder, and then execute "./ROOM_SIM". It will prompt you for the number of people to include in the simulation, and the number of hours the simulation will run for. Enter both accordingly and the simulation will start running. Depending upon the values used it could take some time to complete. The longest I have seen it run for is 25 minutes.
+To run the simulation open a bash prompt in the main directory. Execute "make clean", and then "make simulator". Open a bash prompt in the bin folder, and then execute "./ROOM_SIM". It will prompt you for the number of people to include in the simulation, and the number of hours the simulation will run for. Enter both accordingly and the simulation will start running immediately. The required amount of person XML files must already have been generated in the data/people folder, or the simulation will not run correctly. Depending upon the number of people and simulation time, the simulation could take some time to complete. The longest I have seen it run for is 25 minutes.
 
 # Running Parser Instructions
 To run the parser, open a bash prompt in the data folder. Execute "make clean", "make parser", and then "./PARSER". It will prompt you for the number of rooms, and the number of people. Enter these values when requested. The data parsed from the simulation logger files will be stored in a file called parsedData.txt.
