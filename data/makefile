@@ -64,4 +64,4 @@ extractor: roomsExtractor.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
 
 #CLEAN COMMANDS
 clean: 
-	rm -f bin/* build/*
+	rm -f bin/* build/* people/*
