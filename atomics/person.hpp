@@ -50,6 +50,10 @@ template <typename TIME> class Person{
 		int currentWeather;
 		bool firstTravel;
 		bool firstWeatherUpdate;
+		//the remaining time in minutes until the person will recieve the next weather update
+		int timeUntilNextWeatherUpdate;
+		//when a weather update is received while waiting to move rooms, this stores the remaining time until the internal transition was supposed to occur
+		int remainingTimeUntilNextInternalTransition;
     };
     state_type state;
    
@@ -69,6 +73,10 @@ template <typename TIME> class Person{
 		state.travelInfo = PersonInfo(person.ID, person.isSick, person.exposed, person.vaccinated, person.wearingMask, person.location, 0, "" ,(person.timeInFirstLocation + person.currStartTime)%1440, person.socialDistance, person.weatherThreshold, (person.timeInFirstLocation + person.currStartTime)%1440, person.relationship, person.behaviourRulesPerson);
 		state.firstTravel = true;
 		state.firstWeatherUpdate = true;
+		//the remaining time in minutes until the person will recieve the next weather update. It is initialized to 24 hours
+		state.timeUntilNextWeatherUpdate = 1440;
+		//initialized to 0. It is not used until a weather update interrupts the wait before an internal transition
+		state.remainingTimeUntilNextInternalTransition = 0;
 	}
 
     //internal transition function
@@ -95,6 +103,17 @@ template <typename TIME> class Person{
 		state.travelInfo.timeLeaving = person.currStartTime + person.nextLocation.timeInRoomMin;
 		state.travelInfo.roomIDLeaving = person.location;
 		state.travelInfo.minsUntilLeaving = person.nextLocation.timeInRoomMin;
+
+		//decrements the time until the next weather update to reflect the next amount of time to spend in the next room
+		state.timeUntilNextWeatherUpdate -= state.timeRemaining;
+
+		/*if the next weather update is to arrive before the person leaves the room,
+		then the waiting time after the weather update that will be cut off is stored, and the time left in the day is reset*/
+		if (state.timeUntilNextWeatherUpdate <= 0) {
+			state.remainingTimeUntilNextInternalTransition = -1 * state.timeUntilNextWeatherUpdate;
+			state.timeUntilNextWeatherUpdate = 1440 - state.remainingTimeUntilNextInternalTransition;
+		}
+		else state.remainingTimeUntilNextInternalTransition = 0;
 		
 		//checks if a person is using the tunnels or outdoors to travel between destinations
 		//the person will use outdoors if the current weather is greater or equal to their weatherThreshold value, will use tunnels otherwise
@@ -141,6 +160,9 @@ template <typename TIME> class Person{
 			} else {
 				state.timeRemaining = (person.nextLocation.timeInRoomMin + person.currStartTime)%1440;
 			}
+
+			//sets the amount of time to pass after this weather update to the remaining time between room transitions that was interrupted
+			if (state.remainingTimeUntilNextInternalTransition > 0) state.timeRemaining = state.remainingTimeUntilNextInternalTransition;
 		}
     }
 
