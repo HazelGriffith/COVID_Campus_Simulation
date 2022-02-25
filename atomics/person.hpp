@@ -54,6 +54,11 @@ template <typename TIME> class Person{
 		int timeUntilNextWeatherUpdate;
 		//when a weather update is received while waiting to move rooms, this stores the remaining time until the internal transition was supposed to occur
 		int remainingTimeUntilNextInternalTransition;
+		bool stayingHome;
+		bool goingHome;
+		bool becomingSick;
+		bool severityDecided;
+		int timeUntilSick;
     };
     state_type state;
    
@@ -77,59 +82,102 @@ template <typename TIME> class Person{
 		state.timeUntilNextWeatherUpdate = 1440;
 		//initialized to 0. It is not used until a weather update interrupts the wait before an internal transition
 		state.remainingTimeUntilNextInternalTransition = 0;
+		state.stayingHome = false;
+		state.timeUntilSick = -1;
+		state.becomingSick = false;
+		state.goingHome = false;
+		state.severityDecided = false;
 	}
 
     //internal transition function
     void internal_transition(){
 		//sets up the person to output the correct PersonInfo object at the next time interval
-		
-
-		if (state.firstTravel){
-			//person.setNextLocation() uses the current start time and time remaining to find the next location
-			//because the initial time remaining is set to 0, it will not correctly find the next location
-			//Therefore, if the person is using the initial time of 0, the DecisionMakerBehaviour object person's nextLocation
-			//variable will be empty and cannot give the correct time remaining. So the first time remaining value is loaded
-			//from the person xml file and initialized here
-			state.timeRemaining = (person.timeInFirstLocation + person.currStartTime)%1440;
-			person.setNextLocation(person.timeInFirstLocation);
-			state.firstTravel = false;
-		} else {
-			state.timeRemaining = person.nextLocation.timeInRoomMin;
-			person.setNextLocation(state.timeRemaining);
+		if (person.exposed){
+			unsigned seed1 = chrono::system_clock::now().time_since_epoch().count();
+			default_random_engine generator(seed1);
+			uniform_int_distribution<int> probSickDistribution(0,100);
+			int r = probSickDistribution(generator);
 			
+			if (r > 70){
+				uniform_int_distribution<int> timeUntilSickDistribution(0, 10080);
+				state.timeUntilSick = timeUntilSickDistribution(generator);
+				state.becomingSick = true;
+			}
+			person.exposed = false;
 		}
-		person.currStartTime = person.nextLocation.startTime;
-		state.travelInfo.timeEntering = person.currStartTime;
-		state.travelInfo.timeLeaving = person.currStartTime + person.nextLocation.timeInRoomMin;
-		state.travelInfo.roomIDLeaving = person.location;
-		state.travelInfo.minsUntilLeaving = person.nextLocation.timeInRoomMin;
-
-		//decrements the time until the next weather update to reflect the next amount of time to spend in the next room
-		state.timeUntilNextWeatherUpdate -= state.timeRemaining;
-
-		/*if the next weather update is to arrive before the person leaves the room,
-		then the waiting time after the weather update that will be cut off is stored, and the time left in the day is reset*/
-		if (state.timeUntilNextWeatherUpdate <= 0) {
-			state.remainingTimeUntilNextInternalTransition = -1 * state.timeUntilNextWeatherUpdate;
-			state.timeUntilNextWeatherUpdate = 1440 - state.remainingTimeUntilNextInternalTransition;
-		}
-		else state.remainingTimeUntilNextInternalTransition = 0;
 		
-		//checks if a person is using the tunnels or outdoors to travel between destinations
-		//the person will use outdoors if the current weather is greater or equal to their weatherThreshold value, will use tunnels otherwise
-		if (person.nextLocation.roomID == "Outdoors"|| person.nextLocation.roomID == "Tunnels") {
+		if (state.stayingHome == false){
+			if ((person.isSick)&&(state.severityDecided == false)){
+				unsigned seed1 = chrono::system_clock::now().time_since_epoch().count();
+				default_random_engine generator(seed1);
+				uniform_int_distribution<int> probSickDistribution(0,100);
+				int r = probSickDistribution(generator);
 			
-			if (state.currentWeather >= state.travelInfo.weatherThreshold) {
-				person.nextLocation.roomID = "Outdoors";
+				if (r > 50){
+					state.goingHome = true;
+				}
+				state.severityDecided = true;
 			}
-			else {
-				person.nextLocation.roomID = "Tunnels";
+			
+			if (state.firstTravel){
+				//person.setNextLocation() uses the current start time and time remaining to find the next location
+				//because the initial time remaining is set to 0, it will not correctly find the next location
+				//Therefore, if the person is using the initial time of 0, the DecisionMakerBehaviour object person's nextLocation
+				//variable will be empty and cannot give the correct time remaining. So the first time remaining value is loaded
+				//from the person xml file and initialized here
+				state.timeRemaining = (person.timeInFirstLocation + person.currStartTime)%1440;
+				person.setNextLocation(person.timeInFirstLocation);
+				state.firstTravel = false;
+			} else {
+				state.timeRemaining = person.nextLocation.timeInRoomMin;
+				person.setNextLocation(state.timeRemaining);
+			
+			}
+			person.currStartTime = person.nextLocation.startTime;
+			state.travelInfo.timeEntering = person.currStartTime;
+			state.travelInfo.timeLeaving = person.currStartTime + person.nextLocation.timeInRoomMin;
+			state.travelInfo.roomIDLeaving = person.location;
+			state.travelInfo.minsUntilLeaving = person.nextLocation.timeInRoomMin;
+			
+			if (state.becomingSick){
+				state.timeUntilSick -= state.timeRemaining;
+				if (state.timeUntilSick <= 0){
+					person.isSick = true;
+					state.travelInfo.isSick = true;
+					state.becomingSick = false;
+				}
+			}
+
+			//decrements the time until the next weather update to reflect the next amount of time to spend in the next room
+			state.timeUntilNextWeatherUpdate -= state.timeRemaining;
+
+			/*if the next weather update is to arrive before the person leaves the room,
+			then the waiting time after the weather update that will be cut off is stored, and the time left in the day is reset*/
+			if (state.timeUntilNextWeatherUpdate <= 0) {
+				state.remainingTimeUntilNextInternalTransition = -1 * state.timeUntilNextWeatherUpdate;
+				state.timeUntilNextWeatherUpdate = 1440 - state.remainingTimeUntilNextInternalTransition;
+			}
+			else state.remainingTimeUntilNextInternalTransition = 0;
+		
+			//checks if a person is using the tunnels or outdoors to travel between destinations
+			//the person will use outdoors if the current weather is greater or equal to their weatherThreshold value, will use tunnels otherwise
+			if (person.nextLocation.roomID == "Outdoors"|| person.nextLocation.roomID == "Tunnels") {
+			
+				if (state.currentWeather >= state.travelInfo.weatherThreshold) {
+					person.nextLocation.roomID = "Outdoors";
+				}
+				else {
+					person.nextLocation.roomID = "Tunnels";
+				}
+			}
+
+			state.travelInfo.roomIDEntering = person.nextLocation.roomID;
+			person.location = person.nextLocation.roomID;
+			
+			if ((state.travelInfo.roomIDLeaving.compare("home") == 0)&&(state.goingHome)){
+				state.stayingHome = true;
 			}
 		}
-
-		state.travelInfo.roomIDEntering = person.nextLocation.roomID;
-		person.location = person.nextLocation.roomID;
-		
     }
 
 
@@ -185,10 +233,14 @@ template <typename TIME> class Person{
     TIME time_advance() const{
         TIME next_internal;
 		
-		// time remaining is in minutes, so it is split into hours and minutes to construct an NDTime object
-		int hours = floor(state.timeRemaining/60);
+		if (state.stayingHome){
+			next_internal = numeric_limits<TIME>::infinity();
+		} else {
+			// time remaining is in minutes, so it is split into hours and minutes to construct an NDTime object
+			int hours = floor(state.timeRemaining/60);
 
-		next_internal = TIME({hours, state.timeRemaining - (hours*60)});
+			next_internal = TIME({hours, state.timeRemaining - (hours*60)});
+		}
         
         return next_internal;
 
