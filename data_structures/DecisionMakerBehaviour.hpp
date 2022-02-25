@@ -192,19 +192,18 @@ namespace decision_maker_behaviour_structures{
 				
 				
 				vector<Event> availableEvents = events;
-				cout << availableEvents.size() << endl;
+				
 				vector<Event> personEvents;
 				vector<int> startTimes;
 				vector<int> endTimes;
 				
 				uniform_int_distribution<int> personEventsDistribution(1,4);
 				int numberOfEvents = personEventsDistribution(generator);
-				cout << "NumberOfEvents: " << numberOfEvents << endl;
+				
 					
 				uniform_int_distribution<int> eventsDistribution(0,availableEvents.size()-1);
 				int eventIndex = eventsDistribution(generator);
-				cout << "EventIndex: " << eventIndex << endl;
-				cout << "Number Of Available Events: " << availableEvents.size() << endl;
+				
 				bool scheduleConflict = true;
 				
 				for (int j = 0; j < numberOfEvents; j++){
@@ -259,8 +258,7 @@ namespace decision_maker_behaviour_structures{
 									break;
 								}
 							}
-							cout << "EventIndex: " << eventIndex << endl;
-							cout << "Number Of Available Events: " << availableEvents.size() << endl;
+							
 						}
 					}
 					
@@ -305,7 +303,7 @@ namespace decision_maker_behaviour_structures{
 					} else if ((personEvents[i+1].startTime - personEvents[i].endTime) < 60) {
 						timeSpent = personEvents[i+1].startTime - personEvents[i].endTime;
 					} else {
-						cout << personEvents[i+1].startTime - personEvents[i].endTime << endl;
+						
 						goingHome = true;
 						timeSpent = 10;
 					}	
