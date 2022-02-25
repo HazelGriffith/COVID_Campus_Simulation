@@ -162,346 +162,369 @@ template<typename TIME> class RoomModel{
         
 		
         vector<PersonInfo> msgBagInToRoom = get_messages<typename RoomModelPorts::inToRoom>(mbs);
-        vector<PersonInfo> msgBagOutFromRoom = get_messages<typename RoomModelPorts::outFromRoom>(mbs);
-        
+        vector<PersonInfo> msgBagOutFromRoom = get_messages<typename RoomModelPorts::outFromRoom>(mbs);	
+		bool copy = false;
+		
         //Entities going in to the room
         for(int i = 0 ; i < msgBagInToRoom.size(); i++ ){
             PersonInfo msgInToRoom = msgBagInToRoom[i];
-            
-            //verify that a person entering does not match an existing person in the room
-            for (int k = 0; k < state.peopleInRoom.size(); k++){
-                assert(msgInToRoom.personID.compare(state.peopleInRoom[k].personID) != 0);
+			
+			for (int j = 0; j < i; j++){
+				PersonInfo copyMsg = msgBagInToRoom[j];
+				if (copyMsg.personID.compare(msgInToRoom.personID) == 0){
+					copy = true;
+				}
 			}
 			
-			if (state.numberPeople < maxOccupancy){
-				state.peopleInRoom.push_back(msgInToRoom);
-			} else {
-				//If the room is at or above maxOccupancy, then the person uses their relationships with those in the room to decide if they want to enter
-				
-				//First they count if each person is a friend, stranger, or family member
-				unsigned seed1 = chrono::system_clock::now().time_since_epoch().count();
-				default_random_engine generator(seed1);
-				int strangers = 0;
-				int acquaintances = 0;
-				int friends = 0;
-				for (int j = 0; j < state.numberPeople; j++){
-					string ID = state.peopleInRoom[j].personID;
-					string relationshipType = "";
-					bool found = false;
-					for (int l = 0; l < msgInToRoom.relationships.size(); l++){
-						
-						if (msgInToRoom.relationships[l].PersonID.compare(ID) == 0){
-							found = true;
-							relationshipType = msgInToRoom.relationships[l].Relationship_type;
-							break;
-						}
-					}
-					assert(found == true);
-					
-					if (relationshipType.compare("stranger") == 0){
-						strangers++;
-					} else if (relationshipType.compare("acquaintance") == 0){
-						acquaintances++;
-					} else {
-						friends++;
-					}
+            if (copy == false){
+				//verify that a person entering does not match an existing person in the room
+				for (int k = 0; k < state.peopleInRoom.size(); k++){
+					assert(msgInToRoom.personID.compare(state.peopleInRoom[k].personID) != 0);
 				}
+			
+				if (state.numberPeople < maxOccupancy){
 				
-				assert(strangers+friends+acquaintances == state.numberPeople);
-				
-				//The percentages of acquaintances to friends to strangers is calculated
-				float strangersPercent = strangers/state.numberPeople;
-				float friendsPercent = friends/state.numberPeople;
-				float acquaintancesPercent = acquaintances/state.numberPeople;
-				
-				//the probability of them entering the room given the probability of each category is calculated by multiplying the category percentage by the appropriate behaviour factor
-				int strangersProb = floor(msgInToRoom.relationshipBehaviour.at("stranger").EnterMaxOccRoomProbability*strangersPercent);
-				int friendsProb = floor(msgInToRoom.relationshipBehaviour.at("friends").EnterMaxOccRoomProbability*friendsPercent);
-				int acquaintancesProb = floor(msgInToRoom.relationshipBehaviour.at("acquaintance").EnterMaxOccRoomProbability*acquaintancesPercent);
-				
-				
-				uniform_int_distribution<int> probEnterDistribution(0,100);
-				
-				//If r is then less than any of the probabilities of each category, then they will enter the room, otherwise they will wait outside
-				int r = probEnterDistribution(generator);
-				if ((r <= strangersProb)||(r <= friendsProb)||(r <= acquaintancesProb)){
 					state.peopleInRoom.push_back(msgInToRoom);
 				} else {
-					state.peopleWaitingOutsideRoom.push_back(msgInToRoom);
-				}
+					//If the room is at or above maxOccupancy, then the person uses their relationships with those in the room to decide if they want to enter
 				
+					//First they count if each person is a friend, stranger, or family member
+					unsigned seed1 = chrono::system_clock::now().time_since_epoch().count();
+					default_random_engine generator(seed1);
+					int strangers = 0;
+					int acquaintances = 0;
+					int friends = 0;
+					for (int j = 0; j < state.numberPeople; j++){
+						string ID = state.peopleInRoom[j].personID;
+						string relationshipType = "";
+						bool found = false;
+						for (int l = 0; l < msgInToRoom.relationships.size(); l++){
+						
+							if (msgInToRoom.relationships[l].PersonID.compare(ID) == 0){
+								found = true;
+								relationshipType = msgInToRoom.relationships[l].Relationship_type;
+								break;
+							}
+						}
+						assert(found == true);
+					
+						if (relationshipType.compare("stranger") == 0){
+							strangers++;
+						} else if (relationshipType.compare("acquaintance") == 0){
+							acquaintances++;
+						} else {
+							friends++;
+						}
+					}
+				
+					assert(strangers+friends+acquaintances == state.numberPeople);
+				
+					//The percentages of acquaintances to friends to strangers is calculated
+					float strangersPercent = strangers/state.numberPeople;
+					float friendsPercent = friends/state.numberPeople;
+					float acquaintancesPercent = acquaintances/state.numberPeople;
+				
+					//the probability of them entering the room given the probability of each category is calculated by multiplying the category percentage by the appropriate behaviour factor
+					int strangersProb = floor(msgInToRoom.relationshipBehaviour.at("stranger").EnterMaxOccRoomProbability*strangersPercent);
+					int friendsProb = floor(msgInToRoom.relationshipBehaviour.at("friends").EnterMaxOccRoomProbability*friendsPercent);
+					int acquaintancesProb = floor(msgInToRoom.relationshipBehaviour.at("acquaintance").EnterMaxOccRoomProbability*acquaintancesPercent);
+				
+				
+					uniform_int_distribution<int> probEnterDistribution(0,100);
+				
+					//If r is then less than any of the probabilities of each category, then they will enter the room, otherwise they will wait outside
+					int r = probEnterDistribution(generator);
+					if ((r <= strangersProb)||(r <= friendsProb)||(r <= acquaintancesProb)){
+						state.peopleInRoom.push_back(msgInToRoom);
+					} else {
+						state.peopleWaitingOutsideRoom.push_back(msgInToRoom);
+					}
+				
+				}
 			}
+			copy = false;
 		}
 		
         //Entities coming out of the room
         for(int s = 0 ; s < msgBagOutFromRoom.size(); s++){ 
             PersonInfo msgOutFromRoom = msgBagOutFromRoom[s];
-            bool personFound = false;
 			
-		    //checks if the person is in the room
-		    for (int k = 0; k < state.peopleInRoom.size(); k++){
+			for (int j = 0; j < s; j++){
+				PersonInfo copyMsg = msgBagOutFromRoom[j];
+				if (copyMsg.personID.compare(msgOutFromRoom.personID) == 0){
+					copy = true;
+				}
+			}
+			
+			if (copy == false){
+				bool personFound = false;
+			
+				//checks if the person is in the room
+				for (int k = 0; k < state.peopleInRoom.size(); k++){
 				
-				//If the person is found they are removed from the peopleInRoom list, the probability of them getting sick is calculated,
-				//and lastly they are added to the list of people who are leaving the room
-                if(msgOutFromRoom.personID.compare(state.peopleInRoom[k].personID) == 0){
-					personFound = true;
+					//If the person is found they are removed from the peopleInRoom list, the probability of them getting sick is calculated,
+					//and lastly they are added to the list of people who are leaving the room
+					if(msgOutFromRoom.personID.compare(state.peopleInRoom[k].personID) == 0){
+						personFound = true;
 					
 					
 					
-					ProbGetSick personLeaving;
-					personLeaving.personID = msgOutFromRoom.personID;
+						ProbGetSick personLeaving;
+						personLeaving.personID = msgOutFromRoom.personID;
 
 					
 					
-					int wearsMaskFactorUsed = 0;
-					int socialDistanceFactorUsed = 0;
-					int vaccinatedFactorUsed = 0;
-					int highCO2FactorUsed = 0;
-					int sickPeopleCO2FactorUsed = 0;
+						int wearsMaskFactorUsed = 0;
+						int socialDistanceFactorUsed = 0;
+						int vaccinatedFactorUsed = 0;
+						int highCO2FactorUsed = 0;
+						int sickPeopleCO2FactorUsed = 0;
 					
-					//If the person is vaccinated the factor that determines its impact on infection is used
-					if (msgOutFromRoom.vaccinated){
-						vaccinatedFactorUsed = vaccinatedFactor;
-					}
-					
-					vector<PersonRelationInfo> strangers;
-					vector<PersonRelationInfo> acquaintances;
-					vector<PersonRelationInfo> friends;
-					
-					//The people that the person leaving had interacted with in this room are tallied and divided into the friends, strangers, or acquaintances categories
-					map <string, PersonRelationInfo> currRelationships = state.relationshipsInRoom.at(personLeaving.personID);
-					int count = 0;
-					map<string, PersonRelationInfo>::iterator iter;
-					for (iter = currRelationships.begin(); iter != currRelationships.end(); iter++){
-						PersonRelationInfo relationInfo = iter->second;
-						if (relationInfo.relationshipType.compare("acquaintances") == 0){
-							acquaintances.push_back(relationInfo);
-						} else if (relationInfo.relationshipType.compare("friends") == 0){
-							friends.push_back(relationInfo);
-						} else {
-							strangers.push_back(relationInfo);
+						//If the person is vaccinated the factor that determines its impact on infection is used
+						if (msgOutFromRoom.vaccinated){
+							vaccinatedFactorUsed = vaccinatedFactor;
 						}
-						count++;
-					}
-					assert(count == (acquaintances.size()+friends.size()+strangers.size()));
 					
-					//The start time, end time and total time spent in the room by the person leaving are retrieved
-					float mainStartTime = state.peopleInRoom[k].timeEntering;
+						vector<PersonRelationInfo> strangers;
+						vector<PersonRelationInfo> acquaintances;
+						vector<PersonRelationInfo> friends;
+					
+						//The people that the person leaving had interacted with in this room are tallied and divided into the friends, strangers, or acquaintances categories
+						map <string, PersonRelationInfo> currRelationships = state.relationshipsInRoom.at(personLeaving.personID);
+						int count = 0;
+						map<string, PersonRelationInfo>::iterator iter;
+						for (iter = currRelationships.begin(); iter != currRelationships.end(); iter++){
+							PersonRelationInfo relationInfo = iter->second;
+							if (relationInfo.relationshipType.compare("acquaintances") == 0){
+								acquaintances.push_back(relationInfo);
+							} else if (relationInfo.relationshipType.compare("friends") == 0){
+								friends.push_back(relationInfo);
+							} else {
+								strangers.push_back(relationInfo);
+							}
+							count++;
+						}
+						assert(count == (acquaintances.size()+friends.size()+strangers.size()));
+					
+						//The start time, end time and total time spent in the room by the person leaving are retrieved
+						float mainStartTime = state.peopleInRoom[k].timeEntering;
 
-					float mainEndTime = state.peopleInRoom[k].timeLeaving;
+						float mainEndTime = state.peopleInRoom[k].timeLeaving;
 
-					float mainTotalTime = state.peopleInRoom[k].minsUntilLeaving;
+						float mainTotalTime = state.peopleInRoom[k].minsUntilLeaving;
 
 					
-					//The person is erased from the peopleInRoom list
-					state.peopleInRoom.erase(state.peopleInRoom.begin()+k);
+						//The person is erased from the peopleInRoom list
+						state.peopleInRoom.erase(state.peopleInRoom.begin()+k);
 
-					//The behaviour factors for mask wearing and social distancing for each relationship type are retrieved
-					float strangersMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("stranger").MaskWearingProbability;
-					float friendsMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("friends").MaskWearingProbability;
-					float acquaintancesMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("acquaintance").MaskWearingProbability;
+						//The behaviour factors for mask wearing and social distancing for each relationship type are retrieved
+						float strangersMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("stranger").MaskWearingProbability;
+						float friendsMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("friends").MaskWearingProbability;
+						float acquaintancesMaskBehaviour = msgOutFromRoom.relationshipBehaviour.at("acquaintance").MaskWearingProbability;
 
-					float strangersSocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("stranger").SafeDistanceProbability;
-					float friendsSocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("friends").SafeDistanceProbability;
-					float acquaintancesSocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("acquaintance").SafeDistanceProbability;
+						float strangersSocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("stranger").SafeDistanceProbability;
+						float friendsSocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("friends").SafeDistanceProbability;
+						float acquaintancesSocialDistanceBehaviour = msgOutFromRoom.relationshipBehaviour.at("acquaintance").SafeDistanceProbability;
 				
-					int averageMaskProb = 0;
-					int averageSocialDistanceProb = 0;
+						int averageMaskProb = 0;
+						int averageSocialDistanceProb = 0;
 					
-					//The time spent in the room with the person leaving is calculated for each person in the acquaintances category
-					for (int i = 0; i < acquaintances.size(); i++){
-						int startTime;
-						int endTime;
-						int totalTime;
+						//The time spent in the room with the person leaving is calculated for each person in the acquaintances category
+						for (int i = 0; i < acquaintances.size(); i++){
+							int startTime;
+							int endTime;
+							int totalTime;
 						
 						
-						if (acquaintances[i].startTime <= mainStartTime){
-							//The person entered before the person leaving
-							startTime = mainStartTime;
-						} else {
-							//The person entered after the person leaving
-							startTime = acquaintances[i].startTime;
-						}
+							if (acquaintances[i].startTime <= mainStartTime){
+								//The person entered before the person leaving
+								startTime = mainStartTime;
+							} else {
+								//The person entered after the person leaving
+								startTime = acquaintances[i].startTime;
+							}
 						
-						if (acquaintances[i].endTime < mainEndTime){
-							//The person left before the person leaving
-							endTime = acquaintances[i].endTime;
-						} else {
-							//The person left after the person leaving
-							endTime = mainEndTime;
-						}
+							if (acquaintances[i].endTime < mainEndTime){
+								//The person left before the person leaving
+								endTime = acquaintances[i].endTime;
+							} else {
+								//The person left after the person leaving
+								endTime = mainEndTime;
+							}
 
-						//This is the time they spent in the room together
-						totalTime = endTime - startTime;
-						//This is the percentage of the person leaving's time spent in the room with that person
-						float acquaintancesTimePercent = totalTime/mainTotalTime;
+							//This is the time they spent in the room together
+							totalTime = endTime - startTime;
+							//This is the percentage of the person leaving's time spent in the room with that person
+							float acquaintancesTimePercent = totalTime/mainTotalTime;
 						
-						//The probability is the percentage multiplied by the appropriate behaviour factor
-						averageMaskProb += floor(acquaintancesTimePercent*acquaintancesMaskBehaviour);
+							//The probability is the percentage multiplied by the appropriate behaviour factor
+							averageMaskProb += floor(acquaintancesTimePercent*acquaintancesMaskBehaviour);
 						
-						averageSocialDistanceProb += floor(acquaintancesTimePercent*acquaintancesSocialDistanceBehaviour);
-					}
+							averageSocialDistanceProb += floor(acquaintancesTimePercent*acquaintancesSocialDistanceBehaviour);
+						}
 					
-					//The same as the above only for the friends category
-					for (int i = 0; i < friends.size(); i++){
-						int startTime;
-						int endTime;
-						int totalTime;
+						//The same as the above only for the friends category
+						for (int i = 0; i < friends.size(); i++){
+							int startTime;
+							int endTime;
+							int totalTime;
 						
-						if (friends[i].startTime <= mainStartTime){
-							startTime = mainStartTime;
-						} else {
-							startTime = friends[i].startTime;
+							if (friends[i].startTime <= mainStartTime){
+								startTime = mainStartTime;
+							} else {
+								startTime = friends[i].startTime;
+							}
+						
+							if (friends[i].endTime < mainEndTime){
+								endTime = friends[i].endTime;
+							} else {
+								endTime = mainEndTime;
+							}
+
+							totalTime = endTime - startTime;
+						
+							float friendsTimePercent = totalTime/mainTotalTime;
+						
+							averageMaskProb += floor(friendsTimePercent*friendsMaskBehaviour);
+
+						
+							averageSocialDistanceProb += floor(friendsTimePercent*friendsSocialDistanceBehaviour);
+
 						}
+					
+						//The same as the above only for the strangers category
+						for (int i = 0; i < strangers.size(); i++){
+							int startTime;
+							int endTime;
+							int totalTime;
 						
-						if (friends[i].endTime < mainEndTime){
-							endTime = friends[i].endTime;
-						} else {
-							endTime = mainEndTime;
+							if (strangers[i].startTime <= mainStartTime){
+								startTime = mainStartTime;
+							} else {
+								startTime = strangers[i].startTime;
+							}
+						
+							if (strangers[i].endTime < mainEndTime){
+								endTime = strangers[i].endTime;
+							} else {
+								endTime = mainEndTime;
+							}
+
+							totalTime = endTime - startTime;
+						
+							float strangersTimePercent = totalTime/mainTotalTime;
+
+						
+							averageMaskProb += floor(strangersTimePercent*strangersMaskBehaviour);
+
+						
+							averageSocialDistanceProb += floor(strangersTimePercent*strangersSocialDistanceBehaviour);
+
+						}
+					
+						//If the person leaving did share the room with other people, then the average probability is calculated for mask wearing and social distancing
+						if ((strangers.size()+friends.size()+acquaintances.size()) > 0){
+							averageMaskProb = floor(averageMaskProb/(strangers.size()+friends.size()+acquaintances.size()));
+							averageSocialDistanceProb = floor(averageSocialDistanceProb/(strangers.size()+friends.size()+acquaintances.size()));
 						}
 
-						totalTime = endTime - startTime;
+						assert(averageMaskProb <= 100);
+						assert(averageSocialDistanceProb <= 100);
+						assert(averageMaskProb >= 0);
+						assert(averageSocialDistanceProb >= 0);
 						
-						float friendsTimePercent = totalTime/mainTotalTime;
-						
-						averageMaskProb += floor(friendsTimePercent*friendsMaskBehaviour);
-
-						
-						averageSocialDistanceProb += floor(friendsTimePercent*friendsSocialDistanceBehaviour);
-
-					}
+						unsigned seed1 = chrono::system_clock::now().time_since_epoch().count();
+						default_random_engine generator(seed1);
+						uniform_int_distribution<int> probDistribution(0,100);
 					
-					//The same as the above only for the strangers category
-					for (int i = 0; i < strangers.size(); i++){
-						int startTime;
-						int endTime;
-						int totalTime;
-						
-						if (strangers[i].startTime <= mainStartTime){
-							startTime = mainStartTime;
-						} else {
-							startTime = strangers[i].startTime;
-						}
-						
-						if (strangers[i].endTime < mainEndTime){
-							endTime = strangers[i].endTime;
-						} else {
-							endTime = mainEndTime;
-						}
-
-						totalTime = endTime - startTime;
-						
-						float strangersTimePercent = totalTime/mainTotalTime;
-
-						
-						averageMaskProb += floor(strangersTimePercent*strangersMaskBehaviour);
-
-						
-						averageSocialDistanceProb += floor(strangersTimePercent*strangersSocialDistanceBehaviour);
-
-					}
+						int r = probDistribution(generator);
 					
-					//If the person leaving did share the room with other people, then the average probability is calculated for mask wearing and social distancing
-					if ((strangers.size()+friends.size()+acquaintances.size()) > 0){
-						averageMaskProb = floor(averageMaskProb/(strangers.size()+friends.size()+acquaintances.size()));
-						averageSocialDistanceProb = floor(averageSocialDistanceProb/(strangers.size()+friends.size()+acquaintances.size()));
-					}
-
-					assert(averageMaskProb <= 100);
-					assert(averageSocialDistanceProb <= 100);
-					assert(averageMaskProb >= 0);
-					assert(averageSocialDistanceProb >= 0);
-						
-					unsigned seed1 = chrono::system_clock::now().time_since_epoch().count();
-					default_random_engine generator(seed1);
-					uniform_int_distribution<int> probDistribution(0,100);
-					
-					int r = probDistribution(generator);
-					
-					if (averageMaskProb == 0){
-						//If the person leaving shared the room with no one, then their own mask wearing tendency is used to determine if the mask wearing factor is used
-						if (!msgOutFromRoom.wearsMaskCorrectly){
+						if (averageMaskProb == 0){
+							//If the person leaving shared the room with no one, then their own mask wearing tendency is used to determine if the mask wearing factor is used
+							if (!msgOutFromRoom.wearsMaskCorrectly){
+								wearsMaskFactorUsed = wearsMaskFactor;
+							} 
+						} else if (r > averageMaskProb){
+							//if the value of r (0-100) is greater than the mask wearing probability, then the mask wearing factor is used
 							wearsMaskFactorUsed = wearsMaskFactor;
-						} 
-					} else if (r > averageMaskProb){
-						//if the value of r (0-100) is greater than the mask wearing probability, then the mask wearing factor is used
-						wearsMaskFactorUsed = wearsMaskFactor;
+						}
+					
+						r = probDistribution(generator);
+						//If the value of r (0-100) is greater than the social distancing probability, 
+						//or if the number of people in the room is greater than the social distance threshold, then the social distance factor is used
+						if ((r > averageSocialDistanceProb)||(state.numberPeople>=socialDistanceThreshold)){ // Consider checking in the future when the social distance threshold may have been reached
+							socialDistanceFactorUsed = socialDistanceFactor;
+						}
+						
+						if (state.numberSickPeople > 0){
+							// should consider range of values like for highCO2Factors
+							sickPeopleCO2FactorUsed = sickPeopleCO2Factor;
+						}
+						
+						if (state.CO2Concentration >= highCO2FactorThresholds[3]){
+							highCO2FactorUsed = highCO2Factors[3];
+						} else if (state.CO2Concentration >= highCO2FactorThresholds[2]){
+							highCO2FactorUsed = highCO2Factors[2];
+						} else if (state.CO2Concentration >= highCO2FactorThresholds[1]){
+							highCO2FactorUsed = highCO2Factors[1];
+						} else if (state.CO2Concentration >= highCO2FactorThresholds[0]){
+							highCO2FactorUsed = highCO2Factors[0];
+						}
+						
+						//From the factors used the probability Rank is calculated
+						int probabilityRank = vaccinatedFactorUsed + wearsMaskFactorUsed + socialDistanceFactorUsed 
+												+ sickPeopleCO2FactorUsed + highCO2FactorUsed;
+						if (probabilityRank < 1){
+							probabilityRank = 1;
+						} else if (probabilityRank > 5){
+							probabilityRank = 5;
+						}
+						
+						//The rank is then used to calculate the probability of infection
+						float probabilityOfInfection = ((probabilityRank - 1)*20) + (rand() % 21);
+						
+								
+						//If the person is already sick then their chance of being sick upon leaving is guaranteed
+						if (msgOutFromRoom.isSick){
+							personLeaving.probSick = 1;
+						} else {
+							personLeaving.probSick = probabilityOfInfection;
+						}
+						
+						state.peopleLeaving.push_back(personLeaving);
+						
+						state.relationshipsInRoom.erase(personLeaving.personID);
+						
+						//If there are people waiting to enter the room, then the next person is able to enter
+						if ((!state.peopleWaitingOutsideRoom.empty())&&(state.numberPeople-s < maxOccupancy)){
+							state.peopleInRoom.push_back(state.peopleWaitingOutsideRoom[0]);
+							state.peopleWaitingOutsideRoom.erase(state.peopleWaitingOutsideRoom.begin());
+						}
+						
+						break;
 					}
-					
-					r = probDistribution(generator);
-					//If the value of r (0-100) is greater than the social distancing probability, 
-					//or if the number of people in the room is greater than the social distance threshold, then the social distance factor is used
-					if ((r > averageSocialDistanceProb)||(state.numberPeople>=socialDistanceThreshold)){ // Consider checking in the future when the social distance threshold may have been reached
-						socialDistanceFactorUsed = socialDistanceFactor;
-					}
-					
-					if (state.numberSickPeople > 0){
-						// should consider range of values like for highCO2Factors
-						sickPeopleCO2FactorUsed = sickPeopleCO2Factor;
-					}
-					
-					if (state.CO2Concentration >= highCO2FactorThresholds[3]){
-						highCO2FactorUsed = highCO2Factors[3];
-					} else if (state.CO2Concentration >= highCO2FactorThresholds[2]){
-						highCO2FactorUsed = highCO2Factors[2];
-					} else if (state.CO2Concentration >= highCO2FactorThresholds[1]){
-						highCO2FactorUsed = highCO2Factors[1];
-					} else if (state.CO2Concentration >= highCO2FactorThresholds[0]){
-						highCO2FactorUsed = highCO2Factors[0];
-					}
-					
-					//From the factors used the probability Rank is calculated
-					int probabilityRank = vaccinatedFactorUsed + wearsMaskFactorUsed + socialDistanceFactorUsed 
-											+ sickPeopleCO2FactorUsed + highCO2FactorUsed;
-					if (probabilityRank < 1){
-						probabilityRank = 1;
-					} else if (probabilityRank > 5){
-						probabilityRank = 5;
-					}
-					
-					//The rank is then used to calculate the probability of infection
-					float probabilityOfInfection = ((probabilityRank - 1)*20) + (rand() % 21);
-					
-							
-					//If the person is already sick then their chance of being sick upon leaving is guaranteed
-					if (msgOutFromRoom.isSick){
-						personLeaving.probSick = 1;
-					} else {
-						personLeaving.probSick = probabilityOfInfection;
-					}
-					
-					state.peopleLeaving.push_back(personLeaving);
-					
-					state.relationshipsInRoom.erase(personLeaving.personID);
-					
-					//If there are people waiting to enter the room, then the next person is able to enter
-					if ((!state.peopleWaitingOutsideRoom.empty())&&(state.numberPeople-s < maxOccupancy)){
-						state.peopleInRoom.push_back(state.peopleWaitingOutsideRoom[0]);
-						state.peopleWaitingOutsideRoom.erase(state.peopleWaitingOutsideRoom.begin());
-					}
-					
-					break;
 				}
-			}
-			
-			//checks if the person is waiting outside the room
-			for (int k = 0; k < state.peopleWaitingOutsideRoom.size(); k++){
-				if(msgOutFromRoom.personID.compare(state.peopleWaitingOutsideRoom[k].personID) == 0){
-					personFound = true;
-					
-					state.peopleWaitingOutsideRoom.erase(state.peopleWaitingOutsideRoom.begin()+k);
-					
-					ProbGetSick personLeaving;
-					personLeaving.personID = msgOutFromRoom.personID;
-					personLeaving.probSick = 0;
-					
-					state.peopleLeaving.push_back(personLeaving);
-					
+				
+				//checks if the person is waiting outside the room
+				for (int k = 0; k < state.peopleWaitingOutsideRoom.size(); k++){
+					if(msgOutFromRoom.personID.compare(state.peopleWaitingOutsideRoom[k].personID) == 0){
+						personFound = true;
+						
+						state.peopleWaitingOutsideRoom.erase(state.peopleWaitingOutsideRoom.begin()+k);
+						
+						ProbGetSick personLeaving;
+						personLeaving.personID = msgOutFromRoom.personID;
+						personLeaving.probSick = 0;
+						
+						state.peopleLeaving.push_back(personLeaving);
+						
+					}
 				}
+				
+				//If the person is not in the room, an error is thrown
+				assert(personFound == true);
 			}
-			
-			//If the person is not in the room, an error is thrown
-			assert(personFound == true);
+			copy = false;
         }
 		
 		//The state of the Room is updated
