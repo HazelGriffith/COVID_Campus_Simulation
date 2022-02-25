@@ -76,7 +76,7 @@ int main(){
 	int numberOfRooms = 0;
 	
 	//rooms are dynamically loaded from file
-	roomData.open("realRoomData.csv");
+	roomData.open("../data/realRoomData.csv");
 	string line;
 	string name;
 	
@@ -90,7 +90,7 @@ int main(){
 	}
 	roomData.close();
 	
-	roomData.open("realRoomData.csv");
+	roomData.open("../data/realRoomData.csv");
 	
 	roomXMLFiles.resize(numberOfRooms);
 	string roomPathStr;
@@ -114,6 +114,7 @@ int main(){
 			}
 			roomXMLFiles[i][strlen(roomPath)] = '\0';
 			i++;
+			getline(roomData, line);
 		}
 	}
 	roomData.close();
@@ -401,10 +402,11 @@ int main(){
 	
     shared_ptr<dynamic::modeling::coupled<TIME>> TOP;
 
+	cout << "making top model" << endl;
     TOP = make_shared<dynamic::modeling::coupled<TIME>>(
              "TOP", submodels_TOP, iports_TOP, oports_TOP, eics_TOP, eocs_TOP, ics_TOP 
     );
-
+	cout << "Finished making top model" << endl;
 
 	/***** (6) *****/
     /*************** Loggers *******************/
