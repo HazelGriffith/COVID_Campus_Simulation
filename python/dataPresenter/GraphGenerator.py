@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.collections import LineCollection
-from matplotlib.colors import ListedColormap, BoundaryNorm
 
 #This section reads the data parsed from the simulation
 with open("../../data/ParsedData.txt") as dataFile:
@@ -14,46 +12,41 @@ with open("../../data/ParsedData.txt") as dataFile:
     highestInfectionProbInstances = {}
     
     for line in dataLines:
-        words = line.split()
-        if ("Room" in words[0]) or ("Outdoors" in words[0]):
-            if ("CO2" in words[1]):
-                if ("Room" in words[0]):
-                    ID = words[0].split("m")[1]
-                else:
-                    ID = words[0]
-                if ID in CO2Data.keys():
-                    CO2Data[ID].append(words[2])
-                else:
-                    CO2Data.update({ID: [words[2]]})
-            elif ("occupancy" in words[1]):
-                if ("Room" in words[0]):
-                    ID = words[0].split("m")[1]
-                else:
-                    ID = words[0]
-                if ID in occupancyData.keys():
-                    occupancyData[ID].append(words[2])
-                else:
-                    occupancyData.update({ID: [words[2]]})
-
+        words = line.split(',')
+        if "CO2" in line:
+            room = words[0]
+            CO2 = words[-1]
+            if room in CO2Data.keys():
+                CO2Data[room].append(CO2)
+            else:
+                CO2Data.update({room: [CO2]})
+        elif "occupancy" in line:
+            room = words[0]
+            occupancy = words[-1]
+            if room in occupancyData.keys():
+                occupancyData[room].append(occupancy)
+            else:
+                occupancyData.update({room: [occupancy]})
         elif (len(words) == 1):
             timeStamps.append(words[0])
         else:
             key = words[0]
+            room = words[1]
             if key in infectionProbData.keys():
-                infectionProbData[key].extend([(words[1],words[2])])
+                infectionProbData[key].extend([(room,words[-1])])
             else:
-                infectionProbData.update({key: [(words[1],words[2])]})
+                infectionProbData.update({key: [(room,words[-1])]})
                 
-            key = words[1]
+            key = room
                 
             if key in highestInfectionProbInstances.keys():
-                if float(words[2]) > float(highestInfectionProbInstances[key]):
-                    highestInfectionProbInstances.update({key: words[2]})
+                if float(words[-1]) > float(highestInfectionProbInstances[key]):
+                    highestInfectionProbInstances.update({key: words[-1]})
             else:
-                highestInfectionProbInstances.update({key: words[2]})
-                
+                highestInfectionProbInstances.update({key: words[-1]})
+            
 highestInfectionProbInstances = sorted(highestInfectionProbInstances.items(), key=lambda x: x[1], reverse=True)[:10]
-    
+
 #data formatting
 
 #The overall averages of the probabilities of infection for each room are calculated from the data
@@ -80,8 +73,18 @@ for key in overallProbsOfInfectionPerRoom.keys():
     
 #The ventilation rates are calculated from the data extracted from each room's xml file
 ventilationRatesPerRoom = {}
-for i in range(1,len(CO2Data.keys())):
-    s = "../../data/rooms/" + str(i) + ".xml"
+
+keys = []
+for key in CO2Data.keys():
+    keys.append(key)
+
+for i in range(len(keys)):
+    if "Room" in keys[i]:
+        filename = keys[i].split("m")[1]
+    else:
+        filename = keys[i]
+    s = "../../data/rooms/" + filename + ".xml"
+    print(s)
     roomFile = open(s)
     roomLines = roomFile.readlines()
     ventilationRatesPerRoom.update({i:{}})
@@ -90,7 +93,9 @@ for i in range(1,len(CO2Data.keys())):
             value = line.split(">")[1].split("<")[0]
             dataType = line.split(">")[0].split("<")[1]
             ventilationRatesPerRoom[i].update({dataType:float(value)})
-    
+            print(value)
+    roomFile.close()
+"""   
 roomFile = open("../../data/rooms/tunnels.xml")
 roomLines = roomFile.readlines()
 ventilationRatesPerRoom.update({"tunnels":{}})
@@ -99,7 +104,7 @@ for line in roomLines:
         value = line.split(">")[1].split("<")[0]
         dataType = line.split(">")[0].split("<")[1]
         ventilationRatesPerRoom["tunnels"].update({dataType:float(value)})
-            
+"""           
 for key in ventilationRatesPerRoom.keys():
     variables = ventilationRatesPerRoom[key]
     ACH = variables["ventilationRating"]
@@ -146,7 +151,7 @@ for key in infectionProbData.keys():
     infTimeStamps.append(key)
     
 #This iterates through each half hour interval
-for timeSlot in occupancyPerRoomPerHalfHour["1"].keys():
+for timeSlot in occupancyPerRoomPerHalfHour["RoomTunnels"].keys():
     
     slotHours,slotMinutes = timeSlot.split(":")
     slotHours = int(slotHours)
@@ -233,17 +238,20 @@ for key in occupancyPerRoomPerHalfHour.keys():
         
 #PLOTS
 
+
 #rooms ranked by highest reached infection probability
 
 x = [h[0] for h in highestInfectionProbInstances]
 highest = [float(h[1]) for h in highestInfectionProbInstances]
 overall = []
 
+
 import pandas as pd
 
 for key in x:
-    if key[4:] in overallProbsOfInfectionPerRoom.keys():
+    if key[4:] in overallProbsOfInfectionPerRoom.keys() or key in overallProbsOfInfectionPerRoom.keys():
         overall.append(overallProbsOfInfectionPerRoom.get(key[4:]))
+
 
 df = pd.DataFrame(np.c_[highest,overall], index=x)
 df = df.rename(columns={0: "Highest Value Reached", 1: "Average Value"})
@@ -313,6 +321,4 @@ for room in occupancyPerRoomPerHalfHour.keys():
     subplts[1].set_ylabel("Average Probability of Infection(%)")
     subplts[1].set_xlabel("time(hours)")
     plt.suptitle("Room"+room+" Occupancy & Average Probability of Infection")
-    plt.show()
-
-
+    plt.show()       
