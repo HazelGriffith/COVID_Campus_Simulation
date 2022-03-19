@@ -16,7 +16,6 @@ struct ProbGetSick{
 
 	string personID;
 	float probSick;
-	//ProbGetSick *next = NULL;
 };
 
 ostream& operator << (ostream &out, const ProbGetSick &p);

@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<DecisionMakerBehaviour>
+    <ID>3</ID>
+    <location>home</location>
+    <currStartTime>1280</currStartTime>
+    <timeInFirstLocation>1260</timeInFirstLocation>
+    <isSick>False</isSick>
+    <exposed>False</exposed>
+    <vaccinated>True</vaccinated>
+    <wearingMaskCorrectly>False</wearingMaskCorrectly>
+    <socialDistance>False</socialDistance>
+    <weatherThreshold>1</weatherThreshold>
+    <relationship>
+        <relationship ID="1" type="friends" />
+        <relationship ID="2" type="acquaintance" />
+        <relationship ID="4" type="friends" />
+        <relationship ID="5" type="friends" />
+        <relationship ID="6" type="friends" />
+        <relationship ID="7" type="friends" />
+        <relationship ID="8" type="friends" />
+        <relationship ID="9" type="stranger" />
+        <relationship ID="10" type="stranger" />
+        <relationship ID="11" type="stranger" />
+        <relationship ID="12" type="stranger" />
+        <relationship ID="13" type="stranger" />
+        <relationship ID="14" type="stranger" />
+        <relationship ID="15" type="stranger" />
+        <relationship ID="16" type="stranger" />
+        <relationship ID="17" type="stranger" />
+        <relationship ID="18" type="stranger" />
+        <relationship ID="19" type="stranger" />
+        <relationship ID="20" type="stranger" />
+        <relationship ID="21" type="stranger" />
+        <relationship ID="22" type="stranger" />
+        <relationship ID="23" type="stranger" />
+        <relationship ID="24" type="stranger" />
+        <relationship ID="25" type="stranger" />
+        <relationship ID="26" type="stranger" />
+        <relationship ID="27" type="stranger" />
+        <relationship ID="28" type="stranger" />
+        <relationship ID="29" type="stranger" />
+        <relationship ID="30" type="stranger" />
+        <relationship ID="31" type="stranger" />
+        <relationship ID="32" type="stranger" />
+        <relationship ID="33" type="stranger" />
+        <relationship ID="34" type="stranger" />
+        <relationship ID="35" type="acquaintance" />
+        <relationship ID="36" type="acquaintance" />
+        <relationship ID="37" type="acquaintance" />
+        <relationship ID="38" type="acquaintance" />
+        <relationship ID="39" type="acquaintance" />
+        <relationship ID="40" type="acquaintance" />
+        <relationship ID="41" type="acquaintance" />
+        <relationship ID="42" type="acquaintance" />
+        <relationship ID="43" type="acquaintance" />
+        <relationship ID="44" type="acquaintance" />
+        <relationship ID="45" type="acquaintance" />
+        <relationship ID="46" type="acquaintance" />
+        <relationship ID="47" type="acquaintance" />
+        <relationship ID="48" type="acquaintance" />
+        <relationship ID="49" type="acquaintance" />
+        <relationship ID="50" type="friends" />
+    </relationship>
+    <behaviourRulesPerson>
+        <personRelations status="acquaintance" safeDistanceProb="50" maskWearingProb="50" enterMaxOccRoomProb="50" />
+        <personRelations status="friends" safeDistanceProb="20" maskWearingProb="20" enterMaxOccRoomProb="80" />
+        <personRelations status="stranger" safeDistanceProb="80" maskWearingProb="80" enterMaxOccRoomProb="20" />
+    </behaviourRulesPerson>
+    <locationPlan>
+        <locationPlan room="32-AP - 470" timeinroom="90" startTime="1110" />
+        <locationPlan room="Outdoors" timeinroom="10" startTime="1200" />
+        <locationPlan room="27-MC - 2090" timeinroom="60" startTime="1210" />
+        <locationPlan room="Outdoors" timeinroom="10" startTime="1270" />
+        <locationPlan room="home" timeinroom="1260" startTime="1280" />
+        <locationPlan room="Outdoors" timeinroom="10" startTime="1100" />
+    </locationPlan>
+</DecisionMakerBehaviour>

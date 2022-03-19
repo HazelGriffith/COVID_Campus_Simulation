@@ -48,7 +48,7 @@ class InputReader_ProbGetSick : public iestream_input<ProbGetSick, T> {
 int main(){
 
     /****** Input Reader atomic model instantiation *******************/
-    const char * i_input_data = "../input_data/filter_ProbGetSick_input_test.txt";
+    const char * i_input_data = "../input_data/probGetSickInputTest.txt";
 
     shared_ptr<dynamic::modeling::model> input_reader;
 
@@ -57,7 +57,7 @@ int main(){
 
 	/***** (4) *****/
     /****** filter_ProbGetSick atomic model instantiation *******************/
-    const char * i_personID = "Alfred";
+    const char * i_personID = "1";
 	
 	shared_ptr<dynamic::modeling::model> filterProbGetSick;
 	

@@ -48,7 +48,7 @@ class InputReader_PersonInfo : public iestream_input<PersonInfo, T> {
 int main(){
 
     /****** Input Reader atomic model instantiation *******************/
-    const char * i_input_data = "../input_data/filter_People_Out_input_test.txt";
+    const char * i_input_data = "../input_data/personInfoInputTest.txt";
 
     shared_ptr<dynamic::modeling::model> input_reader;
 
@@ -57,7 +57,7 @@ int main(){
 
 	/***** (4) *****/
     /****** filter_People_Out atomic model instantiation *******************/
-    const char * i_roomID = "Room3";
+    const char * i_roomID = "TestRoom2";
 	
 	shared_ptr<dynamic::modeling::model> filterOut;
 	

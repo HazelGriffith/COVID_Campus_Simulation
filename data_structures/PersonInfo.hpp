@@ -36,7 +36,6 @@ struct PersonInfo{
 	bool socialDistance;
 	int weatherThreshold;
 	long int minsUntilLeaving;
-	//NDTime timeUntilLeaving;
 	vector<Relationship> relationships;
 	map<string,BehaviourRulesPerson> relationshipBehaviour;
 };

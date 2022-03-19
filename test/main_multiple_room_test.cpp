@@ -50,27 +50,18 @@ class InputReader_PersonInfo : public iestream_input<PersonInfo, T> {
 				iestream_input<PersonInfo,T> (file_path) {}
 };
 
-struct RoomInfo{
-	const char* ID;
-	int ventilationRating;
-	int socialDistanceThreshold;
-	int wearsMaskCorrectlyFactor;
-	int socialDistanceFactor;
-	int inputRespIncreasePerMin;
-};
-
 /***** (3) *****/
 int main(){
 
     /****** Input Readers atomic model instantiation *******************/
-    const char * i_input_filterIn_data = "../input_data/inToRoom_input_multiple_test.txt";
+    const char * i_input_filterIn_data = "../input_data/personInfoIntoRoomInputTest.txt";
 
     shared_ptr<dynamic::modeling::model> input_filterIn_reader;
 
     input_filterIn_reader = dynamic::translate::make_dynamic_atomic_model					   
 		<InputReader_PersonInfo, TIME, const char*>("input_filterIn_reader", move(i_input_filterIn_data));
 		
-	const char * i_input_filterOut_data = "../input_data/outFromRoom_input_multiple_test.txt";
+	const char * i_input_filterOut_data = "../input_data/personInfoOutFromRoomInputTest.txt";
 	
 	shared_ptr<dynamic::modeling::model> input_filterOut_reader;
 
@@ -79,105 +70,248 @@ int main(){
 
 	/***** (4) *****/
     /****** room atomic model instantiation *******************/
-    RoomInfo room1Info;
-	RoomInfo room2Info;
 	
-	
+	/****** instantiating room 1 ******************************/
 	//loading XML document
+	string roomID = "TestRoom1";
+
+	
+	string roomPathStr = "../data/rooms/" + roomID + ".xml";\
+	const char * roomPath = roomPathStr.c_str();
+	
+	//loading document
 	TiXmlDocument _document;
-    
-	bool result = _document.LoadFile("../data/Room1.xml");
-	
+	bool result = _document.LoadFile(roomPath);
 	if (!result) {cout << "file not loaded " << _document.ErrorDesc() << endl; return 0;} 
-	
+		
+		
 	//acquiring root of XML document
 	TiXmlHandle hDoc(&_document);
-    TiXmlElement* pElem;
-    TiXmlHandle hRoot(0);
-	
+	TiXmlElement* pElem;
+	TiXmlHandle hRoot(0);
+		
 	pElem=hDoc.FirstChildElement().ToElement();
-       
-    if (!pElem) return 0;    
-        
-    hRoot=TiXmlHandle(pElem);
-	
+	if (!pElem) return 0;    
+	hRoot=TiXmlHandle(pElem);
+		
+	//acquiring ID of the room
 	pElem=hRoot.FirstChild("ID").ToElement();
-    if (!pElem) return 0;
-    room1Info.ID = pElem->GetText();
-	cout << *room1Info.ID;
-	
+	if (!pElem) return 0;
+	string ID = pElem->GetText();
+		
+	//acquiring ventilation rating of the room
 	pElem = hRoot.FirstChild("ventilationRating").ToElement();
 	if (!pElem) return 0;
-	const char* pVentilationRating = pElem->GetText();
-	room1Info.ventilationRating = strtol(pVentilationRating, NULL, 10);
-	cout << room1Info.ventilationRating;
-	
+	int ventilationRating = strtol(pElem->GetText(), NULL, 10);
+
+	//acquiring social distance threshold of the room
 	pElem = hRoot.FirstChild("socialDistanceThreshold").ToElement();
 	if (!pElem) return 0;
-	const char* pSocialDistanceThreshold = pElem->GetText();
-	room1Info.socialDistanceThreshold = strtol(pSocialDistanceThreshold, NULL, 10);
-	cout << room1Info.socialDistanceThreshold;
-	
-	pElem = hRoot.FirstChild("wearsMaskCorrectlyFactor").ToElement();
+	int socialDistanceThreshold = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring maximum occupancy of the room
+	pElem = hRoot.FirstChild("maxOccupancy").ToElement();
 	if (!pElem) return 0;
-	const char* pWearsMaskCorrectlyFactor = pElem->GetText();
-	room1Info.wearsMaskCorrectlyFactor = strtol(pWearsMaskCorrectlyFactor, NULL, 10);
-	cout << room1Info.wearsMaskCorrectlyFactor;
-	
+	int maxOccupancy = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring wearing mask correctly factor of the room
+	pElem = hRoot.FirstChild("wearsMaskFactor").ToElement();
+	if (!pElem) return 0;
+	int wearsMaskFactor = strtol(pElem->GetText(), NULL, 10);
+
+	//acquiring social distance factor of the room
 	pElem = hRoot.FirstChild("socialDistanceFactor").ToElement();
 	if (!pElem) return 0;
-	const char* pSocialDistanceFactor = pElem->GetText();
-	room1Info.socialDistanceFactor = strtol(pSocialDistanceFactor, NULL, 10);
-	cout << room1Info.socialDistanceFactor;
-	
-	pElem = hRoot.FirstChild("inputRespIncreasePerMin").ToElement();
+	int socialDistanceFactor = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring vaccinated factor of the room
+	pElem = hRoot.FirstChild("vaccinatedFactor").ToElement();
 	if (!pElem) return 0;
-	const char* pInputRespIncreasePerMin = pElem->GetText();
-	room1Info.inputRespIncreasePerMin = strtol(pInputRespIncreasePerMin, NULL, 10);
-	cout << room1Info.inputRespIncreasePerMin;
-	
-	const char * i_roomID1 = "Room1";
-	
-	const char * i_roomID2 = "Room2";
-	
-	const int i_ventilationRating = room1Info.ventilationRating;
-	
-	const int i_socialDistanceThreshold = 1;
-	
-	const int i_wearsMaskCorrectlyFactor = 3;
-	
-	const int i_socialDistanceFactor = 4;
-	
-	const int i_inputRespIncreasePerMin = 5;
+	int vaccinatedFactor = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring square metres of the room
+	pElem = hRoot.FirstChild("squareMetres").ToElement();
+	if (!pElem) return 0;
+	int sqrMetres = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring height of the room
+	pElem = hRoot.FirstChild("height").ToElement();
+	if (!pElem) return 0;
+	int height = strtol(pElem->GetText(), NULL, 10);
+		
+	float volumeOfRoom = sqrMetres*height;
+		
+	//acquiring sick people CO2 factor of the room
+	pElem = hRoot.FirstChild("sickPeopleCO2Factor").ToElement();
+	if (!pElem) return 0;
+	int sickPeopleCO2Factor = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring high CO2 factor thresholds of the room
+	pElem = hRoot.FirstChild("highCO2FactorThresholds").ToElement();
+	if (!pElem) return 0;
+	string text = pElem->GetText();
+	int highCO2FactorThresholds[4];
+	for (int j = 0; j < 4; j++){
+		size_t seperator = text.find(",");
+		string number = text.substr(0,seperator);
+		highCO2FactorThresholds[j] = strtol(number.c_str(), NULL, 10);
+
+		text.erase(0,seperator+1);
+	}
+		
+	//acquiring high CO2 factors of the room
+	pElem = hRoot.FirstChild("highCO2Factors").ToElement();
+	if (!pElem) return 0;
+	text = pElem->GetText();
+	int highCO2Factors[4];
+	for (int j = 0; j < 4; j++){
+		size_t seperator = text.find(",");
+		string number = text.substr(0,seperator);
+		highCO2Factors[j] = strtol(number.c_str(), NULL, 10);
+
+		text.erase(0,seperator+1);
+	}
+		
+	//acquiring respiratory increase per minute of the room
+	pElem = hRoot.FirstChild("respIncreasePerMin").ToElement();
+	if (!pElem) return 0;
+	int respIncreasePerMin = strtol(pElem->GetText(), NULL, 10);
 	
 	shared_ptr<dynamic::modeling::model> room1;
 	
-    room1 = dynamic::translate::make_dynamic_atomic_model<RoomModel, TIME>("room1", move(room1Info.ID), 
-		room1Info.ventilationRating, room1Info.socialDistanceThreshold, room1Info.wearsMaskCorrectlyFactor, room1Info.socialDistanceFactor, room1Info.inputRespIncreasePerMin);
+    room1 = dynamic::translate::make_dynamic_atomic_model<RoomModel, TIME>("room1", ID, 
+		ventilationRating, socialDistanceThreshold, maxOccupancy, respIncreasePerMin, 
+		volumeOfRoom, sickPeopleCO2Factor, move(highCO2FactorThresholds), 
+		move(highCO2Factors), vaccinatedFactor, wearsMaskFactor, socialDistanceFactor);
 		
-	shared_ptr<dynamic::modeling::model> room2;
-	
-    room2 = dynamic::translate::make_dynamic_atomic_model<RoomModel, TIME>("room2", move(i_roomID2), 
-		i_ventilationRating, i_socialDistanceThreshold, i_wearsMaskCorrectlyFactor, i_socialDistanceFactor, i_inputRespIncreasePerMin);
-		
-		
-    /****** filter atomic model instantiation *******************/
-	
 	shared_ptr<dynamic::modeling::model> filterIn1;
 	
-    filterIn1 = dynamic::translate::make_dynamic_atomic_model<Filter_People_In, TIME>("filterIn1", move(i_roomID1));
+    filterIn1 = dynamic::translate::make_dynamic_atomic_model<Filter_People_In, TIME>("filterIn1", move("TestRoom1"));
 	
 	shared_ptr<dynamic::modeling::model> filterOut1;
 	
-    filterOut1 = dynamic::translate::make_dynamic_atomic_model<Filter_People_Out, TIME>("filterOut1", move(i_roomID1));
+    filterOut1 = dynamic::translate::make_dynamic_atomic_model<Filter_People_Out, TIME>("filterOut1", move("TestRoom1"));
+	
+	/******** instantiating room 2 ***************/
+	
+	//loading XML document
+	roomID = "TestRoom2";
+
+	
+	roomPathStr = "../data/rooms/" + roomID + ".xml";\
+	const char * roomPath2 = roomPathStr.c_str();
+	
+	//loading document
+	TiXmlDocument _document2;
+	result = _document2.LoadFile(roomPath2);
+	if (!result) {cout << "file not loaded " << _document2.ErrorDesc() << endl; return 0;} 
+		
+		
+	//acquiring root of XML document
+	TiXmlHandle hDoc2(&_document2);
+	TiXmlHandle hRoot2(0);
+		
+	pElem=hDoc2.FirstChildElement().ToElement();
+	if (!pElem) return 0;    
+	hRoot2=TiXmlHandle(pElem);
+		
+	//acquiring ID of the room
+	pElem=hRoot2.FirstChild("ID").ToElement();
+	if (!pElem) return 0;
+	ID = pElem->GetText();
+		
+	//acquiring ventilation rating of the room
+	pElem = hRoot2.FirstChild("ventilationRating").ToElement();
+	if (!pElem) return 0;
+	ventilationRating = strtol(pElem->GetText(), NULL, 10);
+
+	//acquiring social distance threshold of the room
+	pElem = hRoot2.FirstChild("socialDistanceThreshold").ToElement();
+	if (!pElem) return 0;
+	socialDistanceThreshold = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring maximum occupancy of the room
+	pElem = hRoot2.FirstChild("maxOccupancy").ToElement();
+	if (!pElem) return 0;
+	maxOccupancy = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring wearing mask correctly factor of the room
+	pElem = hRoot2.FirstChild("wearsMaskFactor").ToElement();
+	if (!pElem) return 0;
+	wearsMaskFactor = strtol(pElem->GetText(), NULL, 10);
+
+	//acquiring social distance factor of the room
+	pElem = hRoot2.FirstChild("socialDistanceFactor").ToElement();
+	if (!pElem) return 0;
+	socialDistanceFactor = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring vaccinated factor of the room
+	pElem = hRoot2.FirstChild("vaccinatedFactor").ToElement();
+	if (!pElem) return 0;
+	vaccinatedFactor = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring square metres of the room
+	pElem = hRoot2.FirstChild("squareMetres").ToElement();
+	if (!pElem) return 0;
+	sqrMetres = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring height of the room
+	pElem = hRoot2.FirstChild("height").ToElement();
+	if (!pElem) return 0;
+	height = strtol(pElem->GetText(), NULL, 10);
+		
+	volumeOfRoom = sqrMetres*height;
+		
+	//acquiring sick people CO2 factor of the room
+	pElem = hRoot2.FirstChild("sickPeopleCO2Factor").ToElement();
+	if (!pElem) return 0;
+	sickPeopleCO2Factor = strtol(pElem->GetText(), NULL, 10);
+		
+	//acquiring high CO2 factor thresholds of the room
+	pElem = hRoot2.FirstChild("highCO2FactorThresholds").ToElement();
+	if (!pElem) return 0;
+	text = pElem->GetText();
+	highCO2FactorThresholds[4];
+	for (int j = 0; j < 4; j++){
+		size_t seperator = text.find(",");
+		string number = text.substr(0,seperator);
+		highCO2FactorThresholds[j] = strtol(number.c_str(), NULL, 10);
+
+		text.erase(0,seperator+1);
+	}
+		
+	//acquiring high CO2 factors of the room
+	pElem = hRoot2.FirstChild("highCO2Factors").ToElement();
+	if (!pElem) return 0;
+	text = pElem->GetText();
+	highCO2Factors[4];
+	for (int j = 0; j < 4; j++){
+		size_t seperator = text.find(",");
+		string number = text.substr(0,seperator);
+		highCO2Factors[j] = strtol(number.c_str(), NULL, 10);
+
+		text.erase(0,seperator+1);
+	}
+		
+	//acquiring respiratory increase per minute of the room
+	pElem = hRoot2.FirstChild("respIncreasePerMin").ToElement();
+	if (!pElem) return 0;
+	respIncreasePerMin = strtol(pElem->GetText(), NULL, 10);
+	
+	shared_ptr<dynamic::modeling::model> room2;
+	
+    room2 = dynamic::translate::make_dynamic_atomic_model<RoomModel, TIME>("room2", ID, 
+		ventilationRating, socialDistanceThreshold, maxOccupancy, respIncreasePerMin, 
+		volumeOfRoom, sickPeopleCO2Factor, move(highCO2FactorThresholds), 
+		move(highCO2Factors), vaccinatedFactor, wearsMaskFactor, socialDistanceFactor);
 	
 	shared_ptr<dynamic::modeling::model> filterIn2;
 	
-    filterIn2 = dynamic::translate::make_dynamic_atomic_model<Filter_People_In, TIME>("filterIn2", move(i_roomID2));
+    filterIn2 = dynamic::translate::make_dynamic_atomic_model<Filter_People_In, TIME>("filterIn2", move("TestRoom2"));
 	
 	shared_ptr<dynamic::modeling::model> filterOut2;
 	
-    filterOut2 = dynamic::translate::make_dynamic_atomic_model<Filter_People_Out, TIME>("filterOut2", move(i_roomID2));
+    filterOut2 = dynamic::translate::make_dynamic_atomic_model<Filter_People_Out, TIME>("filterOut2", move("TestRoom2"));
 	
 	/***** (5) *****/
     /*******TOP MODEL********/

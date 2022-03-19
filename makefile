@@ -56,11 +56,11 @@ main_personAndFilter_test.o: test/main_personAndFilter_test.cpp
 	$(CC) -g -c $(CFLAGS) $(INCLUDECADMIUM) $(INCLUDEDESTIMES) test/main_personAndFilter_test.cpp -o build/main_personAndFilter_test.o
 
 tests: main_filter_People_In_test.o main_filter_People_Out_test.o main_room_test.o main_multiple_room_test.o main_filter_probGetSick_test.o main_person_test.o main_personAndFilter_test.o PersonInfo.o ProbGetSick.o tinystr.o tinyxml.o tinyxmlparser.o tinyxmlerror.o
-		$(CC) -g -o bin/FILTER_PEOPLE_IN_TEST build/main_filter_People_In_test.o build/PersonInfo.o
-		$(CC) -g -o bin/FILTER_PEOPLE_OUT_TEST build/main_filter_People_Out_test.o build/PersonInfo.o
-		$(CC) -g -o bin/ROOM_TEST build/main_room_test.o build/PersonInfo.o build/ProbGetSick.o
+		$(CC) -g -o bin/FILTER_PEOPLE_IN_TEST build/main_filter_People_In_test.o build/PersonInfo.o build/tinystr.o build/tinyxml.o build/tinyxmlparser.o build/tinyxmlerror.o
+		$(CC) -g -o bin/FILTER_PEOPLE_OUT_TEST build/main_filter_People_Out_test.o build/PersonInfo.o build/tinystr.o build/tinyxml.o build/tinyxmlparser.o build/tinyxmlerror.o
+		$(CC) -g -o bin/ROOM_TEST build/main_room_test.o build/PersonInfo.o build/ProbGetSick.o build/tinystr.o build/tinyxml.o build/tinyxmlparser.o build/tinyxmlerror.o
 		$(CC) -g -o bin/MULTIPLE_ROOM_TEST build/main_multiple_room_test.o build/PersonInfo.o build/ProbGetSick.o build/tinystr.o build/tinyxml.o build/tinyxmlparser.o build/tinyxmlerror.o
-		$(CC) -g -o bin/FILTER_PROBGETSICK_TEST build/main_filter_probGetSick_test.o build/ProbGetSick.o
+		$(CC) -g -o bin/FILTER_PROBGETSICK_TEST build/main_filter_probGetSick_test.o build/ProbGetSick.o build/tinystr.o build/tinyxml.o build/tinyxmlparser.o build/tinyxmlerror.o
 		$(CC) -g -o bin/PERSON_TEST build/main_person_test.o build/ProbGetSick.o build/PersonInfo.o build/tinystr.o build/tinyxml.o build/tinyxmlparser.o build/tinyxmlerror.o
 		$(CC) -g -o bin/PERSON_AND_FILTER_TEST build/main_personAndFilter_test.o build/ProbGetSick.o build/PersonInfo.o build/tinystr.o build/tinyxml.o build/tinyxmlparser.o build/tinyxmlerror.o
 

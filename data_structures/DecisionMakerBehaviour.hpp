@@ -152,7 +152,7 @@ namespace decision_maker_behaviour_structures{
 				
 				//boolean parameters are set according to probability parameters
 				int r = booleanDistribution(generator);
-				if (r < 10){
+				if (r < 0){
 					isSick = true;
 				} else {
 					isSick = false;

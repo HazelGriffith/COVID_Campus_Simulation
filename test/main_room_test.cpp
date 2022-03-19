@@ -53,14 +53,14 @@ class InputReader_PersonInfo : public iestream_input<PersonInfo, T> {
 int main(){
 
     /****** Input Readers atomic model instantiation *******************/
-    const char * i_input_inToRoom_data = "../input_data/inToRoom_input_test.txt";
+    const char * i_input_inToRoom_data = "../input_data/personInfoIntoRoomInputTest.txt";
 
     shared_ptr<dynamic::modeling::model> input_inToRoom_reader;
 
     input_inToRoom_reader = dynamic::translate::make_dynamic_atomic_model					   
 		<InputReader_PersonInfo, TIME, const char*>("input_inToRoom_reader", move(i_input_inToRoom_data));
 		
-	const char * i_input_outFromRoom_data = "../input_data/outFromRoom_input_test.txt";
+	const char * i_input_outFromRoom_data = "../input_data/personInfoOutFromRoomInputTest.txt";
 	
 	shared_ptr<dynamic::modeling::model> input_outFromRoom_reader;
 
@@ -69,10 +69,9 @@ int main(){
 
 	/***** (4) *****/
     /****** room atomic model instantiation *******************/
-	cout << "Enter the room being used: ";
-	string roomID;
-	cin >> roomID;
-	cout << endl;
+	
+	string roomID = "TestRoom1";
+
 	
 	string roomPathStr = "../data/rooms/" + roomID + ".xml";\
 	const char * roomPath = roomPathStr.c_str();
@@ -248,16 +247,7 @@ int main(){
 
     /***** (7) *****/
     /************** Runner call ************************/
-	
-	string hours;
-	cout << "Enter the hours of simulation run-time: ";
-	cin >> hours;
-	cout << endl;
-	
-	string simulationRunTime;
-	simulationRunTime = hours + ":00:00:000";
-	
     dynamic::engine::runner<NDTime, logger_top> r(TOP, {0});
-    r.run_until(NDTime(simulationRunTime));
+    r.run_until(NDTime("24:00:00:000"));
     return 0;
 }

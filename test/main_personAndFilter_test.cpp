@@ -51,7 +51,7 @@ class InputReader_ProbGetSick : public iestream_input<ProbGetSick, T> {
 int main(){
 
     /****** Input Reader atomic model instantiation *******************/
-    const char * i_input_data = "../input_data/personAndFilter_input_test.txt";
+    const char * i_input_data = "../input_data/probGetSickInputTest.txt";
 
     shared_ptr<dynamic::modeling::model> input_reader;
 
@@ -60,14 +60,14 @@ int main(){
 
 	/***** (4) *****/
     /****** person atomic model instantiation *******************/
-    const char * personFileName = "../data/Student1.xml";
+    const char * personFileName = "../data/people/TestPerson1.xml";
 	
 	shared_ptr<dynamic::modeling::model> person;
 	
     person = dynamic::translate::make_dynamic_atomic_model<Person, TIME>("person", move(personFileName));
 	
 	/****** person atomic model instantiation *******************/
-	const char * personID = "Jane";
+	const char * personID = "1";
 	
 	shared_ptr<dynamic::modeling::model> probGetSickFilter;
 	

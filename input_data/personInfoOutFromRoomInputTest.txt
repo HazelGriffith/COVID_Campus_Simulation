@@ -1,0 +1,3 @@
+00:50:00 1 F F T T T 7 TestRoom2 10 TestRoom1 50 40 2 friends 3 stranger
+01:00:00 2 F F F F F 5 TestRoom2 20 TestRoom1 60 40 1 friends 3 acquaintance
+01:05:00 3 F F T F F 3 TestRoom1 30 TestRoom2 65 35 1 stranger 2 acquaintance

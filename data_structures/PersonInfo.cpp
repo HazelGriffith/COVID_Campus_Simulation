@@ -123,29 +123,19 @@ istream& operator >> (istream &in, PersonInfo &p){
 	
 	p.timeLeaving = stoi(tempStr);
 	
-	//cout << "Enter the time in minutes that the person stays in the room for ";
 	in >> p.minsUntilLeaving;
-	/*hours = floor(timeInMinutes/60);
-	timeInMinutes = timeInMinutes - hours*60;
-	mins = floor(timeInMinutes);
-	timeInMinutes = timeInMinutes - mins;
-	secs = floor(timeInMinutes*60);
-	timeInMinutes = timeInMinutes - (secs/60);
-	msecs = (timeInMinutes*60)*1000;
-	NDTime time({hours, mins, secs, msecs});
-	p.timeUntilLeaving = time;*/
 	
 	map<string,BehaviourRulesPerson> behaviourRulesPerson;
 
-	BehaviourRulesPerson family = BehaviourRulesPerson("family", 20, 20, 80);
-	BehaviourRulesPerson friends = BehaviourRulesPerson("friends", 50, 50, 50);
+	BehaviourRulesPerson family = BehaviourRulesPerson("friends", 20, 20, 80);
+	BehaviourRulesPerson friends = BehaviourRulesPerson("acquaintance", 50, 50, 50);
 	BehaviourRulesPerson stranger = BehaviourRulesPerson("stranger", 80, 80, 20);
-	behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("family", family));
-	behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("friends", friends));
+	behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("friends", family));
+	behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("acquaintance", friends));
 	behaviourRulesPerson.insert(pair<string, BehaviourRulesPerson>("stranger", stranger));
 	p.relationshipBehaviour = behaviourRulesPerson;
 	
-	/*string ID;
+	string ID;
 	string relationType;
 	in >> ID;
 	in >> relationType;
@@ -156,16 +146,6 @@ istream& operator >> (istream &in, PersonInfo &p){
 	in >> relationType;
 	r = Relationship(ID, relationType);
 	p.relationships.push_back(r);
-	
-	in >> ID;
-	in >> relationType;
-	r = Relationship(ID, relationType);
-	p.relationships.push_back(r);
-	
-	in >> ID;
-	in >> relationType;
-	r = Relationship(ID, relationType);
-	p.relationships.push_back(r);*/
 	
 	return in;
 	
