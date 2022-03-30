@@ -10,8 +10,68 @@ ifstream stateLog;
 ifstream outputLog;
 ofstream parsedData;
 
+//NEW STUFF
+
+ifstream roomData;
+
+struct RoomInfo {
+	string ID;
+	float ventilationRating;
+	int socialDistanceThreshold;
+	int maxOccupancy;
+	int wearsMaskFactor;
+	int socialDistanceFactor;
+	int vaccinatedFactor;
+	int sickPeopleCO2Factor;
+	int highCO2FactorThresholds[4];
+	int highCO2Factors[4];
+	int respIncreasePerMin;
+	float volumeOfRoom;
+};
+
 int main(){
+
+	const char* SEPARATOR_CHAR = ",";
+
+	int numberOfRooms = 0;
+
+	//rooms are dynamically loaded from file
+	roomData.open("realRoomData.csv");
 	string line;
+
+	if (roomData.is_open()) {
+		getline(roomData, line);
+		getline(roomData, line);
+		while (!line.empty()) {
+			numberOfRooms++;
+			getline(roomData, line);
+		}
+	}
+	roomData.close();
+
+	string roomNames[numberOfRooms];
+
+	roomData.open("realRoomData.csv");
+	string name;
+	int index = 0;
+	size_t firstComma;
+
+	if (roomData.is_open()) {
+		getline(roomData, line);
+		getline(roomData, line);
+		while (!line.empty()) {
+			firstComma = line.find(",");
+			name = line.substr(0, firstComma);
+			getline(roomData, line);
+			roomNames[index] = name;
+			index++;
+		}
+	}
+	roomData.close();
+
+	//START
+
+	//string line;
 	string currTimeStamp;
 	string nextTimeStamp = "";
 	
@@ -31,10 +91,10 @@ int main(){
 	vector <tuple<NDTime, string, float>> infectionProbabilitiesPerRoom;
 	vector <NDTime> timeStamps;
 	if ((stateLog.is_open())&&(outputLog.is_open())){
-		int numberOfRooms;
+		/*int numberOfRooms;
 		cout << "Enter the number of rooms: ";
 		cin >> numberOfRooms;
-		cout << endl;
+		cout << endl;*/
 		CO2ConcentrationPerRoom.resize(numberOfRooms+1);
 		occupancyPerRoom.resize(numberOfRooms+2);
 		
@@ -53,6 +113,7 @@ int main(){
 			//Obtain the last section of a given timeStamp
 			//locates first timeStamp
 			while (found != string::npos){
+				timeStampPos = outputLog.tellg();
 				getline(outputLog, line);
 				found = line.find_first_not_of("0123456789:");
 			}
@@ -60,7 +121,7 @@ int main(){
 			currTimeStamp = line;
 
 			timeStamps.push_back(NDTime(currTimeStamp));
-			timeStampPos = outputLog.tellg();
+			//timeStampPos = outputLog.tellg();
 
 			//cycles through proceeding timeStamps until a different one is found
 			nextTimeStamp = currTimeStamp;
@@ -196,20 +257,20 @@ int main(){
 			for (int i = 0; i < CO2ConcentrationPerRoom.size(); i++){
 				for (int j = 0; j < CO2ConcentrationPerRoom[i].size(); j++){
 					if (i < CO2ConcentrationPerRoom.size()-1){
-						parsedData << "Room" << i+1 << " CO2: " << CO2ConcentrationPerRoom[i][j] << endl;
+						parsedData << roomNames[i] << SEPARATOR_CHAR << "CO2:" << SEPARATOR_CHAR << CO2ConcentrationPerRoom[i][j] << endl;
 					} else {
-						parsedData << "RoomTunnels CO2: " << CO2ConcentrationPerRoom[i][j] << endl;
+						parsedData << "RoomTunnels" << SEPARATOR_CHAR << "CO2:" << SEPARATOR_CHAR << CO2ConcentrationPerRoom[i][j] << endl;
 					}
 				}
 			}
 			for (int i = 0; i < occupancyPerRoom.size(); i++){
 				for (int j = 0; j < occupancyPerRoom[i].size(); j++){
 					if (i < occupancyPerRoom.size()-2){
-						parsedData << "Room" << i+1 << " occupancy: " << occupancyPerRoom[i][j] << endl;
+						parsedData << roomNames[i] << SEPARATOR_CHAR << "occupancy:" << SEPARATOR_CHAR << occupancyPerRoom[i][j] << endl;
 					} else if (i < occupancyPerRoom.size()-1){
-						parsedData << "RoomTunnels occupancy: " << occupancyPerRoom[i][j] << endl;
+						parsedData << "RoomTunnels" << SEPARATOR_CHAR << "occupancy:" << SEPARATOR_CHAR << occupancyPerRoom[i][j] << endl;
 					} else {
-						parsedData << "Outdoors occupancy: " << occupancyPerRoom[i][j] << endl;
+						parsedData << "Outdoors" << SEPARATOR_CHAR << "occupancy:" << SEPARATOR_CHAR << occupancyPerRoom[i][j] << endl;
 					}
 				}
 			}
@@ -217,7 +278,7 @@ int main(){
 				parsedData << timeStamps[i] << endl;
 			}
 			for (int i = 0; i < infectionProbabilitiesPerRoom.size(); i++){
-				parsedData << get<0>(infectionProbabilitiesPerRoom[i]) << " " << get<1>(infectionProbabilitiesPerRoom[i]) << " " << to_string(get<2>(infectionProbabilitiesPerRoom[i])) << endl;
+				parsedData << get<0>(infectionProbabilitiesPerRoom[i]) << SEPARATOR_CHAR << get<1>(infectionProbabilitiesPerRoom[i]) << SEPARATOR_CHAR << to_string(get<2>(infectionProbabilitiesPerRoom[i])) << endl;
 			}
 			parsedData.close();
 		} else {
