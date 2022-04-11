@@ -88,7 +88,7 @@ int main(){
 	
 	vector <vector<float>> CO2ConcentrationPerRoom;
 	vector <vector<string>> occupancyPerRoom;
-	vector <tuple<NDTime, string, float>> infectionProbabilitiesPerRoom;
+	vector <tuple<NDTime, string, string, float>> infectionProbabilitiesPerRoom;
 	vector <NDTime> timeStamps;
 	if ((stateLog.is_open())&&(outputLog.is_open())){
 		/*int numberOfRooms;
@@ -217,23 +217,32 @@ int main(){
 					
 					NDTime timeStamp(currTimeStamp);
 					
+					found = line.find("The Person: ");
+					end = line.find(" has a probability");
+					start = found + 12;
+					string person_id = "id" + line.substr(start, end-start);
+					
 					found = line.find("probability of ");
 					end = line.find(" to get sick");
 					start = found + 15;
 					string value = line.substr(start, end-start);
 					
-					tuple<NDTime, string, float> currInfectionProb (timeStamp, roomName, stof(value));
+					tuple<NDTime, string, string, float> currInfectionProb (timeStamp, roomName, person_id, stof(value));
 					infectionProbabilitiesPerRoom.push_back(currInfectionProb);
 					
 					size_t moreProbs = line.find(".,");
 					while (moreProbs != string::npos){
+						found = line.find("The Person: ",moreProbs+2);
+						end = line.find(" has a probability",moreProbs+2);
+						start = found + 12;
+						string person_id = "id" + line.substr(start, end-start);
 					
 						found = line.find("probability of ",moreProbs+2);
 						end = line.find(" to get sick",moreProbs+2);
 						start = found + 15;
 						string value = line.substr(start, end-start);
 					
-						tuple<NDTime, string, float> currInfectionProb (timeStamp, roomName, stof(value));
+						tuple<NDTime, string, string, float> currInfectionProb (timeStamp, roomName, person_id, stof(value));
 						infectionProbabilitiesPerRoom.push_back(currInfectionProb);
 						
 						size_t nextProbs = moreProbs;
@@ -278,7 +287,7 @@ int main(){
 				parsedData << timeStamps[i] << endl;
 			}
 			for (int i = 0; i < infectionProbabilitiesPerRoom.size(); i++){
-				parsedData << get<0>(infectionProbabilitiesPerRoom[i]) << SEPARATOR_CHAR << get<1>(infectionProbabilitiesPerRoom[i]) << SEPARATOR_CHAR << to_string(get<2>(infectionProbabilitiesPerRoom[i])) << endl;
+				parsedData << get<0>(infectionProbabilitiesPerRoom[i]) << SEPARATOR_CHAR << get<1>(infectionProbabilitiesPerRoom[i]) << SEPARATOR_CHAR << get<2>(infectionProbabilitiesPerRoom[i]) << SEPARATOR_CHAR << to_string(get<3>(infectionProbabilitiesPerRoom[i])) << endl;
 			}
 			parsedData.close();
 		} else {

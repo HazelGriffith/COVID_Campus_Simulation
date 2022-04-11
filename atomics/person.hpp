@@ -113,7 +113,7 @@ template <typename TIME> class Person{
 				uniform_int_distribution<int> probSickDistribution(0,100);
 				int r = probSickDistribution(generator);
 			
-				if (r > 50){
+				if (r < 0){
 					state.goingHome = true;
 				}
 				state.severityDecided = true;
